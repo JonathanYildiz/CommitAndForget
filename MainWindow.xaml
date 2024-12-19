@@ -8,6 +8,15 @@
         Title="MainWindow" Height="450" Width="800">
 
   <Grid>
-    <Image Source="a6bdb196bee23faef1d8020319c7c64750ef7686.avif"/>
+    <Grid.ColumnDefinitions>
+      <ColumnDefinition Width="*"/>
+      <ColumnDefinition Width="*"/>
+    </Grid.ColumnDefinitions>
+    <Image Grid.Column="0"
+           Width="auto" Stretch="Fill"
+           Source="\Pizza.png"/>
+    <Image Grid.Column="1"
+           Width="auto" Stretch="Fill"
+           Source="\Pizza2.avif"/>
   </Grid>
 </Window>

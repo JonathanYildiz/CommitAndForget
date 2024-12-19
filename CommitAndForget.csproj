@@ -8,4 +8,14 @@
     <UseWPF>true</UseWPF>
   </PropertyGroup>
 
+  <ItemGroup>
+    <None Remove="Pizza.png" />
+    <None Remove="Pizza2.avif" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Pizza.png" />
+    <Resource Include="Pizza2.avif" />
+  </ItemGroup>
+
 </Project>
