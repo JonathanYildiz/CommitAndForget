@@ -1,3 +1,5 @@
+USE dbcommitandforget;
+
 -- Testdaten für tblBenutzer einfügen
 INSERT INTO tblBenutzer (szName, szStrasse, nHausnummer, szPostleitzahl, szWohnort, szMail, szPasswort, blsAdmin) 
 VALUES 

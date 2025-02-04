@@ -13,7 +13,7 @@ namespace CommitAndForget.Services
       ConnectionString = new MySqlConnectionStringBuilder()
       {
         Server = "127.0.0.1",
-        Database = "commitandforget",
+        Database = "dbcommitandforget",
         UserID = "root",
         Password = "",
         SslMode = MySqlSslMode.Disabled
