@@ -18,4 +18,8 @@
     <Resource Include="Pizza2.avif" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="MySql.Data" Version="9.2.0" />
+  </ItemGroup>
+
 </Project>
