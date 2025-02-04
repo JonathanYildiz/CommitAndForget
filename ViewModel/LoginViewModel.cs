@@ -12,26 +12,7 @@ namespace CommitAndForget.ViewModel
       get => Get<ObservableCollection<TestModel>>();
       set => Set(value);
     }
-
-    private string m_TestString;
-    public string TestString
-    {
-      get
-      {
-        return m_TestString;
-      }
-      set
-      {
-        if (m_TestString != value)
-        {
-          m_TestString = value;
-          OnPropertyChanged();
-        }
-      }
-    }
     
-
-
     public LoginViewModel()
     {
       TestList = TestDataProvider.LoadTestData();
