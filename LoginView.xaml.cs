@@ -8,7 +8,6 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using CommitAndForget.View;
 using CommitAndForget.ViewModel;
 
 namespace CommitAndForget
@@ -16,17 +15,17 @@ namespace CommitAndForget
   /// <summary>
   /// Interaction logic for MainWindow.xaml
   /// </summary>
-  public partial class MainWindow : Window
+  public partial class LoginView : Window
   {
-    public MainWindow()
+    public LoginView()
     {
       InitializeComponent();
 
-      var loginWindow = new LoginView();
-      loginWindow.DataContext = new LoginViewModel();
-      loginWindow.Show();
+      //var loginWindow = new LoginView();
+      //loginWindow.DataContext = new LoginViewModel();
+      //loginWindow.Show();
 
-      Close(); // MainWindow schließen
+      //Close(); // MainWindow schließen
     }
   }
 }
