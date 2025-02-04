@@ -1,53 +1,39 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Data;
 using System.Windows;
-using Microsoft.Data.SqlClient;
+using MySql.Data.MySqlClient;
 
 namespace CommitAndForget.Services
 {
   public class DataBaseService
   {
-
     private static readonly string ConnectionString;
-    private static readonly string ConnectionStringWithoutEncryption;
+
     static DataBaseService()
     {
-      ConnectionString = new SqlConnectionStringBuilder()
+      ConnectionString = new MySqlConnectionStringBuilder()
       {
-        DataSource = "85.215.35.160",
-        InitialCatalog = "dbWorkshopManager",
-        UserID = "WorkshopManagerUser",
-        Password = "AGA$U7TU%§uxckYc",
-        TrustServerCertificate = true
+        Server = "127.0.0.1",
+        Database = "commitandforget",
+        UserID = "root",
+        Password = "",
+        SslMode = MySqlSslMode.Disabled
       }.ConnectionString;
 
-      ConnectionStringWithoutEncryption = new SqlConnectionStringBuilder()
-      {
-        DataSource = "85.215.35.160",
-        InitialCatalog = "dbWorkshopManager",
-        UserID = "WorkshopManagerUser",
-        Password = "AGA$U7TU%§uxckYc",
-        TrustServerCertificate = true,
-        Encrypt = false
-      }.ConnectionString;
     }
+
     public static DataTable ExecuteSP(string sp)
     {
       DataTable tbl = new DataTable();
       try
       {
-        using (SqlConnection connection = new SqlConnection(ConnectionString))
+        using (MySqlConnection connection = new MySqlConnection(ConnectionString))
         {
-          SqlCommand command = new SqlCommand(sp, connection)
+          MySqlCommand command = new MySqlCommand(sp, connection)
           {
             CommandType = CommandType.StoredProcedure
           };
 
-          using (SqlDataAdapter adapter = new SqlDataAdapter(command))
+          using (MySqlDataAdapter adapter = new MySqlDataAdapter(command))
           {
             adapter.Fill(tbl);
           }
@@ -60,34 +46,22 @@ namespace CommitAndForget.Services
       return tbl;
     }
 
-    // TODO JYI prüfen, ob encryption ausschalten zum Bilder hochladen hier überhaupt notwendig ist
-    public static DataTable ExecuteSP(string sp, Dictionary<string, object> parameters, bool encrypt = true)
+    public static DataTable ExecuteSP(string sp, Dictionary<string, object> parameters)
     {
       DataTable tbl = new DataTable();
       try
       {
-        using (SqlConnection connection = new SqlConnection(encrypt ? ConnectionString : ConnectionStringWithoutEncryption))
+        using (MySqlConnection connection = new MySqlConnection(ConnectionString))
         {
-          SqlCommand command = new SqlCommand(sp, connection)
+          MySqlCommand command = new MySqlCommand(sp, connection)
           {
             CommandType = CommandType.StoredProcedure
           };
           foreach (KeyValuePair<string, object> item in parameters)
           {
-            if (item.Value is DateTime dateTimeValue)
-              command.Parameters.Add(new SqlParameter(item.Key, SqlDbType.DateTime) { Value = dateTimeValue });
-            else if (item.Value is decimal decimalValue)
-              command.Parameters.Add(new SqlParameter(item.Key, SqlDbType.Decimal) { Value = decimalValue });
-            else if (item.Value is string stringValue)
-              command.Parameters.Add(new SqlParameter(item.Key, SqlDbType.NVarChar) { Value = stringValue });
-            else if (item.Value is byte[] imageValue)
-              command.Parameters.Add(new SqlParameter(item.Key, SqlDbType.VarBinary) { Value = imageValue });
-            else if (item.Value is null)
-              command.Parameters.Add(new SqlParameter(item.Key, DBNull.Value));
-            else
-              command.Parameters.Add(new SqlParameter(item.Key, item.Value ?? DBNull.Value));
+            command.Parameters.AddWithValue(item.Key, item.Value ?? DBNull.Value);
           }
-          using (SqlDataAdapter adapter = new SqlDataAdapter(command))
+          using (MySqlDataAdapter adapter = new MySqlDataAdapter(command))
           {
             adapter.Fill(tbl);
           }
@@ -105,30 +79,19 @@ namespace CommitAndForget.Services
       DataSet dataSet = new DataSet();
       try
       {
-        using (SqlConnection connection = new SqlConnection(ConnectionString))
+        using (MySqlConnection connection = new MySqlConnection(ConnectionString))
         {
-          SqlCommand command = new SqlCommand(sp, connection)
+          MySqlCommand command = new MySqlCommand(sp, connection)
           {
             CommandType = CommandType.StoredProcedure
           };
 
           foreach (KeyValuePair<string, object> item in parameters)
           {
-            SqlParameter parameter = new SqlParameter(item.Key, item.Value ?? DBNull.Value);
-
-            if (item.Value is DateTime)
-              parameter.SqlDbType = SqlDbType.DateTime;
-            else if (item.Value is decimal)
-              parameter.SqlDbType = SqlDbType.Decimal;
-            else if (item.Value is string)
-              parameter.SqlDbType = SqlDbType.NVarChar;
-            else if (item.Value is byte[])
-              parameter.SqlDbType = SqlDbType.VarBinary;
-
-            command.Parameters.Add(parameter);
+            command.Parameters.AddWithValue(item.Key, item.Value ?? DBNull.Value);
           }
 
-          using (SqlDataAdapter adapter = new SqlDataAdapter(command))
+          using (MySqlDataAdapter adapter = new MySqlDataAdapter(command))
           {
             adapter.Fill(dataSet);
           }
@@ -146,15 +109,14 @@ namespace CommitAndForget.Services
       DataSet dataSet = new DataSet();
       try
       {
-        using (SqlConnection connection = new SqlConnection(ConnectionString))
+        using (MySqlConnection connection = new MySqlConnection(ConnectionString))
         {
-          SqlCommand command = new SqlCommand(sp, connection)
+          MySqlCommand command = new MySqlCommand(sp, connection)
           {
             CommandType = CommandType.StoredProcedure
           };
 
-
-          using (SqlDataAdapter adapter = new SqlDataAdapter(command))
+          using (MySqlDataAdapter adapter = new MySqlDataAdapter(command))
           {
             adapter.Fill(dataSet);
           }
@@ -166,6 +128,5 @@ namespace CommitAndForget.Services
       }
       return dataSet;
     }
-
   }
 }

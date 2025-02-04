@@ -20,12 +20,7 @@ namespace CommitAndForget
     public LoginView()
     {
       InitializeComponent();
-
-      //var loginWindow = new LoginView();
-      //loginWindow.DataContext = new LoginViewModel();
-      //loginWindow.Show();
-
-      //Close(); // MainWindow schließen
+      DataContext = new LoginViewModel();
     }
   }
 }
