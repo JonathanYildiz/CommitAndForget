@@ -1,3 +1,4 @@
+USE dbcommitandforget;
 
 DROP PROCEDURE IF EXISTS spLoadBenutzer;
 

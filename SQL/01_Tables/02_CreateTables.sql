@@ -10,7 +10,7 @@ CREATE TABLE IF NOT EXISTS tblBenutzer (
     szWohnort NVARCHAR(200) NOT NULL,
     szMail NVARCHAR(200) UNIQUE NOT NULL,
     szPasswort NVARCHAR(200) NOT NULL,
-    blsAdmin BIT DEFAULT 0
+    bIsAdmin BIT DEFAULT 0
 );
 -- Prüfen, ob die Tabelle tblBild existiert, falls nicht, dann erstellen
 CREATE TABLE IF NOT EXISTS tblBild (

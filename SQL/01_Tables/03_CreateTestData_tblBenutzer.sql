@@ -1,5 +1,7 @@
+USE dbcommitandforget;
+
 -- Testdaten für tblBenutzer einfügen
-INSERT INTO tblBenutzer (szName, szStrasse, nHausnummer, szPostleitzahl, szWohnort, szMail, szPasswort, blsAdmin) 
+INSERT INTO tblBenutzer (szName, szStrasse, nHausnummer, szPostleitzahl, szWohnort, szMail, szPasswort, bIsAdmin) 
 VALUES 
 ('Max Mustermann', 'Hauptstraße', 12, '12345', 'Berlin', 'max@example.com', 'passwort123', 1),
 ('Anna Beispiel', 'Nebenstraße', 5, '54321', 'Hamburg', 'anna@example.com', 'geheim123', 0),
