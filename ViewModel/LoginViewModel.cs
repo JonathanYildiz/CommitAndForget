@@ -5,6 +5,7 @@ using CommitAndForget.Essentials;
 using CommitAndForget.Model;
 using CommitAndForget.Services;
 using CommitAndForget.Services.DataProvider;
+using CommitAndForget.View;
 using CommunityToolkit.Mvvm.Input;
 
 namespace CommitAndForget.ViewModel
@@ -48,10 +49,10 @@ namespace CommitAndForget.ViewModel
     private void CreateCommands()
     {
       LoginCommand = new RelayCommand<Window>(Login);
-      RegistrierenCommand = new RelayCommand(Registrieren);
+      ShowRegistrierenCommand = new RelayCommand(ShowRegistrieren);
     }
     public ICommand LoginCommand { get; private set; }
-    public ICommand RegistrierenCommand { get; private set; }
+    public ICommand ShowRegistrierenCommand { get; private set; }
     #endregion Commands
 
     #region Methoden
@@ -90,11 +91,13 @@ namespace CommitAndForget.ViewModel
 
     }
 
-    private void Registrieren()
+    private void ShowRegistrieren()
     {
       try
       {
-
+        var view = new RegistrierenView();
+        view.DataContext = this;
+        view.Show();
       }
       catch (Exception ex)
       {

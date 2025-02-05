@@ -80,7 +80,7 @@
 
         <Button Grid.Row="3" Content="Anmelden" Command="{Binding LoginCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}"/>
 
-        <Button Grid.Row="4" Content="Registrieren" Command="{Binding RegistrierenCommand}" />
+        <Button Grid.Row="4" Content="Registrieren" Command="{Binding ShowRegistrierenCommand}" />
 
       </Grid>
   </Grid>
