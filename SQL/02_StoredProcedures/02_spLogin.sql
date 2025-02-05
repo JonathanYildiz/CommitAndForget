@@ -9,7 +9,7 @@ CREATE PROCEDURE spLogin(
 )
 BEGIN
 -- Pruefen, ob die Mail-Passwort-Kombination existiert 
-	SELECT nKey, szName, szStrasse, nHausnummer, szPostleitzahl, szWohnort, szMail, blsAdmin
+	SELECT nKey, szName, szStrasse, nHausnummer, szPostleitzahl, szWohnort, szMail, bIsAdmin
     FROM tblbenutzer
     WHERE szMail = p_Mail
     AND szPasswort = p_Passwort;
