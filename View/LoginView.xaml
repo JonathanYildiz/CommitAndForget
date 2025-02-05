@@ -7,47 +7,82 @@
         mc:Ignorable="d"
         Title="MacApple" Height="450" Width="800" MinWidth="300" MinHeight="300"
         x:Name="loginWindow">
-  <!--<Window.Resources>
-    <Style x:Key="NutzerTextBoxStyle" TargetType="TextBox">
-      <Style.Triggers>
-        <MultiDataTrigger>
-          <MultiDataTrigger.Conditions>
-            <Condition Binding="{Binding Text, RelativeSource={RelativeSource Self}}" Value=""/>
-            <Condition Binding="{Binding IsKeyboardFocused, RelativeSource={RelativeSource Self}}" Value="False"/>
-          </MultiDataTrigger.Conditions>
-          <Setter Property="Text" Value="Nutzer"/>
-          <Setter Property="Foreground" Value="Gray"/>
-        </MultiDataTrigger>
-        <Trigger Property="IsKeyboardFocused" Value="True">
-          <Setter Property="Foreground" Value="Black"/>
-        </Trigger>
-      </Style.Triggers>
+ 
+  <Window.Resources>
+    <Style TargetType="Button">
+      <Setter Property="HorizontalAlignment" Value="Center" />
+      <Setter Property="VerticalAlignment" Value="Center" />
+      <Setter Property="Background" Value="Transparent" />
+      <Setter Property="Foreground" Value="Cyan" />
+      <Setter Property="BorderBrush" Value="Transparent" />
+      <Setter Property="FontSize" Value="14" />
+      <Setter Property="FontWeight" Value="Bold" />
+      <Setter Property="Template">
+        <Setter.Value>
+          <ControlTemplate TargetType="Button">
+            <Border x:Name="border" 
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                CornerRadius="5">
+              <ContentPresenter>
+                <ContentPresenter.Effect>
+                  <DropShadowEffect Color="Black"
+                                             Direction="320"
+                                             ShadowDepth="2"
+                                             Opacity="0.5"
+                                             BlurRadius="1"/>
+                </ContentPresenter.Effect>
+              </ContentPresenter>
+            </Border>
+            <ControlTemplate.Triggers>
+              <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Background" Value="#80000000"/>
+              </Trigger>
+            </ControlTemplate.Triggers>
+          </ControlTemplate>
+        </Setter.Value>
+      </Setter>
     </Style>
-  </Window.Resources>-->
+    
+    <Style TargetType="TextBox">
+      <Setter Property="MaxWidth" Value="300" />
+      <Setter Property="Height" Value="30" />
+      <Setter Property="FontSize" Value="20" />
+    </Style>
+  </Window.Resources>
+  
   <Grid>
     <Image Grid.Column="0"
            Width="auto" Stretch="Fill"
            Source="\Pizza.png"/>
     <Grid>
-      <Grid.RowDefinitions>
-        <RowDefinition Height="*"/> <!--Row 0-->
-        <RowDefinition Height="*"/> <!--Row 1-->
-        <RowDefinition Height="*"/> <!--Row 2-->
-        <RowDefinition Height="*"/> <!--Row 3-->
-      </Grid.RowDefinitions>
       <Grid.ColumnDefinitions>
         <ColumnDefinition Width="2*"/> <!--Column 0-->
         <ColumnDefinition Width="6*"/> <!--Column 1-->
         <ColumnDefinition Width="2*"/> <!--Column 2-->
       </Grid.ColumnDefinitions>
 
-      <TextBox Grid.Row="0" Grid.Column="1" Height="20" Text="{Binding Mail}"></TextBox>
+      <Grid Grid.Column="1">
+        <Grid.RowDefinitions>
+          <RowDefinition Height="3*" />
+          <RowDefinition />
+          <RowDefinition />
+          <RowDefinition />
+          <RowDefinition />
+          <RowDefinition Height="3*" />
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="1">
+          <Label>Benutzername</Label>
+          <TextBox Text="{Binding Mail}"></TextBox>
+        </Grid>
 
-      <TextBox Grid.Row="1" Grid.Column="1" Height="20" Text="{Binding Passwort}"></TextBox>
+       <TextBox Grid.Row="2" Text="{Binding Passwort}"></TextBox>
 
-      <Button Grid.Row="2" Command="{Binding LoginCommand}"></Button>
+        <Button Grid.Row="3" Content="Anmelden" Command="{Binding LoginCommand}" />
 
-      <Button Grid.Row="3" Command="{Binding RegistrierenCommand}"></Button>
+        <Button Grid.Row="4" Content="Registrieren" Command="{Binding RegistrierenCommand}" />
+
+      </Grid>
   </Grid>
     
   </Grid>
