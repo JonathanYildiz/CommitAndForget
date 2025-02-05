@@ -9,16 +9,16 @@
   <Grid>
     <StackPanel>
       
-    <TextBox Text="NAme"/>
-    <TextBox Text="Vorname"/>
-    <TextBox Text="Straße"/>
-    <TextBox Text="Hausnummer"/>
-    <TextBox Text="PLZ"/>
-    <TextBox Text="Ort"/>
-    <TextBox Text="E-Mail"/>
-    <TextBox Text="Passwort"/>
-    <Button>OK</Button>
-    <Button>Abbrechen</Button>
+    <TextBox Text="{Binding NeuerBenutzer.Name}"/>
+    <TextBox Text="{Binding NeuerBenutzer.Vorname}"/>
+    <TextBox Text="{Binding NeuerBenutzer.Straße}"/>
+    <TextBox Text="{Binding NeuerBenutzer.Hausnummer}"/>
+    <TextBox Text="{Binding NeuerBenutzer.PLZ}"/>
+    <TextBox Text="{Binding NeuerBenutzer.Ort}"/>
+    <TextBox Text="{Binding NeuerBenutzer.Mail}"/>
+    <TextBox Text="{Binding NeuerBenutzer.Passwort}"/>
+      <Button Command="{Binding ConfirmRegistrierenCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}">OK</Button>
+      <Button Command="{Binding CancelCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}">Abbrechen</Button>
     </StackPanel>
   </Grid>
 </Window>
