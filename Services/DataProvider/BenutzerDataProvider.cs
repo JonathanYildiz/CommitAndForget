@@ -27,8 +27,7 @@ namespace CommitAndForget.Services.DataProvider
             benutzer.Postleitzahl = row["szPostleitzahl"] != DBNull.Value ? row["szPostleitzahl"].ToString() ?? string.Empty : string.Empty;
             benutzer.Wohnort = row["szWohnort"] != DBNull.Value ? row["szWohnort"].ToString() ?? string.Empty : string.Empty;
             benutzer.Mail = row["szMail"] != DBNull.Value ? row["szMail"].ToString() ?? string.Empty : string.Empty;
-            benutzer.Passwort = row["szPasswort"] != DBNull.Value ? row["szPasswort"].ToString() ?? string.Empty : string.Empty;
-            benutzer.IsAdmin = row["bIsAdmin"] != DBNull.Value ? (bool)row["bIsAdmin"] : default;
+            benutzer.IsAdmin = row["bIsAdmin"] != DBNull.Value ? Convert.ToBoolean(row["bIsAdmin"]) : default;
 
             benutzerListe.Add(benutzer);
           }
@@ -37,9 +36,42 @@ namespace CommitAndForget.Services.DataProvider
       }
       catch (Exception ex)
       {
-        MessageBox.Show($"Es ist ein Fehler aufgetreten: {ex.Message}", "Fehler", MessageBoxButton.OK, MessageBoxImage.Error);
+        MessageBoxService.DisplayMessage(ex.Message, MessageBoxImage.Error);
         return [];
       }
+    }
+
+    public static BenutzerModel Login(string mail, string passwort)
+    {
+      var benutzer = new BenutzerModel();
+      try
+      {
+        var parameters = new Dictionary<string, object>
+        {
+          { "p_Mail", mail },
+          { "p_Passwort", passwort }
+        };
+        DataTable dt = DataBaseService.ExecuteSP("spLogin", parameters);
+        
+        if (dt is not null && dt.Rows.Count == 1) // Es darf nur ein Benutzer zurückkommmen
+        {
+          benutzer.Key = dt.Rows[0]["nKey"] != DBNull.Value ? (int)dt.Rows[0]["nKey"] : default;
+          benutzer.Name = dt.Rows[0]["szName"] != DBNull.Value ? dt.Rows[0]["szName"].ToString() ?? string.Empty : string.Empty;
+          benutzer.Strasse = dt.Rows[0]["szStrasse"] != DBNull.Value ? dt.Rows[0]["szStrasse"].ToString() ?? string.Empty : string.Empty;
+          benutzer.Hausnummer = dt.Rows[0]["nHausnummer"] != DBNull.Value ? (int)dt.Rows[0]["nHausnummer"] : default;
+          benutzer.Postleitzahl = dt.Rows[0]["szPostleitzahl"] != DBNull.Value ? dt.Rows[0]["szPostleitzahl"].ToString() ?? string.Empty : string.Empty;
+          benutzer.Wohnort = dt.Rows[0]["szWohnort"] != DBNull.Value ? dt.Rows[0]["szWohnort"].ToString() ?? string.Empty : string.Empty;
+          benutzer.Mail = dt.Rows[0]["szMail"] != DBNull.Value ? dt.Rows[0]["szMail"].ToString() ?? string.Empty : string.Empty;
+          benutzer.IsAdmin = dt.Rows[0]["bIsAdmin"] != DBNull.Value ? Convert.ToBoolean(dt.Rows[0]["bIsAdmin"]) : default;
+        } 
+
+        return benutzer;
+      }
+      catch (Exception ex)
+      {
+        MessageBoxService.DisplayMessage(ex.Message, MessageBoxImage.Error);
+      }
+      return benutzer;
     }
   }
 }

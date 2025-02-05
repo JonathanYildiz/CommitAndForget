@@ -45,7 +45,7 @@
 
       <TextBox Grid.Row="1" Grid.Column="1" Height="20" Text="{Binding Passwort}"></TextBox>
 
-      <Button Grid.Row="2" Command="{Binding LoginCommand}"></Button>
+      <Button Grid.Row="2" Command="{Binding LoginCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}"></Button>
 
       <Button Grid.Row="3" Command="{Binding RegistrierenCommand}"></Button>
   </Grid>

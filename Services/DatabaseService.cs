@@ -41,7 +41,7 @@ namespace CommitAndForget.Services
       }
       catch (Exception ex)
       {
-        MessageBox.Show($"Es ist ein Fehler aufgetreten: {ex.Message}", "Fehler", MessageBoxButton.OK, MessageBoxImage.Error);
+        MessageBoxService.DisplayMessage(ex.Message, MessageBoxImage.Error);
       }
       return tbl;
     }
@@ -69,7 +69,7 @@ namespace CommitAndForget.Services
       }
       catch (Exception ex)
       {
-        MessageBox.Show($"Es ist ein Fehler aufgetreten: {ex.Message}", "Fehler", MessageBoxButton.OK, MessageBoxImage.Error);
+        MessageBoxService.DisplayMessage(ex.Message, MessageBoxImage.Error);
       }
       return tbl;
     }
@@ -99,7 +99,7 @@ namespace CommitAndForget.Services
       }
       catch (Exception ex)
       {
-        MessageBox.Show($"Es ist ein Fehler aufgetreten: {ex.Message}", "Fehler", MessageBoxButton.OK, MessageBoxImage.Error);
+        MessageBoxService.DisplayMessage(ex.Message, MessageBoxImage.Error);
       }
       return dataSet;
     }
@@ -124,7 +124,7 @@ namespace CommitAndForget.Services
       }
       catch (Exception ex)
       {
-        MessageBox.Show($"Es ist ein Fehler aufgetreten: {ex.Message}", "Fehler", MessageBoxButton.OK, MessageBoxImage.Error);
+        MessageBoxService.DisplayMessage(ex.Message, MessageBoxImage.Error);
       }
       return dataSet;
     }
