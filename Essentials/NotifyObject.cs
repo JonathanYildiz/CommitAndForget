@@ -3,7 +3,7 @@ using System.Runtime.CompilerServices;
 
 namespace CommitAndForget.Essentials
 {
-  public abstract class NotifyObject
+  public abstract class NotifyObject : INotifyPropertyChanged
   {
     private readonly Dictionary<string, object> propertyValues;
 
