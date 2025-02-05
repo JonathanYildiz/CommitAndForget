@@ -6,7 +6,19 @@
         xmlns:local="clr-namespace:CommitAndForget.View"
         mc:Ignorable="d"
         Title="RegistrierenView" Height="450" Width="800">
-    <Grid>
-    <Label>TODO</Label>
-    </Grid>
+  <Grid>
+    <StackPanel>
+      
+    <TextBox Text="NAme"/>
+    <TextBox Text="Vorname"/>
+    <TextBox Text="Straße"/>
+    <TextBox Text="Hausnummer"/>
+    <TextBox Text="PLZ"/>
+    <TextBox Text="Ort"/>
+    <TextBox Text="E-Mail"/>
+    <TextBox Text="Passwort"/>
+    <Button>OK</Button>
+    <Button>Abbrechen</Button>
+    </StackPanel>
+  </Grid>
 </Window>
