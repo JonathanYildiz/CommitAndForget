@@ -5,6 +5,7 @@ using CommitAndForget.Essentials;
 using CommitAndForget.Model;
 using CommitAndForget.Services;
 using CommitAndForget.Services.DataProvider;
+using CommitAndForget.View;
 using CommunityToolkit.Mvvm.Input;
 
 namespace CommitAndForget.ViewModel
@@ -29,6 +30,12 @@ namespace CommitAndForget.ViewModel
       get => Get<string>();
       set => Set(value);
     }
+
+    public BenutzerModel NeuerBenutzer
+    {
+      get => Get<BenutzerModel>();
+      set => Set(value);
+    }
     #endregion Properties
 
     #region Konstruktor
@@ -42,46 +49,60 @@ namespace CommitAndForget.ViewModel
     private void CreateCommands()
     {
       LoginCommand = new RelayCommand<Window>(Login);
-      RegistrierenCommand = new RelayCommand(Registrieren);
+      ShowRegistrierenCommand = new RelayCommand(ShowRegistrieren);
     }
     public ICommand LoginCommand { get; private set; }
-    public ICommand RegistrierenCommand { get; private set; }
+    public ICommand ShowRegistrierenCommand { get; private set; }
     #endregion Commands
 
     #region Methoden
     private void Login(Window window)
     {
-      if (string.IsNullOrEmpty(Mail) || string.IsNullOrEmpty(Passwort))
+      try
       {
-        MessageBoxService.DisplayMessage("Bitte geben Sie Ihre E-Mail und Ihr Passwort ein.", MessageBoxImage.Warning);
-        return;
+        if (string.IsNullOrEmpty(Mail) || string.IsNullOrEmpty(Passwort))
+        {
+          MessageBoxService.DisplayMessage("Bitte geben Sie Ihre E-Mail und Ihr Passwort ein.", MessageBoxImage.Warning);
+          return;
+        }
+
+        BenutzerModel aktuellerBenutzer = BenutzerDataProvider.Login(Mail, Passwort);
+        if (aktuellerBenutzer is not null && aktuellerBenutzer.Key > 0) //Benutzer muss gültigen nKey besitzen
+        {
+          Mail = "";
+          Passwort = "";
+
+          // Neue View erstellen
+          // DataContext zuweisen -> new MacAppleViewModel(aktuellerBenutzer);
+          // NeueView.Show();
+
+          window?.Close();
+        }
+        else
+        {
+          MessageBoxService.DisplayMessage("E-Mail oder Passwort ist falsch.", MessageBoxImage.Warning);
+          Passwort = "";
+        }
       }
-
-      BenutzerModel aktuellerBenutzer = BenutzerDataProvider.Login(Mail, Passwort);
-      if (aktuellerBenutzer is not null && aktuellerBenutzer.Key > 0) //Benutzer muss gültigen nKey besitzen
+      catch (Exception ex)
       {
-        Mail = "";
-        Passwort = "";
-
-        // Neue View erstellen
-        // DataContext zuweisen -> new MacAppleViewModel(aktuellerBenutzer);
-        // NeueView.Show();
-
-        window?.Close();
-
-        //TODO JYI Login handlen
-      }
-      else
-      {
-        MessageBoxService.DisplayMessage("E-Mail oder Passwort ist falsch.", MessageBoxImage.Warning);
-        Passwort = "";
+        MessageBoxService.DisplayMessage(ex.Message, MessageBoxImage.Error);
       }
 
     }
 
-    private void Registrieren()
+    private void ShowRegistrieren()
     {
-      // Registrierung handlen
+      try
+      {
+        var view = new RegistrierenView();
+        view.DataContext = this;
+        view.Show();
+      }
+      catch (Exception ex)
+      {
+        MessageBoxService.DisplayMessage(ex.Message, MessageBoxImage.Error);
+      }
     }
     #endregion Methoden
   }
