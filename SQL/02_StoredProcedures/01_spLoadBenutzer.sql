@@ -1,0 +1,12 @@
+USE dbcommitandforget;
+
+DROP PROCEDURE IF EXISTS spLoadBenutzer;
+
+DELIMITER $$
+
+CREATE PROCEDURE spLoadBenutzer()
+BEGIN
+    SELECT * FROM tblBenutzer;
+END $$
+
+DELIMITER ;
