@@ -2,7 +2,7 @@
 
 namespace CommitAndForget.Model
 {
-  public class BestellungsModel : NotifyObject
+  public class OrderModel : NotifyObject
   {
     #region Properties
     public int Key
@@ -11,19 +11,19 @@ namespace CommitAndForget.Model
       set => Set(value);
     }
 
-    public DateTime Bestelldatum
+    public DateTime OrderDate
     {
       get => Get<DateTime>();
       set => Set(value);
     }
 
-    public int BenutzerLink
+    public int UserLink
     {
       get => Get<int>();
       set => Set(value);
     }
 
-    public int RechnungsLink
+    public int InvoiceLink
     {
       get => Get<int>();
       set => Set(value);

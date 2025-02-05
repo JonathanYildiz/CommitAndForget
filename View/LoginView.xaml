@@ -6,7 +6,8 @@
         xmlns:local="clr-namespace:CommitAndForget"
         mc:Ignorable="d"
         Title="MacApple" Height="450" Width="800" MinWidth="300" MinHeight="300"
-        x:Name="loginWindow">
+        x:Name="loginWindow"
+        WindowStartupLocation="CenterScreen">
  
   <Window.Resources>
     <Style TargetType="Button">
@@ -73,14 +74,16 @@
         </Grid.RowDefinitions>
         <Grid Grid.Row="1">
           <Label>Benutzername</Label>
-          <TextBox Text="{Binding Mail}"></TextBox>
+          <TextBox Text="{Binding Email}"></TextBox>
         </Grid>
 
-       <TextBox Grid.Row="2" Text="{Binding Passwort}"></TextBox>
+       <TextBox Grid.Row="2" Text="{Binding Password}"></TextBox>
 
-        <Button Grid.Row="3" Content="Anmelden" Command="{Binding LoginCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}"/>
+        <Button Grid.Row="3" Content="Anmelden" 
+                Command="{Binding LoginCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}"/>
 
-        <Button Grid.Row="4" Content="Registrieren" Command="{Binding ShowRegistrierenCommand}" />
+        <Button Grid.Row="4" Content="Registrieren" 
+                Command="{Binding ShowRegistrationWindowCommand}" />
 
       </Grid>
   </Grid>

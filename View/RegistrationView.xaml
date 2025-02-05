@@ -1,0 +1,47 @@
+﻿<Window x:Class="CommitAndForget.View.RegistrationView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:CommitAndForget.View"
+        mc:Ignorable="d"
+        Title="Registrieren" Height="450" Width="800">
+  <Grid>
+    <StackPanel>
+      <DockPanel>
+        <Label>Vorname</Label>
+      <TextBox Text="{Binding NewUser.FirstName}"/>
+      </DockPanel>
+      <DockPanel>
+        <Label>Nachname</Label>
+    <TextBox Text="{Binding NewUser.LastName}"/>
+      </DockPanel>
+      <DockPanel>
+        <Label>Straße</Label>
+    <TextBox Text="{Binding NewUser.Street}"/>
+      </DockPanel>
+      <DockPanel>
+        <Label>Hausnummer</Label>
+    <TextBox Text="{Binding NewUser.HouseNumber}"/>
+      </DockPanel>
+      <DockPanel>
+        <Label>PLZ</Label>
+    <TextBox Text="{Binding NewUser.PostalCode}"/>
+      </DockPanel>
+      <DockPanel>
+        <Label>Ort</Label>
+    <TextBox Text="{Binding NewUser.City}"/>
+      </DockPanel>
+      <DockPanel>
+        <Label>E-Mail</Label>
+    <TextBox Text="{Binding NewUser.Email}"/>
+      </DockPanel>
+      <DockPanel>
+        <Label>Passwort</Label>
+    <TextBox Text="{Binding NewUser.Password}"/>
+      </DockPanel>
+      <Button Command="{Binding ConfirmRegistrationCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}">OK</Button>
+      <Button Command="{Binding CancelCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}">Abbrechen</Button>
+    </StackPanel>
+  </Grid>
+</Window>

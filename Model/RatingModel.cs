@@ -17,13 +17,13 @@ namespace CommitAndForget.Model
       set => Set(value);
     }
 
-    public int BenutzerLink
+    public int UserLink
     {
       get => Get<int>();
       set => Set(value);
     }
 
-    public int BildLink
+    public int ImageLink
     {
       get => Get<int>();
       set => Set(value);

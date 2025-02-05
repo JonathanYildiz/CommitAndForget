@@ -2,7 +2,7 @@
 
 namespace CommitAndForget.Model
 {
-  public class RechnungsModel : NotifyObject
+  public class InvoiceModel : NotifyObject
   {
     #region Properties
     public int Key
@@ -11,19 +11,19 @@ namespace CommitAndForget.Model
       set => Set(value);
     }
 
-    public int Rechnungsnummer
+    public int InvoiceNumber
     {
       get => Get<int>();
       set => Set(value);
     }
 
-    public bool Bezahlt
+    public bool Paid
     {
       get => Get<bool>();
       set => Set(value);
     }
 
-    public string Bezahlart
+    public string PaymentMethod
     {
       get => Get<string>();
       set => Set(value);
