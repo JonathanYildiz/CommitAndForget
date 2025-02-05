@@ -1,175 +1,171 @@
-USE dbcommitandforget;
-
--- Prüfen, ob die Tabelle tblBenutzer existiert, falls nicht, dann erstellen
-CREATE TABLE IF NOT EXISTS tblBenutzer (
+-- Create the tblUser table if it does not exist
+CREATE TABLE IF NOT EXISTS tblUser (
     nKey INT AUTO_INCREMENT PRIMARY KEY,
-    szName NVARCHAR(200) NOT NULL,
-    szStrasse NVARCHAR(200) NOT NULL,
-    nHausnummer INT NOT NULL,
-    szPostleitzahl NVARCHAR(200) NOT NULL,
-    szWohnort NVARCHAR(200) NOT NULL,
-    szMail NVARCHAR(200) UNIQUE NOT NULL,
-    szPasswort NVARCHAR(200) NOT NULL,
+    szFirstname NVARCHAR(200) NOT NULL,
+    szLastname NVARCHAR(200) NOT NULL,
+    szStreet NVARCHAR(200) NOT NULL,
+    szHouseNumber NVARCHAR(200) NOT NULL,
+    szPostalCode NVARCHAR(200) NOT NULL,
+    szCity NVARCHAR(200) NOT NULL,
+    szEmail NVARCHAR(200) UNIQUE NOT NULL,
+    szPassword NVARCHAR(200) NOT NULL,
     bIsAdmin BIT DEFAULT 0
 );
--- Prüfen, ob die Tabelle tblBild existiert, falls nicht, dann erstellen
-CREATE TABLE IF NOT EXISTS tblBild (
-	nKey INT AUTO_INCREMENT PRIMARY KEY,
-    vbBild  LONGBLOB NOT NULL, 
-    bFreigeschaltet BIT DEFAULT 0,
-    dtErstelldatum DATE NOT NULL DEFAULT (CURDATE()),
-    bContestGewonnen BIT DEFAULT 0
+
+-- Check if the tblImage table exists, if not, create it
+CREATE TABLE IF NOT EXISTS tblImage (
+    nKey INT AUTO_INCREMENT PRIMARY KEY,
+    vbImage LONGBLOB NOT NULL, 
+    bApproved BIT DEFAULT 0,
+    dtCreationDate DATE NOT NULL DEFAULT (CURDATE()),
+    bContestWon BIT DEFAULT 0
 );
 
--- Prüfen, ob die Tabelle tblRating existiert, falls nicht, dann erstellen
+-- Check if the tblRating table exists, if not, create it
 CREATE TABLE IF NOT EXISTS tblRating (
-	nKey INT AUTO_INCREMENT PRIMARY KEY,
+    nKey INT AUTO_INCREMENT PRIMARY KEY,
     nRating INT NOT NULL,
-    nBenutzerLink INT NOT NULL,
-    nBildLink INT NOT NULL,
+    nUserLink INT NOT NULL,
+    nImageLink INT NOT NULL,
     
--- Fremdschlüssel-Definition
- CONSTRAINT fk_tblRating_Benutzer 
-        FOREIGN KEY (nBenutzerLink) 
-        REFERENCES tblBenutzer(nKey) 
+    -- Foreign key definition
+    CONSTRAINT fk_tblRating_User 
+        FOREIGN KEY (nUserLink) 
+        REFERENCES tblUser(nKey) 
         ON DELETE CASCADE 
         ON UPDATE CASCADE,
 
-CONSTRAINT fk_tblRating_Bild 
-        FOREIGN KEY (nBildLink) 
-        REFERENCES tblBild(nKey) 
+    CONSTRAINT fk_tblRating_Image 
+        FOREIGN KEY (nImageLink) 
+        REFERENCES tblImage(nKey) 
         ON DELETE CASCADE 
         ON UPDATE CASCADE
 ); 
 
--- Prüfen, ob die Tabelle tblRechnung existiert, falls nicht, dann erstellen
-CREATE TABLE IF NOT EXISTS tblRechnung (
-	nKey INT AUTO_INCREMENT PRIMARY KEY,
-    nRechnungsnummer INT NOT NULL,
-    bBezahlt BIT DEFAULT 0,
-    szBezahlart NVARCHAR(200) NOT NULL
+-- Check if the tblInvoice table exists, if not, create it
+CREATE TABLE IF NOT EXISTS tblInvoice (
+    nKey INT AUTO_INCREMENT PRIMARY KEY,
+    nInvoiceNumber INT NOT NULL,
+    bPaid BIT DEFAULT 0,
+    szPaymentMethod NVARCHAR(200) NOT NULL
 );
 
--- Prüfen, ob die Tabelle tblBestellung existiert, falls nicht, dann erstellen
-CREATE TABLE IF NOT EXISTS tblBestellung (
-	nKey INT AUTO_INCREMENT PRIMARY KEY,
-    dtBestelldatum  DATE NOT NULL DEFAULT (CURDATE()),
-    nBenutzerLink INT NOT NULL,
-    nRechnungLink INT NOT NULL,
+-- Check if the tblOrder table exists, if not, create it
+CREATE TABLE IF NOT EXISTS tblOrder (
+    nKey INT AUTO_INCREMENT PRIMARY KEY,
+    dtOrderDate DATE NOT NULL DEFAULT (CURDATE()),
+    nUserLink INT NOT NULL,
+    nInvoiceLink INT NOT NULL,
     
-    -- Fremdschlüssel-Definition
- CONSTRAINT fk_tblBestellung_Benutzer 
-        FOREIGN KEY (nBenutzerLink) 
-        REFERENCES tblBenutzer(nKey) 
+    -- Foreign key definition
+    CONSTRAINT fk_tblOrder_User 
+        FOREIGN KEY (nUserLink) 
+        REFERENCES tblUser(nKey) 
         ON DELETE CASCADE 
         ON UPDATE CASCADE,
 
-CONSTRAINT fk_tblBestellung_Rechnung 
-        FOREIGN KEY (nRechnungLink) 
-        REFERENCES tblRechnung(nKey) 
+    CONSTRAINT fk_tblOrder_Invoice 
+        FOREIGN KEY (nInvoiceLink) 
+        REFERENCES tblInvoice(nKey) 
         ON DELETE CASCADE 
         ON UPDATE CASCADE
 );
 
--- Prüfen, ob die Tabelle tblProdukt existiert, falls nicht, dann erstellen
-CREATE TABLE IF NOT EXISTS tblProdukt (
-	nKey INT AUTO_INCREMENT PRIMARY KEY,
-    szName  NVARCHAR(200) NOT NULL,
-    rPreis DECIMAL(5,2) NOT NULL,
-    nBildLink INT NOT NULL,
-    
-    -- Fremdschlüssel-Definition
- CONSTRAINT fk_tblProdukt_Bild 
-        FOREIGN KEY (nBildLink) 
-        REFERENCES tblBild(nKey) 
-        ON DELETE CASCADE 
-        ON UPDATE CASCADE
-);
-
--- Prüfen, ob die Tabelle tblBestellungProdukt existiert, falls nicht, dann erstellen
-CREATE TABLE IF NOT EXISTS tblBestellungPtodukt (
-	nKey INT AUTO_INCREMENT PRIMARY KEY,
-    nBestellungsLink INT NOT NULL,
-    nProduktLink INT NOT NULL,
-    nMenge INT NOT NULL,
-    
-    
-    -- Fremdschlüssel-Definition
- CONSTRAINT fk_tblBestellungProdukt_Bestellung 
-        FOREIGN KEY (nBestellungsLink) 
-        REFERENCES tblBestellung(nKey) 
-        ON DELETE CASCADE 
-        ON UPDATE CASCADE,
-
-CONSTRAINT fk_tblBestellungProdukt_Produkt 
-        FOREIGN KEY (nProduktLink) 
-        REFERENCES tblProdukt(nKey) 
-        ON DELETE CASCADE 
-        ON UPDATE CASCADE
-);
-
--- Prüfen, ob die Tabelle tblMenu existiert, falls nicht, dann erstellen
-CREATE TABLE IF NOT EXISTS tblMenu (
-	nKey INT AUTO_INCREMENT PRIMARY KEY,
+-- Check if the tblProduct table exists, if not, create it
+CREATE TABLE IF NOT EXISTS tblProduct (
+    nKey INT AUTO_INCREMENT PRIMARY KEY,
     szName NVARCHAR(200) NOT NULL,
-    rPreis DECIMAL(5,2) NOT NULL,
-    nBildLink INT NOT NULL,
+    rPrice DECIMAL(5,2) NOT NULL,
+    nImageLink INT NOT NULL,
     
-    
-    -- Fremdschlüssel-Definition
- CONSTRAINT fk_tblMenu_Bild
-        FOREIGN KEY (nBildLink) 
-        REFERENCES tblBild(nKey) 
+    -- Foreign key definition
+    CONSTRAINT fk_tblProduct_Image 
+        FOREIGN KEY (nImageLink) 
+        REFERENCES tblImage(nKey) 
         ON DELETE CASCADE 
         ON UPDATE CASCADE
 );
 
--- Prüfen, ob die Tabelle tblProduktMenu existiert, falls nicht, dann erstellen
-CREATE TABLE IF NOT EXISTS tblProduktMenu (
-	nKey INT AUTO_INCREMENT PRIMARY KEY,
-    nProduktLink INT NOT NULL,
-    nMenuLink INT NOT NULL,
-    nMenge INT NOT NULL,
+-- Check if the tblOrderProduct table exists, if not, create it
+CREATE TABLE IF NOT EXISTS tblOrderProduct (
+    nKey INT AUTO_INCREMENT PRIMARY KEY,
+    nOrderLink INT NOT NULL,
+    nProductLink INT NOT NULL,
+    nQuantity INT NOT NULL,
     
-    
-    -- Fremdschlüssel-Definition
- CONSTRAINT fk_tblProduktMenu_Produkt 
-        FOREIGN KEY (nProduktLink) 
-        REFERENCES tblProdukt(nKey) 
+    -- Foreign key definition
+    CONSTRAINT fk_tblOrderProduct_Order 
+        FOREIGN KEY (nOrderLink) 
+        REFERENCES tblOrder(nKey) 
         ON DELETE CASCADE 
         ON UPDATE CASCADE,
 
-CONSTRAINT fk_tblProduktMenu_Menu 
+    CONSTRAINT fk_tblOrderProduct_Product 
+        FOREIGN KEY (nProductLink) 
+        REFERENCES tblProduct(nKey) 
+        ON DELETE CASCADE 
+        ON UPDATE CASCADE
+);
+
+-- Check if the tblMenu table exists, if not, create it
+CREATE TABLE IF NOT EXISTS tblMenu (
+    nKey INT AUTO_INCREMENT PRIMARY KEY,
+    szName NVARCHAR(200) NOT NULL,
+    rPrice DECIMAL(5,2) NOT NULL,
+    nImageLink INT NOT NULL,
+    
+    -- Foreign key definition
+    CONSTRAINT fk_tblMenu_Image
+        FOREIGN KEY (nImageLink) 
+        REFERENCES tblImage(nKey) 
+        ON DELETE CASCADE 
+        ON UPDATE CASCADE
+);
+
+-- Check if the tblProductMenu table exists, if not, create it
+CREATE TABLE IF NOT EXISTS tblProductMenu (
+    nKey INT AUTO_INCREMENT PRIMARY KEY,
+    nProductLink INT NOT NULL,
+    nMenuLink INT NOT NULL,
+    nQuantity INT NOT NULL,
+    
+    -- Foreign key definition
+    CONSTRAINT fk_tblProductMenu_Product 
+        FOREIGN KEY (nProductLink) 
+        REFERENCES tblProduct(nKey) 
+        ON DELETE CASCADE 
+        ON UPDATE CASCADE,
+
+    CONSTRAINT fk_tblProductMenu_Menu 
         FOREIGN KEY (nMenuLink) 
         REFERENCES tblMenu(nKey) 
         ON DELETE CASCADE 
         ON UPDATE CASCADE
 );
 
--- Prüfen, ob die Tabelle tblZutat existiert, falls nicht, dann erstellen
-CREATE TABLE IF NOT EXISTS tblZutat (
-	nKey INT AUTO_INCREMENT PRIMARY KEY,
+-- Check if the tblIngredient table exists, if not, create it
+CREATE TABLE IF NOT EXISTS tblIngredient (
+    nKey INT AUTO_INCREMENT PRIMARY KEY,
     szName NVARCHAR(200) NOT NULL
 );
 
--- Prüfen, ob die Tabelle tblProduktZutat existiert, falls nicht, dann erstellen
-CREATE TABLE IF NOT EXISTS tblProduktZutat (
-	nKey INT AUTO_INCREMENT PRIMARY KEY,
-    nZutatLink  INT NOT NULL,
-    nProduktLink INT NOT NULL,
-    nMenge INT NOT NULL,
+-- Check if the tblProductIngredient table exists, if not, create it
+CREATE TABLE IF NOT EXISTS tblProductIngredient (
+    nKey INT AUTO_INCREMENT PRIMARY KEY,
+    nIngredientLink INT NOT NULL,
+    nProductLink INT NOT NULL,
+    nQuantity INT NOT NULL,
     
-    
-    -- Fremdschlüssel-Definition
- CONSTRAINT fk_tblProduktZutat_Zutat
-        FOREIGN KEY (nZutatLink) 
-        REFERENCES tblZutat(nKey) 
+    -- Foreign key definition
+    CONSTRAINT fk_tblProductIngredient_Ingredient
+        FOREIGN KEY (nIngredientLink) 
+        REFERENCES tblIngredient(nKey) 
         ON DELETE CASCADE 
         ON UPDATE CASCADE,
 
-CONSTRAINT fk_tblProduktZutat_Produkt 
-        FOREIGN KEY (nProduktLink) 
-        REFERENCES tblProdukt(nKey) 
+    CONSTRAINT fk_tblProductIngredient_Product 
+        FOREIGN KEY (nProductLink) 
+        REFERENCES tblProduct(nKey) 
         ON DELETE CASCADE 
         ON UPDATE CASCADE
 );
