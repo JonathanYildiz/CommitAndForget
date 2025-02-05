@@ -50,9 +50,13 @@ namespace CommitAndForget.ViewModel
     {
       LoginCommand = new RelayCommand<Window>(Login);
       ShowRegistrierenCommand = new RelayCommand(ShowRegistrieren);
+      ConfirmRegistrierenCommand = new RelayCommand<Window>(ConfirmRegistrieren);
+      CancelCommand = new RelayCommand<Window>(Cancel);
     }
     public ICommand LoginCommand { get; private set; }
     public ICommand ShowRegistrierenCommand { get; private set; }
+    public ICommand ConfirmRegistrierenCommand { get; private set; }
+    public ICommand CancelCommand { get; private set; }
     #endregion Commands
 
     #region Methoden
@@ -95,6 +99,8 @@ namespace CommitAndForget.ViewModel
     {
       try
       {
+        NeuerBenutzer = new BenutzerModel();
+
         var view = new RegistrierenView();
         view.DataContext = this;
         view.Show();
@@ -104,6 +110,32 @@ namespace CommitAndForget.ViewModel
         MessageBoxService.DisplayMessage(ex.Message, MessageBoxImage.Error);
       }
     }
+
+    private void ConfirmRegistrieren(Window window)
+    {
+      try
+      {
+        BenutzerModel angelegterBenutzer = BenutzerDataProvider.Registrieren(NeuerBenutzer);
+
+        if (angelegterBenutzer is not null && angelegterBenutzer.Key > 0)
+        {
+          Mail = NeuerBenutzer.Mail;
+          Passwort = NeuerBenutzer.Passwort;
+          window?.Close();
+        }
+        else
+        {
+          MessageBoxService.DisplayMessage("Benutzer konnte nicht angelegt werden.", MessageBoxImage.Error);
+        }
+      }
+      catch (Exception ex)
+      {
+        MessageBoxService.DisplayMessage(ex.Message, MessageBoxImage.Error);
+      }
+    }
+
+    private void Cancel(Window window) => window?.Close();
+
     #endregion Methoden
   }
 }
