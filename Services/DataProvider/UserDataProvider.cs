@@ -83,14 +83,14 @@ namespace CommitAndForget.Services.DataProvider
       {
         var parameters = new Dictionary<string, object>
         {
-          { "p_FirstName", user.FirstName },
-          { "p_LastName", user.LastName },
-          { "p_Street", user.Street },
-          { "p_HouseNumber", user.HouseNumber },
-          { "p_PostalCode", user.PostalCode },
-          { "p_City", user.City },
-          { "p_Email", user.Email },
-          { "p_Password", user.Password }
+          { "p_FirstName", newUser.FirstName },
+          { "p_LastName", newUser.LastName },
+          { "p_Street", newUser.Street },
+          { "p_HouseNumber", newUser.HouseNumber },
+          { "p_PostalCode", newUser.PostalCode },
+          { "p_City", newUser.City },
+          { "p_Email", newUser.Email },
+          { "p_Password", newUser.Password }
         };
         DataTable dt = DataBaseService.ExecuteSP("spRegisterUser", parameters);
 
