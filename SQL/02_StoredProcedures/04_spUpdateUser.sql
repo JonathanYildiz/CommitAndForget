@@ -21,7 +21,7 @@ BEGIN
     WHERE nKey = p_Key;
    
 	IF v_Count = 0 THEN
-		SELECT 'Error: User is not found!' AS Nachricht;
+		SELECT 'Fehler: Benutzer ist nicht gefunden!' AS Nachricht;
     ELSE
 		UPDATE tbluser
         SET 

@@ -1,4 +1,3 @@
-select * from tbluser;
 DROP PROCEDURE IF EXISTS spRegisterUser;
 
 DELIMITER $$
