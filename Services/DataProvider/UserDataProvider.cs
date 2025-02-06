@@ -96,7 +96,11 @@ namespace CommitAndForget.Services.DataProvider
 
         if (dt is not null && dt.Rows.Count == 1) // Es darf nur ein Benutzer zurückkommmen
         {
-          // TODO JYI SQL Fehlermeldung abfangen, wenn Email bereits verwendet wird 
+          if (dt.Columns.Contains("Nachricht") && dt.Rows[0]["Nachricht"] != DBNull.Value) // Fehlermeldungen aus der Datenbank abfangen
+          {
+            MessageBoxService.DisplayMessage(dt.Rows[0]["Nachricht"].ToString() ?? "DB-Fehler", MessageBoxImage.Warning);
+            return null;
+          }
 
           user.Key = dt.Rows[0]["nKey"] != DBNull.Value ? (int)dt.Rows[0]["nKey"] : default;
           user.FirstName = dt.Rows[0]["szFirstName"] != DBNull.Value ? dt.Rows[0]["szFirstName"].ToString() ?? string.Empty : string.Empty;

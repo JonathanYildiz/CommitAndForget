@@ -64,6 +64,16 @@ namespace CommitAndForget.ViewModel
     {
       try
       {
+        if (string.IsNullOrEmpty(Email) && string.IsNullOrEmpty(Password)) // TODO nur zum debuggen, hinterher entfernen
+        {
+          var view = new UserMainView();
+          view.WindowStartupLocation = WindowStartupLocation.CenterScreen;
+          view.DataContext = new UserViewModel(new UserModel());
+          view.Show();
+          window?.Close();
+          return;
+        }
+
         if (string.IsNullOrEmpty(Email) || string.IsNullOrEmpty(Password))
         {
           MessageBoxService.DisplayMessage("Bitte geben Sie Ihre E-Mail und Ihr Passwort ein.", MessageBoxImage.Warning);
@@ -76,9 +86,20 @@ namespace CommitAndForget.ViewModel
           Email = "";
           Password = "";
 
-          // Neue View erstellen
-          // DataContext zuweisen -> new MacAppleViewModel(aktuellerBenutzer);
-          // NeueView.Show();
+          if(currentUser.IsAdmin)
+          {
+            var view = new AdminMainView();
+            view.WindowStartupLocation = WindowStartupLocation.CenterScreen;
+            view.DataContext = new AdminViewModel(currentUser);
+            view.Show();
+          }
+          else
+          {
+            var view = new UserMainView();
+            view.WindowStartupLocation = WindowStartupLocation.CenterScreen;
+            view.DataContext = new UserViewModel(currentUser);
+            view.Show();
+          }        
 
           window?.Close();
         }
@@ -117,6 +138,8 @@ namespace CommitAndForget.ViewModel
       try
       {
         UserModel createdUser = UserDataProvider.Register(NewUser);
+        if (createdUser is null)
+          return;
 
         if (createdUser is not null && createdUser.Key > 0)
         {
