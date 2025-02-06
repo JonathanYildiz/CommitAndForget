@@ -1,4 +1,3 @@
-select * from tblmenu;
 USE dbcommitandforget;
 
 DROP PROCEDURE IF EXISTS spDeleteMenu;
