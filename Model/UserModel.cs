@@ -2,7 +2,7 @@
 
 namespace CommitAndForget.Model
 {
-  public class BenutzerModel : NotifyObject
+  public class UserModel : NotifyObject
   {
     #region Properties
     public int Key
@@ -11,43 +11,49 @@ namespace CommitAndForget.Model
       set => Set(value);
     }
 
-    public string Name
+    public string FirstName
     {
       get => Get<string>();
       set => Set(value);
     }
 
-    public string Strasse
+    public string LastName
     {
       get => Get<string>();
       set => Set(value);
     }
 
-    public int Hausnummer
-    {
-      get => Get<int>();
-      set => Set(value);
-    }
-
-    public string Postleitzahl
+    public string Street
     {
       get => Get<string>();
       set => Set(value);
     }
 
-    public string Wohnort
+    public string HouseNumber
     {
       get => Get<string>();
       set => Set(value);
     }
 
-    public string Mail
+    public string PostalCode
     {
       get => Get<string>();
       set => Set(value);
     }
 
-    public string Passwort
+    public string City
+    {
+      get => Get<string>();
+      set => Set(value);
+    }
+
+    public string Email
+    {
+      get => Get<string>();
+      set => Set(value);
+    }
+
+    public string Password
     {
       get => Get<string>();
       set => Set(value);

@@ -6,18 +6,18 @@ namespace CommitAndForget.ViewModel
   public class MacAppleViewModel : NotifyObject
   {
     #region Properties
-    public BenutzerModel AktuellerBenutzer
+    public UserModel CurrentUser
     {
-      get => Get<BenutzerModel>();
+      get => Get<UserModel>();
       set => Set(value);
     }
     #endregion Properties
 
-    #region Konstruktor
-    public MacAppleViewModel(BenutzerModel aktuellerBenutzer)
+    #region Constructor
+    public MacAppleViewModel(UserModel currentUser)
     {
-      AktuellerBenutzer = aktuellerBenutzer;
+      CurrentUser = currentUser;
     }
-    #endregion Konstruktor
+    #endregion constructor
   }
 }

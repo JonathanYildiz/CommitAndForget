@@ -13,68 +13,68 @@ namespace CommitAndForget.ViewModel
   public class LoginViewModel : NotifyObject
   {
     #region Properties
-    public ObservableCollection<BenutzerModel> BenutzerListe
+    public ObservableCollection<UserModel> UserList
     {
-      get => Get<ObservableCollection<BenutzerModel>>();
+      get => Get<ObservableCollection<UserModel>>();
       set => Set(value);
     }
 
-    public string Mail
+    public string Email
     {
       get => Get<string>();
       set => Set(value);
     }
 
-    public string Passwort
+    public string Password
     {
       get => Get<string>();
       set => Set(value);
     }
 
-    public BenutzerModel NeuerBenutzer
+    public UserModel NewUser
     {
-      get => Get<BenutzerModel>();
+      get => Get<UserModel>();
       set => Set(value);
     }
     #endregion Properties
 
-    #region Konstruktor
+    #region Constructor
     public LoginViewModel()
     {
       CreateCommands();
     }
-    #endregion Konstuktor
+    #endregion Constuctor
 
     #region Commands
     private void CreateCommands()
     {
       LoginCommand = new RelayCommand<Window>(Login);
-      ShowRegistrierenCommand = new RelayCommand(ShowRegistrieren);
-      ConfirmRegistrierenCommand = new RelayCommand<Window>(ConfirmRegistrieren);
+      ShowRegistrationWindowCommand = new RelayCommand(ShowRegistrationWindow);
+      ConfirmRegistrationCommand = new RelayCommand<Window>(ConfirmRegistration);
       CancelCommand = new RelayCommand<Window>(Cancel);
     }
     public ICommand LoginCommand { get; private set; }
-    public ICommand ShowRegistrierenCommand { get; private set; }
-    public ICommand ConfirmRegistrierenCommand { get; private set; }
+    public ICommand ShowRegistrationWindowCommand { get; private set; }
+    public ICommand ConfirmRegistrationCommand { get; private set; }
     public ICommand CancelCommand { get; private set; }
     #endregion Commands
 
-    #region Methoden
+    #region Methods
     private void Login(Window window)
     {
       try
       {
-        if (string.IsNullOrEmpty(Mail) || string.IsNullOrEmpty(Passwort))
+        if (string.IsNullOrEmpty(Email) || string.IsNullOrEmpty(Password))
         {
           MessageBoxService.DisplayMessage("Bitte geben Sie Ihre E-Mail und Ihr Passwort ein.", MessageBoxImage.Warning);
           return;
         }
 
-        BenutzerModel aktuellerBenutzer = BenutzerDataProvider.Login(Mail, Passwort);
-        if (aktuellerBenutzer is not null && aktuellerBenutzer.Key > 0) //Benutzer muss gültigen nKey besitzen
+        UserModel currentUser = UserDataProvider.Login(Email, Password);
+        if (currentUser is not null && currentUser.Key > 0) //Benutzer muss gültigen nKey besitzen
         {
-          Mail = "";
-          Passwort = "";
+          Email = "";
+          Password = "";
 
           // Neue View erstellen
           // DataContext zuweisen -> new MacAppleViewModel(aktuellerBenutzer);
@@ -85,7 +85,7 @@ namespace CommitAndForget.ViewModel
         else
         {
           MessageBoxService.DisplayMessage("E-Mail oder Passwort ist falsch.", MessageBoxImage.Warning);
-          Passwort = "";
+          Password = "";
         }
       }
       catch (Exception ex)
@@ -95,13 +95,14 @@ namespace CommitAndForget.ViewModel
 
     }
 
-    private void ShowRegistrieren()
+    private void ShowRegistrationWindow()
     {
       try
       {
-        NeuerBenutzer = new BenutzerModel();
+        NewUser = new UserModel();
 
-        var view = new RegistrierenView();
+        var view = new RegistrationView();
+        view.WindowStartupLocation = WindowStartupLocation.CenterScreen;
         view.DataContext = this;
         view.Show();
       }
@@ -111,16 +112,16 @@ namespace CommitAndForget.ViewModel
       }
     }
 
-    private void ConfirmRegistrieren(Window window)
+    private void ConfirmRegistration(Window window)
     {
       try
       {
-        BenutzerModel angelegterBenutzer = BenutzerDataProvider.Registrieren(NeuerBenutzer);
+        UserModel createdUser = UserDataProvider.Register(NewUser);
 
-        if (angelegterBenutzer is not null && angelegterBenutzer.Key > 0)
+        if (createdUser is not null && createdUser.Key > 0)
         {
-          Mail = NeuerBenutzer.Mail;
-          Passwort = NeuerBenutzer.Passwort;
+          Email = NewUser.Email;
+          Password = NewUser.Password;
           window?.Close();
         }
         else
@@ -136,6 +137,6 @@ namespace CommitAndForget.ViewModel
 
     private void Cancel(Window window) => window?.Close();
 
-    #endregion Methoden
+    #endregion Methods
   }
 }

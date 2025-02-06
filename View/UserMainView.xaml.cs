@@ -14,14 +14,11 @@ using System.Windows.Shapes;
 
 namespace CommitAndForget.View
 {
-    /// <summary>
-    /// Interaction logic for RegistrierenView.xaml
-    /// </summary>
-    public partial class RegistrierenView : Window
+  public partial class UserMainView : Window
+  {
+    public UserMainView()
     {
-        public RegistrierenView()
-        {
-            InitializeComponent();
-        }
+      InitializeComponent();
     }
+  }
 }

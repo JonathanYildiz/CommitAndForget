@@ -2,18 +2,20 @@
 
 namespace CommitAndForget.Model
 {
-  public class TestModel : NotifyObject
+  public class IngredientModel : NotifyObject
   {
-    public int TestInt
+    #region Properties
+    public int Key
     {
       get => Get<int>();
       set => Set(value);
     }
 
-    public string TestString
+    public string Name
     {
       get => Get<string>();
       set => Set(value);
     }
+    #endregion Properties
   }
 }

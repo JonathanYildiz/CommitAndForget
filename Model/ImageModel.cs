@@ -3,7 +3,7 @@ using CommitAndForget.Essentials;
 
 namespace CommitAndForget.Model
 {
-  public class BildModel : NotifyObject
+  public class ImageModel : NotifyObject
   {
     #region Properties
     public int Key
@@ -12,25 +12,25 @@ namespace CommitAndForget.Model
       set => Set(value);
     }
 
-    public ImageSource Bild
+    public ImageSource Image
     {
       get => Get<ImageSource>();
       set => Set(value);
     }
 
-    public bool Freigeschaltet
+    public bool Approved
     {
       get => Get<bool>();
       set => Set(value);
     }
 
-    public DateTime Erstelldatum
+    public DateTime CreationDate
     {
       get => Get<DateTime>();
       set => Set(value);
     }
 
-    public bool ContestGewonnen
+    public bool ContestWon
     {
       get => Get<bool>();
       set => Set(value);
