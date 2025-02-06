@@ -77,7 +77,7 @@ CREATE TABLE IF NOT EXISTS tblProduct (
     nKey INT AUTO_INCREMENT PRIMARY KEY,
     szName NVARCHAR(200) NOT NULL,
     rPrice DECIMAL(5,2) NOT NULL,
-    nImageLink INT NOT NULL,
+    nImageLink INT,
     
     -- Foreign key definition
     CONSTRAINT fk_tblProduct_Image 
@@ -113,7 +113,7 @@ CREATE TABLE IF NOT EXISTS tblMenu (
     nKey INT AUTO_INCREMENT PRIMARY KEY,
     szName NVARCHAR(200) NOT NULL,
     rPrice DECIMAL(5,2) NOT NULL,
-    nImageLink INT NOT NULL,
+    nImageLink INT,
     
     -- Foreign key definition
     CONSTRAINT fk_tblMenu_Image
