@@ -1,8 +1,8 @@
 -- Create the tblUser table if it does not exist
 CREATE TABLE IF NOT EXISTS tblUser (
     nKey INT AUTO_INCREMENT PRIMARY KEY,
-    szFirstname NVARCHAR(200) NOT NULL,
-    szLastname NVARCHAR(200) NOT NULL,
+    szFirstName NVARCHAR(200) NOT NULL,
+    szLastName NVARCHAR(200) NOT NULL,
     szStreet NVARCHAR(200) NOT NULL,
     szHouseNumber NVARCHAR(200) NOT NULL,
     szPostalCode NVARCHAR(200) NOT NULL,

@@ -4,8 +4,8 @@ DROP PROCEDURE IF EXISTS spRegisterUser;
 DELIMITER $$
 
 CREATE PROCEDURE spRegisterUser(
-	IN p_Firstname NVARCHAR(200),
-    IN p_Lastname NVARCHAR(200),
+	IN p_FirstName NVARCHAR(200),
+    IN p_LastName NVARCHAR(200),
     IN p_Street NVARCHAR(200),
     IN p_HouseNumber NVARCHAR(200),
     IN p_PostalCode NVARCHAR(200),
@@ -25,10 +25,10 @@ BEGIN
     IF v_Count > 0 THEN 
 		SELECT 'Fehler: Die E-Mail-Adresse ist bereits registriert.' AS Nachricht;
 	ELSE 
-		INSERT INTO tbluser (szFirstname, szLastname, szStreet, szHouseNumber, szPostalCode, szCity, szEmail, szPassword)
-        VALUES (p_Firstname, p_Lastname,  p_Street, p_HouseNumber,  p_PostalCode, p_City, p_Email, p_Password);
+		INSERT INTO tbluser (szFirstName, szLastName, szStreet, szHouseNumber, szPostalCode, szCity, szEmail, szPassword)
+        VALUES (p_FirstName, p_LastName,  p_Street, p_HouseNumber,  p_PostalCode, p_City, p_Email, p_Password);
         
-        SELECT  nKey, szFirstname, szLastname, szStreet, szHouseNumber, szPostalCode, szCity, szEmail, bIsAdmin
+        SELECT  nKey, szFirstName, szLastName, szStreet, szHouseNumber, szPostalCode, szCity, szEmail, bIsAdmin
         FROM tbluser 
         WHERE  szEmail = p_Email;
     END IF;

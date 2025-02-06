@@ -6,7 +6,7 @@ DELIMITER $$
 
 CREATE PROCEDURE spLoadUsers()
 BEGIN
-    SELECT nKey, szFirstname, szLastname, szStreet, szHouseNumber, szPostalCode, szCity, szEmail, bIsAdmin
+    SELECT nKey, szFirstName, szLastName, szStreet, szHouseNumber, szPostalCode, szCity, szEmail, bIsAdmin
     FROM tbluser;
 END $$
 

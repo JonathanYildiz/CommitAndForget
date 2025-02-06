@@ -1,7 +1,7 @@
 USE dbcommitandforget;
 
 -- Testdaten für tblBenutzer einfügen
-INSERT INTO tbluser (szFirstname, szLastname, szStreet, szHouseNumber, szPostalCode, szCity, szEmail, szPassword, bIsAdmin) 
+INSERT INTO tbluser (szFirstName, szLastName, szStreet, szHouseNumber, szPostalCode, szCity, szEmail, szPassword, bIsAdmin) 
 VALUES 
 ('Max', 'Mustermann', 'Hauptstraße', '12', '12345', 'Berlin', 'max@example.com', 'passwort123', 1),
 ('Anna',  'Beispiel', 'Nebenstraße', '5A', '54321', 'Hamburg', 'anna@example.com', 'geheim123', 0),

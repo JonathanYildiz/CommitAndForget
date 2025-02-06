@@ -4,8 +4,8 @@ DELIMITER $$
 
 CREATE PROCEDURE spUpdateUser(
 	IN p_Key INT, 
-	IN p_Firstname NVARCHAR(200),
-    IN p_Lastname NVARCHAR(200),
+	IN p_FirstName NVARCHAR(200),
+    IN p_LastName NVARCHAR(200),
     IN p_Street NVARCHAR(200),
     IN p_HouseNumber NVARCHAR(200),
     IN p_PostalCode NVARCHAR(200),
@@ -16,7 +16,7 @@ CREATE PROCEDURE spUpdateUser(
 BEGIN
 	DECLARE v_Count INT;
 -- Pruefen, ob die Mail-Passwort-Kombination existiert 
-	SELECT nKey, szFirstname, szLastname, szStreet, szHouseNumber, szPostalCode, szCity, szEmail, szPassword
+	SELECT nKey, szFirstName, szLastName, szStreet, szHouseNumber, szPostalCode, szCity, szEmail, szPassword
     FROM tbluser
     WHERE nKey = p_Key;
    
@@ -25,8 +25,8 @@ BEGIN
     ELSE
 		UPDATE tbluser
         SET 
-			szFirstname = p_Firstname,
-            szLastname = p_Lastname,
+			szFirstName = p_FirstName,
+            szLastName = p_LastName,
             szStreet = p_Street,
             szHouseNumber = p_HouseNumber,
             szPostalCode = p_PostalCode, 
@@ -35,7 +35,7 @@ BEGIN
             szPassword = p_Password
 		WHERE nKey = p_Key;
         
-        SELECT nKey, szFirstname, szLastname, szStreet, szHouseNumber, szPostalCode, szCity, szEmail
+        SELECT nKey, szFirstName, szLastName, szStreet, szHouseNumber, szPostalCode, szCity, szEmail
         FROM tbluser 
         WHERE nKey = p_Key;
 	END IF;
