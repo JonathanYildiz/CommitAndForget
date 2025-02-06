@@ -83,20 +83,24 @@ namespace CommitAndForget.Services.DataProvider
       {
         var parameters = new Dictionary<string, object>
         {
-          { "p_FirstName", user.FirstName },
-          { "p_LastName", user.LastName },
-          { "p_Street", user.Street },
-          { "p_HouseNumber", user.HouseNumber },
-          { "p_PostalCode", user.PostalCode },
-          { "p_City", user.City },
-          { "p_Email", user.Email },
-          { "p_Password", user.Password }
+          { "p_FirstName", newUser.FirstName },
+          { "p_LastName", newUser.LastName },
+          { "p_Street", newUser.Street },
+          { "p_HouseNumber", newUser.HouseNumber },
+          { "p_PostalCode", newUser.PostalCode },
+          { "p_City", newUser.City },
+          { "p_Email", newUser.Email },
+          { "p_Password", newUser.Password }
         };
         DataTable dt = DataBaseService.ExecuteSP("spRegisterUser", parameters);
 
         if (dt is not null && dt.Rows.Count == 1) // Es darf nur ein Benutzer zurückkommmen
         {
-          // TODO JYI SQL Fehlermeldung abfangen, wenn Email bereits verwendet wird 
+          if (dt.Columns.Contains("Nachricht") && dt.Rows[0]["Nachricht"] != DBNull.Value) // Fehlermeldungen aus der Datenbank abfangen
+          {
+            MessageBoxService.DisplayMessage(dt.Rows[0]["Nachricht"].ToString() ?? "DB-Fehler", MessageBoxImage.Warning);
+            return null;
+          }
 
           user.Key = dt.Rows[0]["nKey"] != DBNull.Value ? (int)dt.Rows[0]["nKey"] : default;
           user.FirstName = dt.Rows[0]["szFirstName"] != DBNull.Value ? dt.Rows[0]["szFirstName"].ToString() ?? string.Empty : string.Empty;
