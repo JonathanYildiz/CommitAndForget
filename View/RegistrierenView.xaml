@@ -8,15 +8,38 @@
         Title="RegistrierenView" Height="450" Width="800">
   <Grid>
     <StackPanel>
-      
-    <TextBox Text="{Binding NeuerBenutzer.Name}"/>
+      <DockPanel>
+        <Label>Name</Label>
+      <TextBox Text="{Binding NeuerBenutzer.Name}"/>
+      </DockPanel>
+      <DockPanel>
+        <Label>Vorname</Label>
     <TextBox Text="{Binding NeuerBenutzer.Vorname}"/>
+      </DockPanel>
+      <DockPanel>
+        <Label>Straße</Label>
     <TextBox Text="{Binding NeuerBenutzer.Straße}"/>
+      </DockPanel>
+      <DockPanel>
+        <Label>Hausnummer</Label>
     <TextBox Text="{Binding NeuerBenutzer.Hausnummer}"/>
+      </DockPanel>
+      <DockPanel>
+        <Label>PLZ</Label>
     <TextBox Text="{Binding NeuerBenutzer.PLZ}"/>
+      </DockPanel>
+      <DockPanel>
+        <Label>Ort</Label>
     <TextBox Text="{Binding NeuerBenutzer.Ort}"/>
+      </DockPanel>
+      <DockPanel>
+        <Label>E-Mail</Label>
     <TextBox Text="{Binding NeuerBenutzer.Mail}"/>
+      </DockPanel>
+      <DockPanel>
+        <Label>Passwort</Label>
     <TextBox Text="{Binding NeuerBenutzer.Passwort}"/>
+      </DockPanel>
       <Button Command="{Binding ConfirmRegistrierenCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}">OK</Button>
       <Button Command="{Binding CancelCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}">Abbrechen</Button>
     </StackPanel>
