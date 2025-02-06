@@ -75,6 +75,7 @@ CREATE TABLE IF NOT EXISTS tblOrder (
 -- Check if the tblProduct table exists, if not, create it
 CREATE TABLE IF NOT EXISTS tblProduct (
     nKey INT AUTO_INCREMENT PRIMARY KEY,
+    nEnergy INT,
     szName NVARCHAR(200) NOT NULL,
     rPrice DECIMAL(5,2) NOT NULL,
     nImageLink INT,
