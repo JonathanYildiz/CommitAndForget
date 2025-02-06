@@ -92,7 +92,7 @@ namespace CommitAndForget.Services.DataProvider
           { "p_Email", user.Email },
           { "p_Password", user.Password }
         };
-        DataTable dt = DataBaseService.ExecuteSP("spRegister", parameters);
+        DataTable dt = DataBaseService.ExecuteSP("spRegisterUser", parameters);
 
         if (dt is not null && dt.Rows.Count == 1) // Es darf nur ein Benutzer zurückkommmen
         {

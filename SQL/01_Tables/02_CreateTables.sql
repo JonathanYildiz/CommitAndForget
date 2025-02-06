@@ -1,3 +1,4 @@
+USE dbcommitandforget;
 -- Create the tblUser table if it does not exist
 CREATE TABLE IF NOT EXISTS tblUser (
     nKey INT AUTO_INCREMENT PRIMARY KEY,
