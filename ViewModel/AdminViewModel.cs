@@ -10,11 +10,18 @@ namespace CommitAndForget.ViewModel
 {
   public class AdminViewModel : NotifyObject
   {
+    #region Properties
+    public UserModel CurrentUser
+    {
+      get => Get<UserModel>();
+      set => Set(value);
+    }
+    #endregion Properties
 
     #region Constructor
     public AdminViewModel(UserModel user)
     {
-        
+      CurrentUser = user;
     }
     #endregion Constructor
   }

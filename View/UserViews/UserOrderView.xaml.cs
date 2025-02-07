@@ -15,14 +15,14 @@ using System.Windows.Shapes;
 
 namespace CommitAndForget.View.UserViews
 {
-    /// <summary>
-    /// Interaction logic for UserMenuProductView.xaml
-    /// </summary>
-    public partial class UserOrderView : Page
+  /// <summary>
+  /// Interaction logic for UserMenuProductView.xaml
+  /// </summary>
+  public partial class UserOrderView : Page
+  {
+    public UserOrderView()
     {
-        public UserOrderView()
-        {
-            InitializeComponent();
-        }
+      InitializeComponent();
     }
+  }
 }

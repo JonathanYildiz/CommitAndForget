@@ -12,17 +12,18 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using CommitAndForget.ViewModel;
 
 namespace CommitAndForget.View.UserViews
 {
-    /// <summary>
-    /// Interaction logic for UserSelectionView.xaml
-    /// </summary>
-    public partial class UserSelectionView : Page
+  /// <summary>
+  /// Interaction logic for UserSelectionView.xaml
+  /// </summary>
+  public partial class UserSelectionView : Page
+  {
+    public UserSelectionView()
     {
-        public UserSelectionView()
-        {
-            InitializeComponent();
-        }
+      InitializeComponent();
     }
+  }
 }

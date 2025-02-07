@@ -1,4 +1,3 @@
-select * from tblproduct;
 USE dbcommitandforget;
 
 DROP PROCEDURE IF EXISTS spDeleteProduct;
