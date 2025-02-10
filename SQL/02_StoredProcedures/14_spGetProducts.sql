@@ -13,7 +13,7 @@ SELECT
     p.nEnergy AS product_nEnergy,
     p.rPrice AS product_rPrice,
     p.nImageLink AS product_nImageLink,
-    i.nKey AS ingredient_nNey,
+    i.nKey AS ingredient_nKey,
     i.szName AS ingredient_szName,
     pi.nQuantity AS ingredient_nQuantity
     FROM tblproduct p 
