@@ -43,28 +43,29 @@ namespace CommitAndForget.ViewModel
       NavigateToUserSelectionCommand = new RelayCommand(NavigateToUserSelection);
       NavigateToUserOrderCommand = new RelayCommand(NavigateToUserOrder);
       NavigateBackCommand = new RelayCommand(NavigateBack);
+      NavigateToMenuCommand = new RelayCommand(NavigateToMenu);
+      NavigateToProductCommand = new RelayCommand(NavigateToProduct);
     }
     public ICommand NavigateToUserSelectionCommand { get; private set; }
     public ICommand NavigateToUserOrderCommand { get; private set; }
     public ICommand NavigateBackCommand { get; private set; }
+    public ICommand NavigateToMenuCommand { get; private set; }
+    public ICommand NavigateToProductCommand { get; private set; }
     #endregion Commands
 
     #region Methods
-    private void NavigateToUserSelection()
-    {
-      MainFrame?.Navigate(new UserSelectionView());
-    }
-
-    private void NavigateToUserOrder()
-    {
-      MainFrame?.Navigate(new UserOrderView());
-    }
+    // Methoden zur Navigation (DataContext ist das zentrale UserViewModel)
+    private void NavigateToUserSelection() => MainFrame?.Navigate(new UserSelectionView());
+    private void NavigateToUserOrder() => MainFrame?.Navigate(new UserOrderView() { DataContext = this });
+    private void NavigateToMenu() => MainFrame?.Navigate(new MenuView() { DataContext = this });
+    private void NavigateToProduct() => MainFrame?.Navigate(new ProductView() { DataContext = this });
 
     private void NavigateBack()
     {
       if (MainFrame.NavigationService.CanGoBack)
         MainFrame.NavigationService.GoBack();
     }
+
     #endregion Methods
   }
 }
