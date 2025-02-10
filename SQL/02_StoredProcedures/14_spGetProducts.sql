@@ -14,7 +14,8 @@ SELECT
     p.rPrice AS product_rPrice,
     p.nImageLink AS product_nImageLink,
     i.nKey AS ingredient_nNey,
-    i.szName AS ingredient_szName
+    i.szName AS ingredient_szName,
+    pi.nQuantity AS ingredient_nQuantity
     FROM tblproduct p 
     LEFT JOIN tblproductingredient pi ON p.nKey = pi.nProductLink
     LEFT JOIN tblingredient i ON pi.nIngredientLink = i.nKey
