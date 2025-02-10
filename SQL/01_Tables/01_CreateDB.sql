@@ -4,4 +4,5 @@ DROP DATABASE if EXISTS dbcommitandforget;
 CREATE DATABASE dbcommitandforget 
 CHARACTER SET utf8mb4 
 COLLATE utf8mb4_general_ci;
+SET GLOBAL max_allowed_packet = 67108864;
 
