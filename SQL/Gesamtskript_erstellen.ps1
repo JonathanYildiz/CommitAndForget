@@ -27,6 +27,3 @@ foreach ($folder in $folders) {
 }
 
 Write-Host "Gesamtskript erstellt: $mergedFilePath"
-# Warten auf Tastendruck bevor das Skript beendet wird
-Write-Host "Enter um fortzufahren..."
-Read-Host

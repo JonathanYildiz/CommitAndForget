@@ -9,6 +9,37 @@
       Title="ProductView">
 
   <Grid>
-    <Label Content="Produktansicht" HorizontalAlignment="Center" VerticalAlignment="Top" FontSize="36"/>
+    <Grid.ColumnDefinitions>
+      <ColumnDefinition Width="2*"/>
+      <ColumnDefinition Width="3*"/>
+    </Grid.ColumnDefinitions>
+
+    <StackPanel Grid.Column="0" Margin="10">
+      <Label Content="Zutatenliste" HorizontalAlignment="Center" FontSize="24" Margin="0,0,0,10"/>
+      <ListBox ItemsSource="{Binding IngredientList}" DisplayMemberPath="Name" />
+    </StackPanel>
+
+    <Grid Grid.Column="1" Margin="10">
+      <Label Content="Produktansicht" HorizontalAlignment="Center" FontSize="24" Margin="0,0,0,10"/>
+      <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <ItemsControl ItemsSource="{Binding ProductList}">
+          <ItemsControl.ItemTemplate>
+            <DataTemplate>
+              <Border BorderBrush="Gray" BorderThickness="1" Margin="5" Padding="10">
+                <StackPanel Orientation="Vertical">
+                  <Image Source="{Binding Image.Image}" Height="100" Margin="0,0,0,10"/>
+                  <TextBlock Text="{Binding Name}" FontSize="18" FontWeight="Bold"/>
+                  <TextBlock Text="{Binding Price, StringFormat=C}" FontSize="16" Margin="0,5,0,5"/>
+                  <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                    <Button Content="Info" Margin="5"/>
+                    <Button Content="Bestellen" Margin="5"/>
+                  </StackPanel>
+                </StackPanel>
+              </Border>
+            </DataTemplate>
+          </ItemsControl.ItemTemplate>
+        </ItemsControl>
+      </ScrollViewer>
+    </Grid>
   </Grid>
 </Page>

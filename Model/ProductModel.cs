@@ -1,4 +1,5 @@
-﻿using CommitAndForget.Essentials;
+﻿using System.Collections.ObjectModel;
+using CommitAndForget.Essentials;
 
 namespace CommitAndForget.Model
 {
@@ -29,11 +30,30 @@ namespace CommitAndForget.Model
       set => Set(value);
     }
 
-    public int ImageLink
+    public ImageModel Image
+    {
+      get => Get<ImageModel>();
+      set => Set(value);
+    }
+
+    public int Quantity
     {
       get => Get<int>();
       set => Set(value);
     }
+
+    public ObservableCollection<IngredientModel> Ingredients
+    {
+      get => Get<ObservableCollection<IngredientModel>>();
+      set => Set(value);
+    }
     #endregion Properties
+
+    #region Constructor
+    public ProductModel()
+    {
+      Quantity = 1;
+    }
+    #endregion Constructor
   }
 }

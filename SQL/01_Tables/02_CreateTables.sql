@@ -16,7 +16,7 @@ CREATE TABLE IF NOT EXISTS tblUser (
 -- Check if the tblImage table exists, if not, create it
 CREATE TABLE IF NOT EXISTS tblImage (
     nKey INT AUTO_INCREMENT PRIMARY KEY,
-    vbImage LONGBLOB NOT NULL, 
+    vbImage LONGBLOB, 
     bApproved BIT DEFAULT 0,
     dtCreationDate DATE NOT NULL DEFAULT (CURDATE()),
     bContestWon BIT DEFAULT 0

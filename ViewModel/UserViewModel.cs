@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -8,6 +9,7 @@ using System.Windows.Input;
 using System.Windows.Threading;
 using CommitAndForget.Essentials;
 using CommitAndForget.Model;
+using CommitAndForget.Services.DataProvider;
 using CommitAndForget.View.UserViews;
 using CommunityToolkit.Mvvm.Input;
 
@@ -19,6 +21,21 @@ namespace CommitAndForget.ViewModel
     public UserModel CurrentUser
     {
       get => Get<UserModel>();
+      set => Set(value);
+    }
+    public ObservableCollection<ProductModel> ProductList
+    {
+      get => Get<ObservableCollection<ProductModel>>();
+      set => Set(value);
+    }
+    public ObservableCollection<MenuModel> MenuList
+    {
+      get => Get<ObservableCollection<MenuModel>>();
+      set => Set(value);
+    }
+    public ObservableCollection<IngredientModel> IngredientList
+    {
+      get => Get<ObservableCollection<IngredientModel>>();
       set => Set(value);
     }
 
@@ -57,8 +74,27 @@ namespace CommitAndForget.ViewModel
     // Methoden zur Navigation (DataContext ist das zentrale UserViewModel)
     private void NavigateToUserSelection() => MainFrame?.Navigate(new UserSelectionView());
     private void NavigateToUserOrder() => MainFrame?.Navigate(new UserOrderView() { DataContext = this });
-    private void NavigateToMenu() => MainFrame?.Navigate(new MenuView() { DataContext = this });
-    private void NavigateToProduct() => MainFrame?.Navigate(new ProductView() { DataContext = this });
+    private void NavigateToMenu()
+    {
+      MenuList = MenuDataProvider.LoadMenus();
+      MainFrame?.Navigate(new MenuView() { DataContext = this });
+    }
+    private void NavigateToProduct() 
+    {
+      ProductList = ProductDataProvider.LoadProducts();
+      IngredientList = new ObservableCollection<IngredientModel>();
+
+      foreach (var product in ProductList)
+      {
+        foreach(var ingredient in product.Ingredients)
+        {
+          if(!IngredientList.Contains(ingredient))
+            IngredientList.Add(ingredient);
+        }
+      }
+
+      MainFrame?.Navigate(new ProductView() { DataContext = this });
+    }
 
     private void NavigateBack()
     {

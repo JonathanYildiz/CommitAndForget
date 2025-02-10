@@ -9,6 +9,17 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Docs\**" />
+    <Compile Remove="SQL\**" />
+    <EmbeddedResource Remove="Docs\**" />
+    <EmbeddedResource Remove="SQL\**" />
+    <None Remove="Docs\**" />
+    <None Remove="SQL\**" />
+    <Page Remove="Docs\**" />
+    <Page Remove="SQL\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Remove="Pizza.png" />
     <None Remove="Pizza2.avif" />
   </ItemGroup>
