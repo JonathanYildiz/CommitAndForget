@@ -8,10 +8,13 @@ CREATE PROCEDURE spGetProducts()
 
 BEGIN 
 SELECT 
-	p.nKey AS product_key,
-    p.szName AS produkt_name,
-    i.nKey AS ingredient_key,
-    i.szName AS ingredient_name
+	p.nKey AS product_nKey,
+    p.szName AS product_szName,
+    p.nEnergy AS product_nEnergy,
+    p.rPrice AS product_rPrice,
+    p.nImageLink AS product_nImageLink,
+    i.nKey AS ingredient_nNey,
+    i.szName AS ingredient_szName
     FROM tblproduct p 
     LEFT JOIN tblproductingredient pi ON p.nKey = pi.nProductLink
     LEFT JOIN tblingredient i ON pi.nIngredientLink = i.nKey
