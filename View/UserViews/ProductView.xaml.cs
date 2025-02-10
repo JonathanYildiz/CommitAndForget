@@ -24,5 +24,7 @@ namespace CommitAndForget.View.UserViews
     {
       InitializeComponent();
     }
+
+    private void DeselectIngredients(object sender, RoutedEventArgs e) => IngredientList.UnselectAll();
   }
 }

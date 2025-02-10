@@ -16,13 +16,15 @@
 
     <StackPanel Grid.Column="0" Margin="10">
       <Label Content="Zutatenliste" HorizontalAlignment="Center" FontSize="24" Margin="0,0,0,10"/>
-      <ListBox ItemsSource="{Binding IngredientList}" DisplayMemberPath="Name" />
+      <Button Content="Alle" Click="DeselectIngredients"/>
+      <ListBox x:Name="IngredientList" ItemsSource="{Binding IngredientList}" DisplayMemberPath="Name" SelectedItem="{Binding SelectedIngredient}"/>
+      <Button Content="{Binding ShoppingCartQuantity}" Command="{Binding NavigateToShoppingCartCommand}"/>
     </StackPanel>
 
     <Grid Grid.Column="1" Margin="10">
       <Label Content="Produktansicht" HorizontalAlignment="Center" FontSize="24" Margin="0,0,0,10"/>
       <ScrollViewer VerticalScrollBarVisibility="Auto">
-        <ItemsControl ItemsSource="{Binding ProductList}">
+        <ItemsControl ItemsSource="{Binding FilteredProductList}">
           <ItemsControl.ItemTemplate>
             <DataTemplate>
               <Border BorderBrush="Gray" BorderThickness="1" Margin="5" Padding="10">
@@ -31,8 +33,8 @@
                   <TextBlock Text="{Binding Name}" FontSize="18" FontWeight="Bold"/>
                   <TextBlock Text="{Binding Price, StringFormat=C}" FontSize="16" Margin="0,5,0,5"/>
                   <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                    <Button Content="Info" Margin="5"/>
-                    <Button Content="Bestellen" Margin="5"/>
+                    <Button Content="Info" Margin="5" Command="{Binding DataContext.ShowProductInfoCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}" CommandParameter="{Binding}"/>
+                    <Button Content="Bestellen" Margin="5" Command="{Binding DataContext.AddToShoppingCartCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}" CommandParameter="{Binding}"/>
                   </StackPanel>
                 </StackPanel>
               </Border>

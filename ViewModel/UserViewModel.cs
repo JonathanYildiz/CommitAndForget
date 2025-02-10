@@ -1,14 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
 using System.Windows.Input;
+using System.Windows.Navigation;
 using System.Windows.Threading;
 using CommitAndForget.Essentials;
 using CommitAndForget.Model;
+using CommitAndForget.Services;
 using CommitAndForget.Services.DataProvider;
 using CommitAndForget.View.UserViews;
 using CommunityToolkit.Mvvm.Input;
@@ -28,6 +33,11 @@ namespace CommitAndForget.ViewModel
       get => Get<ObservableCollection<ProductModel>>();
       set => Set(value);
     }
+    public ICollectionView FilteredProductList
+    {
+      get => Get<ICollectionView>();
+      set => Set(value);
+    }
     public ObservableCollection<MenuModel> MenuList
     {
       get => Get<ObservableCollection<MenuModel>>();
@@ -38,7 +48,22 @@ namespace CommitAndForget.ViewModel
       get => Get<ObservableCollection<IngredientModel>>();
       set => Set(value);
     }
-
+    public ObservableCollection<ProductModel> ShoppingCart
+    {
+      get => Get<ObservableCollection<ProductModel>>();
+      set => Set(value);
+    }
+    public IngredientModel SelectedIngredient
+    {
+      get => Get<IngredientModel>();
+      set
+      {
+        Set(value);
+        FilteredProductList.Refresh();
+      }
+    }
+    public int ShoppingCartQuantity => ShoppingCart.Sum(item => item.Quantity);
+    
     public Frame MainFrame
     {
       get => Get<Frame>();
@@ -50,6 +75,8 @@ namespace CommitAndForget.ViewModel
     public UserViewModel(UserModel user)
     {
       CurrentUser = user;
+      ProductList = new ObservableCollection<ProductModel>();
+      ShoppingCart = new ObservableCollection<ProductModel>();      
       CreateCommands();
     }
     #endregion Constructor
@@ -62,15 +89,22 @@ namespace CommitAndForget.ViewModel
       NavigateBackCommand = new RelayCommand(NavigateBack);
       NavigateToMenuCommand = new RelayCommand(NavigateToMenu);
       NavigateToProductCommand = new RelayCommand(NavigateToProduct);
+      NavigateToShoppingCartCommand = new RelayCommand(NavigateToShoppingCart);
+      AddToShoppingCartCommand = new RelayCommand<ProductModel>(AddToShoppingCart);
+      ShowProductInfoCommand = new RelayCommand<ProductModel>(ShowProductInfo);
     }
     public ICommand NavigateToUserSelectionCommand { get; private set; }
     public ICommand NavigateToUserOrderCommand { get; private set; }
     public ICommand NavigateBackCommand { get; private set; }
     public ICommand NavigateToMenuCommand { get; private set; }
     public ICommand NavigateToProductCommand { get; private set; }
+    public ICommand NavigateToShoppingCartCommand { get; private set; }
+    public ICommand AddToShoppingCartCommand { get; private set; }
+    public ICommand ShowProductInfoCommand { get; private set; }
     #endregion Commands
 
     #region Methods
+    #region Navigation
     // Methoden zur Navigation (DataContext ist das zentrale UserViewModel)
     private void NavigateToUserSelection() => MainFrame?.Navigate(new UserSelectionView());
     private void NavigateToUserOrder() => MainFrame?.Navigate(new UserOrderView() { DataContext = this });
@@ -82,8 +116,9 @@ namespace CommitAndForget.ViewModel
     private void NavigateToProduct() 
     {
       ProductList = ProductDataProvider.LoadProducts();
-      IngredientList = new ObservableCollection<IngredientModel>();
 
+      // Zutaten aus den Produkten Laden um Filter im Frontend anzeigen zu können
+      IngredientList = new ObservableCollection<IngredientModel>();
       foreach (var product in ProductList)
       {
         foreach(var ingredient in product.Ingredients)
@@ -93,7 +128,14 @@ namespace CommitAndForget.ViewModel
         }
       }
 
+      FilteredProductList = CollectionViewSource.GetDefaultView(ProductList);
+      FilteredProductList.Filter = FilterProducts;
       MainFrame?.Navigate(new ProductView() { DataContext = this });
+    }
+
+    private void NavigateToShoppingCart()
+    {
+      // TODO implementieren
     }
 
     private void NavigateBack()
@@ -101,7 +143,47 @@ namespace CommitAndForget.ViewModel
       if (MainFrame.NavigationService.CanGoBack)
         MainFrame.NavigationService.GoBack();
     }
+    #endregion Navigation
 
+    private bool FilterProducts(object obj)
+    {
+      if(obj is ProductModel product)
+      {
+        if (SelectedIngredient is null)
+          return true;
+        else
+          return product.Ingredients.FirstOrDefault(x => x.Key == SelectedIngredient.Key) != null;
+      }
+      
+      return false;
+    }
+
+    private void AddToShoppingCart(ProductModel? product)
+    {
+      if(product is not null)
+      {
+        // Wenn Produkt bereits in Warenkorb => Menge erhöhen
+        var productInList = ShoppingCart.FirstOrDefault(p => p.Key == product.Key);
+        if (productInList is null)
+          ShoppingCart.Add(product);
+        else
+          productInList.Quantity++;
+
+        OnPropertyChanged(nameof(ShoppingCartQuantity));
+      }
+    }
+
+    private void ShowProductInfo(ProductModel? product)
+    {
+      if (product is not null)
+      {
+        string ingredients = "";
+        foreach (var ingredient in product.Ingredients)
+          ingredients += ingredient.Name + "\n";
+
+        MessageBoxService.DisplayMessage($"Produkt: {product.Name}\n\nZutaten:\n{ingredients}", MessageBoxImage.Information);
+      }
+    }
     #endregion Methods
   }
 }
