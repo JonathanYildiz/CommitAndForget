@@ -13,8 +13,13 @@
       <RowDefinition Height="*" />
       <RowDefinition Height="9*" />
     </Grid.RowDefinitions>
-    
-    <Label Grid.Row="1">test</Label>
-    <Button Grid.Row="1" Content="Zurück"/>
+    <Grid Grid.Row="1" Grid.ColumnSpan="2">
+      <Grid.ColumnDefinitions>
+        <ColumnDefinition/>
+        <ColumnDefinition/>
+      </Grid.ColumnDefinitions>
+      <Button Grid.Column="0" Command="{Binding NavigateToMenuCommand}">Menü</Button>
+      <Button Grid.Column="1" Command="{Binding NavigateToProductCommand}">Einzelne Produkte</Button>
     </Grid>
+  </Grid>
 </Page>
