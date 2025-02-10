@@ -17,7 +17,7 @@ SELECT
     p.nEnergy AS product_nEnergy,
     p.rPrice AS product_rPrice,
     p.nImageLink AS product_nImageLink,
-    i.nKey AS ingredient_nNey,
+    i.nKey AS ingredient_nKey,
     i.szName AS ingredient_szName
     FROM tblmenu m
     LEFT JOIN tblproductmenu pm ON m.nKey = pm.nMenuLink
