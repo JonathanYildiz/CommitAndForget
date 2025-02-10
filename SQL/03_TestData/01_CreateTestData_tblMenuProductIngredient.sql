@@ -7,10 +7,10 @@ INSERT INTO tblmenu (szName, rPrice) VALUES
 -- Testdaten für Table: Product
 INSERT INTO tblproduct (szName, nEnergy, rPrice, nImageLink) VALUES 
 ('Quinoa Bowl with Avocado', 300, 6.99, 1),
-('Grilled Chicken Breast', 201, 7.49),
-('Vegan Wrap with Hummus', 363, 5.99),
-('Salmon with Broccoli',  241, 8.49),
-('Salad with Feta and Walnuts', 743, 5.49);
+('Grilled Chicken Breast', 201, 7.49, NULL),
+('Vegan Wrap with Hummus', 363, 5.99, NULL),
+('Salmon with Broccoli',  241, 8.49, NULL),
+('Salad with Feta and Walnuts', 743, 5.49, NULL);
 
 -- Testdaten für Table: Ingredient
 INSERT INTO tblingredient (szName) VALUES 
