@@ -5,7 +5,7 @@ INSERT INTO tblmenu (szName, rPrice) VALUES
 ('Vegan Fit Menu', 9.75);
 
 -- Testdaten für Table: Product
-INSERT INTO tblproduct (szName, nEnergie, rPrice) VALUES 
+INSERT INTO tblproduct (szName, nEnergy, rPrice) VALUES 
 ('Quinoa Bowl with Avocado', 300, 6.99),
 ('Grilled Chicken Breast', 201, 7.49),
 ('Vegan Wrap with Hummus', 363, 5.99),
