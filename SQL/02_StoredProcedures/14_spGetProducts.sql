@@ -12,12 +12,14 @@ SELECT
     p.szName AS product_szName,
     p.nEnergy AS product_nEnergy,
     p.rPrice AS product_rPrice,
-    p.nImageLink AS product_nImageLink,
+    img.nKey AS image_nKey,
+    img.vbImage AS image_vbImage,
     i.nKey AS ingredient_nKey,
     i.szName AS ingredient_szName,
     pi.nQuantity AS ingredient_nQuantity
     FROM tblproduct p 
     LEFT JOIN tblproductingredient pi ON p.nKey = pi.nProductLink
+    LEFT JOIN tblimage img ON p.nImageLink = img.nKey
     LEFT JOIN tblingredient i ON pi.nIngredientLink = i.nKey
     ORDER BY p.nKey, i.szName;
 END $$
