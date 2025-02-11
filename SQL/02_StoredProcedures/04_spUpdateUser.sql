@@ -11,6 +11,7 @@ CREATE PROCEDURE spUpdateUser(
     IN p_PostalCode NVARCHAR(200),
     IN p_City NVARCHAR(200),
 	IN p_Email NVARCHAR(200),
+    IN p_IsAdmin BIT,
     IN p_Password NVARCHAR(200)
 )
 BEGIN
@@ -32,11 +33,12 @@ BEGIN
             szPostalCode = p_PostalCode, 
             szCity = p_City,
             szEmail = p_Email,
+            bIsAdmin = p_IsAdmin,
             szPassword = coalesce(nullif(p_Password, ""), szPassword)
             
 		WHERE nKey = p_Key;
         
-        SELECT nKey, szFirstName, szLastName, szStreet, szHouseNumber, szPostalCode, szCity, szEmail
+        SELECT nKey, szFirstName, szLastName, szStreet, szHouseNumber, szPostalCode, szCity, szEmail, bIsAdmin
         FROM tbluser 
         WHERE nKey = p_Key;
 	END IF;
