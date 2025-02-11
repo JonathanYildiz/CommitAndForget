@@ -15,16 +15,14 @@ using System.Windows.Shapes;
 
 namespace CommitAndForget.View.UserViews
 {
-  /// <summary>
-  /// Interaction logic for MenuView.xaml
-  /// </summary>
-  public partial class MenuView : Page
-  {
-    public MenuView()
+    /// <summary>
+    /// Interaction logic for PaymentView.xaml
+    /// </summary>
+    public partial class PaymentView : Page
     {
-      InitializeComponent();
+        public PaymentView()
+        {
+            InitializeComponent();
+        }
     }
-
-    private void DeselectIngredients(object sender, RoutedEventArgs e) => IngredientList.UnselectAll();
-  }
 }

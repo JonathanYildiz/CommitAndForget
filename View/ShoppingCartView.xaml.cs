@@ -13,18 +13,16 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace CommitAndForget.View.UserViews
+namespace CommitAndForget.View
 {
-  /// <summary>
-  /// Interaction logic for MenuView.xaml
-  /// </summary>
-  public partial class MenuView : Page
-  {
-    public MenuView()
+    /// <summary>
+    /// Interaction logic for ShoppingCartView.xaml
+    /// </summary>
+    public partial class ShoppingCartView : UserControl
     {
-      InitializeComponent();
+        public ShoppingCartView()
+        {
+            InitializeComponent();
+        }
     }
-
-    private void DeselectIngredients(object sender, RoutedEventArgs e) => IngredientList.UnselectAll();
-  }
 }

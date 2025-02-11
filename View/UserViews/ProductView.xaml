@@ -4,7 +4,8 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:converter="clr-namespace:CommitAndForget.Converter"
-      xmlns:local="clr-namespace:CommitAndForget.View.UserViews"
+      xmlns:view="clr-namespace:CommitAndForget.View"
+      xmlns:local="clr-namespace:CommitAndForget.View.UserViews" 
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
       Title="ProductView">
@@ -16,6 +17,7 @@
     <Grid.ColumnDefinitions>
       <ColumnDefinition Width="2*"/>
       <ColumnDefinition Width="3*"/>
+      <ColumnDefinition Width="30"/>
     </Grid.ColumnDefinitions>
 
     <!-- Entweder Zutatenliste...-->
@@ -33,28 +35,9 @@
       <Button Grid.Row="2" Content="{Binding ShoppingCartQuantity}" Command="{Binding ToggleShowShoppingCartCommand}" Height="30"/>
     </Grid>
     <!--..ODER Warenkorb anzeigen-->
-    <Grid Grid.Column="0" Margin="10" Visibility="{Binding ShowShoppingCart, Converter={StaticResource BoolToVisibilityConverter}, ConverterParameter=false}">
-      <Grid.RowDefinitions>
-        <RowDefinition Height="50"/>
-        <RowDefinition/>
-        <RowDefinition Height="30"/>
-      </Grid.RowDefinitions>
-      <Label Grid.Row="0" Content="Warenkorb" FontSize="24" HorizontalAlignment="Center" Margin="0,0,0,10"/>
-      <ListBox Grid.Row="1" ItemsSource="{Binding ShoppingCart}">
-        <ListBox.ItemTemplate>
-          <DataTemplate>
-            <StackPanel Orientation="Horizontal" Margin="5">
-              <TextBlock Text="{Binding Name}" Width="120" TextWrapping="Wrap" VerticalAlignment="Center"/>
-              <TextBlock Text="{Binding Quantity}" Width="50" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-              <Button Content="X" Command="{Binding DataContext.RemoveFromShoppingCartCommand, RelativeSource={RelativeSource AncestorType=ListBox}}" CommandParameter="{Binding}" Width="25" Height="25" VerticalAlignment="Center"/>
-            </StackPanel>
-          </DataTemplate>
-        </ListBox.ItemTemplate>
-      </ListBox>
-      <Button Grid.Row="2" Content="Zurück" Command="{Binding ToggleShowShoppingCartCommand}"/>
-    </Grid>
-
-
+    <view:ShoppingCartView Grid.Column="0" Visibility="{Binding ShowShoppingCart, Converter={StaticResource BoolToVisibilityConverter}, ConverterParameter=false}"/>
+      
+    <!-- Produktliste -->
     <Grid Grid.Column="1" Margin="10">
       <Label Content="Produktansicht" HorizontalAlignment="Center" FontSize="24" Margin="0,0,0,10"/>
       <ScrollViewer VerticalScrollBarVisibility="Auto">
@@ -68,7 +51,7 @@
                   <TextBlock Text="{Binding Price, StringFormat=C}" FontSize="16" Margin="0,5,0,5"/>
                   <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                     <Button Content="Info" Margin="5" Command="{Binding DataContext.ShowProductInfoCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}" CommandParameter="{Binding}"/>
-                    <Button Content="Bestellen" Margin="5" Command="{Binding DataContext.AddToShoppingCartCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}" CommandParameter="{Binding}"/>
+                    <Button Content="Bestellen" Margin="5" Command="{Binding DataContext.AddProductToShoppingCartCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}" CommandParameter="{Binding}"/>
                   </StackPanel>
                 </StackPanel>
               </Border>
@@ -77,5 +60,8 @@
         </ItemsControl>
       </ScrollViewer>
     </Grid>
+
+    <Button Grid.Column="2" Content=">" FontSize="24" FontWeight="Bold" Command="{Binding NavigateToMenuCommand}"/>
+
   </Grid>
 </Page>

@@ -1,4 +1,5 @@
-﻿using CommitAndForget.Model;
+﻿using CommitAndForget.Converter;
+using CommitAndForget.Model;
 using System.Collections.ObjectModel;
 using System.Data;
 using System.IO;
@@ -37,7 +38,7 @@ namespace CommitAndForget.Services.DataProvider
               if (row["image_vbImage"] != DBNull.Value)
               {
                 byte[] imageData = (byte[])row["image_vbImage"];
-                img.Image = LoadImage(imageData);
+                img.Image = ByteArrayToBitmapImageConverter.LoadImage(imageData);
               }
               product.Image = img;
 
@@ -61,20 +62,6 @@ namespace CommitAndForget.Services.DataProvider
       {
         MessageBoxService.DisplayMessage(ex.Message, MessageBoxImage.Error);
         return [];
-      }
-    }
-
-    private static BitmapImage LoadImage(byte[] imageData)
-    {
-      using (var ms = new MemoryStream(imageData))
-      {
-        var image = new BitmapImage();
-        image.BeginInit();
-        image.CacheOption = BitmapCacheOption.OnLoad;
-        image.StreamSource = ms;
-        image.EndInit();
-        image.Freeze(); // Optional: um das Bild thread-sicher zu machen
-        return image;
       }
     }
   }
