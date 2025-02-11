@@ -63,6 +63,11 @@ namespace CommitAndForget.ViewModel
       }
     }
     public int ShoppingCartQuantity => ShoppingCart.Sum(item => item.Quantity);
+    public bool ShowShoppingCart
+    {
+      get => Get<bool>();
+      set => Set(value);
+    }
     
     public Frame MainFrame
     {
@@ -89,18 +94,20 @@ namespace CommitAndForget.ViewModel
       NavigateBackCommand = new RelayCommand(NavigateBack);
       NavigateToMenuCommand = new RelayCommand(NavigateToMenu);
       NavigateToProductCommand = new RelayCommand(NavigateToProduct);
-      NavigateToShoppingCartCommand = new RelayCommand(NavigateToShoppingCart);
+      ToggleShowShoppingCartCommand = new RelayCommand(ToggleShowShoppingCart);
       AddToShoppingCartCommand = new RelayCommand<ProductModel>(AddToShoppingCart);
       ShowProductInfoCommand = new RelayCommand<ProductModel>(ShowProductInfo);
+      RemoveFromShoppingCartCommand = new RelayCommand<ProductModel>(RemoveFromShoppingCart);
     }
     public ICommand NavigateToUserSelectionCommand { get; private set; }
     public ICommand NavigateToUserOrderCommand { get; private set; }
     public ICommand NavigateBackCommand { get; private set; }
     public ICommand NavigateToMenuCommand { get; private set; }
     public ICommand NavigateToProductCommand { get; private set; }
-    public ICommand NavigateToShoppingCartCommand { get; private set; }
+    public ICommand ToggleShowShoppingCartCommand { get; private set; }
     public ICommand AddToShoppingCartCommand { get; private set; }
     public ICommand ShowProductInfoCommand { get; private set; }
+    public ICommand RemoveFromShoppingCartCommand { get; private set; }
     #endregion Commands
 
     #region Methods
@@ -116,6 +123,7 @@ namespace CommitAndForget.ViewModel
     private void NavigateToProduct() 
     {
       ProductList = ProductDataProvider.LoadProducts();
+      ShowShoppingCart = false; // Wenn mit aktivem Warenkob zurück und wieder vor navigiert wird, soll dieser wieder ausgeblendet sein
 
       // Zutaten aus den Produkten Laden um Filter im Frontend anzeigen zu können
       IngredientList = new ObservableCollection<IngredientModel>();
@@ -133,10 +141,7 @@ namespace CommitAndForget.ViewModel
       MainFrame?.Navigate(new ProductView() { DataContext = this });
     }
 
-    private void NavigateToShoppingCart()
-    {
-      // TODO implementieren
-    }
+    private void ToggleShowShoppingCart() => ShowShoppingCart = !ShowShoppingCart;
 
     private void NavigateBack()
     {
@@ -182,6 +187,15 @@ namespace CommitAndForget.ViewModel
           ingredients += ingredient.Name + "\n";
 
         MessageBoxService.DisplayMessage($"Produkt: {product.Name}\n\nZutaten:\n{ingredients}", MessageBoxImage.Information);
+      }
+    }
+
+    private void RemoveFromShoppingCart(ProductModel? product)
+    {
+      if (product is not null)
+      {
+        ShoppingCart?.Remove(product);
+        OnPropertyChanged(nameof(ShoppingCartQuantity));
       }
     }
     #endregion Methods
