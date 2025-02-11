@@ -16,12 +16,9 @@ using CommitAndForget.ViewModel;
 
 namespace CommitAndForget.View.UserViews
 {
-  /// <summary>
-  /// Interaction logic for UserSelectionView.xaml
-  /// </summary>
-  public partial class UserSelectionView : Page
+  public partial class SelectionView : Page
   {
-    public UserSelectionView()
+    public SelectionView()
     {
       InitializeComponent();
     }

@@ -139,8 +139,8 @@ namespace CommitAndForget.ViewModel
     #region Methods
     #region Navigation
     // Methoden zur Navigation (DataContext ist das zentrale UserViewModel)
-    private void NavigateToUserSelection() => MainFrame?.Navigate(new UserSelectionView());
-    private void NavigateToUserOrder() => MainFrame?.Navigate(new UserOrderView() { DataContext = this });
+    private void NavigateToUserSelection() => MainFrame?.Navigate(new SelectionView());
+    private void NavigateToUserOrder() => MainFrame?.Navigate(new OrderView() { DataContext = this });
     private void NavigateToMenu()
     {
       MenuList = MenuDataProvider.LoadMenus();

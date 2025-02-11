@@ -2,9 +2,9 @@
 
 namespace CommitAndForget.View.UserViews
 {
-  public partial class PaymentView : Page
+  public partial class OrderView : Page
   {
-    public PaymentView()
+    public OrderView()
     {
       InitializeComponent();
     }
