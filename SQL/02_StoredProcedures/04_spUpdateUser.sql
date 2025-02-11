@@ -32,7 +32,8 @@ BEGIN
             szPostalCode = p_PostalCode, 
             szCity = p_City,
             szEmail = p_Email,
-            szPassword = p_Password
+            szPassword = coalesce(nullif(p_Password, ""), szPassword)
+            
 		WHERE nKey = p_Key;
         
         SELECT nKey, szFirstName, szLastName, szStreet, szHouseNumber, szPostalCode, szCity, szEmail
