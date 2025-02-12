@@ -88,6 +88,27 @@ CREATE TABLE IF NOT EXISTS tblProduct (
         ON UPDATE CASCADE
 );
 
+-- Check if the tblOrderMenu table exists, if not, create it
+CREATE TABLE IF NOT EXISTS tblOrderMenu (
+    nKey INT AUTO_INCREMENT PRIMARY KEY,
+    nOrderLink INT NOT NULL,
+    nMenuLink INT NOT NULL,
+    nQuantity INT NOT NULL,
+    
+    -- Foreign key definition
+    CONSTRAINT fk_tblOrderMenu_Order 
+        FOREIGN KEY (nOrderLink) 
+        REFERENCES tblOrder(nKey) 
+        ON DELETE CASCADE 
+        ON UPDATE CASCADE,
+
+    CONSTRAINT fk_tblOrderMenu_Menu 
+        FOREIGN KEY (nMenuLink) 
+        REFERENCES tblMenu(nKey) 
+        ON DELETE CASCADE 
+        ON UPDATE CASCADE
+);
+
 -- Check if the tblOrderProduct table exists, if not, create it
 CREATE TABLE IF NOT EXISTS tblOrderProduct (
     nKey INT AUTO_INCREMENT PRIMARY KEY,
