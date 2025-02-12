@@ -10,15 +10,16 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using System.Windows.Shapes;
-using CommitAndForget.ViewModel;
 
-namespace CommitAndForget.View.UserViews
+namespace CommitAndForget.View.AdminViews
 {
-  public partial class SelectionView : Page
+  /// <summary>
+  /// Interaction logic for EditUserView.xaml
+  /// </summary>
+  public partial class EditUserView : Window
   {
-    public SelectionView()
+    public EditUserView()
     {
       InitializeComponent();
     }

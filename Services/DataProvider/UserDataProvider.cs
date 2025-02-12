@@ -11,7 +11,7 @@ namespace CommitAndForget.Services.DataProvider
     {
       try
       {
-        DataTable dt = DataBaseService.ExecuteSP("spLoadUser");
+        DataTable dt = DataBaseService.ExecuteSP("spLoadUsers");
         var userList = new ObservableCollection<UserModel>();
 
         if (dt is not null && dt.Rows.Count > 0)
@@ -73,7 +73,7 @@ namespace CommitAndForget.Services.DataProvider
       {
         MessageBoxService.DisplayMessage(ex.Message, MessageBoxImage.Error);
         return user;
-      }      
+      }
     }
 
     public static UserModel Register(UserModel newUser)
@@ -118,6 +118,45 @@ namespace CommitAndForget.Services.DataProvider
       {
         MessageBoxService.DisplayMessage(ex.Message, MessageBoxImage.Error);
         return user;
+      }
+    }
+
+    public static void DeleteUser(int key)
+    {
+      try
+      {
+        var parameters = new Dictionary<string, object> { { "p_Key", key } };
+        DataBaseService.ExecuteSP("spDeleteUser", parameters);
+      }
+      catch (Exception ex)
+      {
+        MessageBoxService.DisplayMessage(ex.Message, MessageBoxImage.Error);
+      }
+    }
+
+    public static void UpdateUser(UserModel user)
+    {
+      try
+      {
+        user.Key = 1234;
+        var parameters = new Dictionary<string, object>
+        {
+          { "p_Key", user.Key },
+          { "p_FirstName", user.FirstName },
+          { "p_LastName", user.LastName },
+          { "p_Street", user.Street },
+          { "p_HouseNumber", user.HouseNumber },
+          { "p_PostalCode", user.PostalCode },
+          { "p_City", user.City },
+          { "p_Email", user.Email },
+          { "p_Password", user.Password },
+          { "p_IsAdmin", user.IsAdmin }
+        };
+        DataBaseService.ExecuteSP("spUpdateUser", parameters);
+      }
+      catch (Exception ex)
+      {
+        MessageBoxService.DisplayMessage(ex.Message, MessageBoxImage.Error);
       }
     }
   }

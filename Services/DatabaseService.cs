@@ -64,6 +64,11 @@ namespace CommitAndForget.Services
           using (MySqlDataAdapter adapter = new MySqlDataAdapter(command))
           {
             adapter.Fill(tbl);
+
+            // Fehlermeldungen abfangen
+            if (tbl is not null && tbl.Rows.Count == 1)
+              if (tbl.Columns.Contains("Nachricht") && tbl.Rows[0]["Nachricht"] != DBNull.Value)
+                MessageBoxService.DisplayMessage(tbl.Rows[0]["Nachricht"].ToString() ?? "DB-Fehler", MessageBoxImage.Warning);
           }
         }
       }

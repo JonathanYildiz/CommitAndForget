@@ -1,0 +1,18 @@
+﻿<Page x:Class="CommitAndForget.View.AdminViews.AdminSelectionView"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:CommitAndForget.View.AdminViews"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800"
+      Title="AdminSelectionView">
+
+  <StackPanel Orientation="Vertical">
+    <Button Content="Benutzerverwaltung" Command="{Binding NavigateToUserManagementCommand}"/>
+    <Button Content="Produktverwaltung" Command="{Binding NavigateToProductManagementCommand}"/>
+    <Button Content="Menüverwaltung" Command="{Binding NavigateToMenuManagementCommand}"/>
+    <Button Content="Bildverwaltung" Command="{Binding NavigateToImageManagementCommand}"/>
+    <Button Content="Bestellungsverwaltung" Command="{Binding NavigateToOrderManagementCommand}"/>
+  </StackPanel>
+</Page>

@@ -105,7 +105,6 @@ namespace CommitAndForget.ViewModel
     #region Commands
     private void CreateCommands()
     {
-      NavigateToUserSelectionCommand = new RelayCommand(NavigateToUserSelection);
       NavigateToUserOrderCommand = new RelayCommand(NavigateToUserOrder);
       NavigateBackCommand = new RelayCommand(NavigateBack);
       NavigateToMenuCommand = new RelayCommand(NavigateToMenu);
@@ -120,7 +119,6 @@ namespace CommitAndForget.ViewModel
       NavigateToPaymentCommand = new RelayCommand(NavigateToPayment);
       PayCommand = new RelayCommand<string>(Pay);
     }
-    public ICommand NavigateToUserSelectionCommand { get; private set; }
     public ICommand NavigateToUserOrderCommand { get; private set; }
     public ICommand NavigateBackCommand { get; private set; }
     public ICommand NavigateToMenuCommand { get; private set; }
@@ -139,7 +137,6 @@ namespace CommitAndForget.ViewModel
     #region Methods
     #region Navigation
     // Methoden zur Navigation (DataContext ist das zentrale UserViewModel)
-    private void NavigateToUserSelection() => MainFrame?.Navigate(new SelectionView());
     private void NavigateToUserOrder() => MainFrame?.Navigate(new OrderView() { DataContext = this });
     private void NavigateToMenu()
     {

@@ -66,9 +66,9 @@ namespace CommitAndForget.ViewModel
       {
         if (string.IsNullOrEmpty(Email) && string.IsNullOrEmpty(Password)) // TODO nur zum debuggen, hinterher entfernen
         {
-          var view = new UserMainView();
+          var view = new MainView();
           view.WindowStartupLocation = WindowStartupLocation.CenterScreen;
-          view.DataContext = new UserViewModel(new UserModel());
+          view.DataContext = new AdminViewModel(new UserModel());
           view.Show();
           window?.Close();
           return;
@@ -86,20 +86,15 @@ namespace CommitAndForget.ViewModel
           Email = "";
           Password = "";
 
-          if(currentUser.IsAdmin)
-          {
-            var view = new AdminMainView();
-            view.WindowStartupLocation = WindowStartupLocation.CenterScreen;
+          var view = new MainView();
+          view.WindowStartupLocation = WindowStartupLocation.CenterScreen;
+
+          if (currentUser.IsAdmin)
             view.DataContext = new AdminViewModel(currentUser);
-            view.Show();
-          }
           else
-          {
-            var view = new UserMainView();
-            view.WindowStartupLocation = WindowStartupLocation.CenterScreen;
             view.DataContext = new UserViewModel(currentUser);
-            view.Show();
-          }        
+
+          view.Show();
 
           window?.Close();
         }
