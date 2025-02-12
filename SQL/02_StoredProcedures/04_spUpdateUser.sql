@@ -36,9 +36,8 @@ BEGIN
             szPostalCode = p_PostalCode, 
             szCity = p_City,
             szEmail = p_Email,
-            bIsAdmin = p_IsAdmin
+            bIsAdmin = p_IsAdmin,
             szPassword = coalesce(nullif(p_Password, ""), szPassword)
-            
         WHERE nKey = p_Key;
         
         -- Zurückgeben der aktualisierten Benutzerdaten
