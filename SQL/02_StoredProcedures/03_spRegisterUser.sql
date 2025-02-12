@@ -26,7 +26,7 @@ BEGIN
 		SELECT 'Fehler: Die E-Mail-Adresse ist bereits registriert.' AS Nachricht;
 	ELSE 
 		INSERT INTO tbluser (szFirstName, szLastName, szStreet, szHouseNumber, szPostalCode, szCity, szEmail, szPassword, bIsAdmin)
-        VALUES (p_FirstName, p_LastName,  p_Street, p_HouseNumber,  p_PostalCode, p_City, p_Email, p_Password, p_bIsAdmin);
+        VALUES (p_FirstName, p_LastName,  p_Street, p_HouseNumber,  p_PostalCode, p_City, p_Email, p_Password, p_IsAdmin);
         
         SELECT  nKey, szFirstName, szLastName, szStreet, szHouseNumber, szPostalCode, szCity, szEmail, bIsAdmin
         FROM tbluser 
