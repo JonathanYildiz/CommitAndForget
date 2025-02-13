@@ -17,10 +17,7 @@ BEGIN
 		szName = p_Name,
 		rPrice = p_Price,
         nEnergy = p_Energy,
-        nImageLink = CASE
-			WHEN p_ImageLink IS NOT NULL THEN p_ImageLink
-            ELSE nImageLink
-		END
+        nImageLink = p_ImageLink
    WHERE nKey = p_Key;
 END $$
 
