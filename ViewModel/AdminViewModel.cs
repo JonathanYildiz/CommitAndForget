@@ -2,11 +2,13 @@
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Media.Imaging;
 using CommitAndForget.Essentials;
 using CommitAndForget.Model;
 using CommitAndForget.Services.DataProvider;
 using CommitAndForget.View.AdminViews;
 using CommunityToolkit.Mvvm.Input;
+using Microsoft.Win32;
 
 namespace CommitAndForget.ViewModel
 {
@@ -43,6 +45,11 @@ namespace CommitAndForget.ViewModel
       get => Get<ObservableCollection<IngredientModel>>();
       set => Set(value);
     }
+    public ObservableCollection<ImageModel> ImageList
+    {
+      get => Get<ObservableCollection<ImageModel>>();
+      set => Set(value);
+    }
     public Frame MainFrame
     {
       get => Get<Frame>();
@@ -56,6 +63,7 @@ namespace CommitAndForget.ViewModel
       CurrentUser = user;
       UserList = new ObservableCollection<UserModel>();
       IngredientList = new ObservableCollection<IngredientModel>();
+      ImageList = new ObservableCollection<ImageModel>();
       CreateCommands();
     }
     #endregion Constructor
@@ -78,6 +86,11 @@ namespace CommitAndForget.ViewModel
       ToggleIngredientCommand = new RelayCommand<IngredientModel>(ToggleIngredient);
       SaveProductCommand = new RelayCommand(SaveProduct);
       DeleteProductCommand = new RelayCommand<ProductModel>(DeleteProduct);
+      SelectImageCommand = new RelayCommand(SelectImage);
+      AddImageCommand = new RelayCommand(AddImage);
+      DeleteImageCommand = new RelayCommand<ImageModel>(DeleteImage);
+      ChooseImageCommand = new RelayCommand<ImageModel>(ChooseImage);
+      RemoveImageFromProductCommand = new RelayCommand(RemoveImageFromProduct);
     }
     public ICommand NavigateToUserManagementCommand { get; private set; }
     public ICommand NavigateToProductManagementCommand { get; private set; }
@@ -94,6 +107,11 @@ namespace CommitAndForget.ViewModel
     public ICommand ToggleIngredientCommand { get; private set; }
     public ICommand SaveProductCommand { get; private set; }
     public ICommand DeleteProductCommand { get; private set; }
+    public ICommand SelectImageCommand { get; private set; }
+    public ICommand AddImageCommand { get; private set; }
+    public ICommand DeleteImageCommand { get; private set; }
+    public ICommand ChooseImageCommand { get; private set; }
+    public ICommand RemoveImageFromProductCommand { get; private set; }
     #endregion Commands
 
     #region Methods
@@ -177,7 +195,7 @@ namespace CommitAndForget.ViewModel
         IngredientList = IngredientDataProvider.LoadIngredients(product);
         SelectedProduct = product;
 
-        foreach(var ingredient in IngredientList) //Checkboxes initialisieren
+        foreach (var ingredient in IngredientList) //Checkboxes initialisieren
         {
           if (product.Ingredients.FirstOrDefault(i => i.Key == ingredient.Key) != null)
             ingredient.IsChecked = true;
@@ -227,6 +245,7 @@ namespace CommitAndForget.ViewModel
         }
       }
       SelectedProduct = null;
+      CloseCurrentWindow();
     }
     private void DeleteProduct(ProductModel? prodct)
     {
@@ -240,6 +259,53 @@ namespace CommitAndForget.ViewModel
         }
       }
     }
+    private void SelectImage()
+    {
+      ImageList = ImageDataProvider.LoadImages();
+      var window = new ShowImagesView() { DataContext = this };
+      window.WindowStartupLocation = WindowStartupLocation.CenterScreen;
+      window.ShowDialog();
+    }
+    private void AddImage()
+    {
+      var image = new ImageModel();
+      var dialog = new OpenFileDialog();
+      dialog.Filter = "Bild-Dateien (*.jpg, *.jpeg, *.png)|*.jpg;*.jpeg;*.png";
+      if (dialog.ShowDialog() == true)
+      {
+        image.Image = new BitmapImage(new Uri(dialog.FileName));
+        image = ImageDataProvider.UploadImage(image);
+        if (image is not null)
+          ImageList.Add(image);
+      }
+    }
+    private void DeleteImage(ImageModel? image)
+    {
+      if (image is not null)
+      {
+        var msgBox = MessageBox.Show("Möchten Sie das Bild wirklich löschen?", "Bild löschen", MessageBoxButton.YesNo, MessageBoxImage.Question);
+        if (msgBox == MessageBoxResult.Yes)
+        {
+          ImageDataProvider.DeleteImage(image.Key);
+          ImageList.Remove(image);
+        }
+      }
+    }
+    private void ChooseImage(ImageModel? image)
+    {
+      if (image is not null)
+      {
+        SelectedProduct.Image = image;
+        CloseCurrentWindow();
+      }
+    }
+    private void RemoveImageFromProduct()
+    {
+      SelectedProduct.Image.Image = null;
+      SelectedProduct.Image.Key = 0;
+    }
+
+    private void CloseCurrentWindow() => Application.Current.Windows.OfType<Window>().SingleOrDefault(w => w.IsActive)?.Close();
     #endregion Methods
   }
 }
