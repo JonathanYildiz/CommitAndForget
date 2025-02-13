@@ -21,7 +21,7 @@ namespace CommitAndForget.Converter
       }
     }
 
-    public static byte[] SaveImage(ImageSource imageSource)
+    public static byte[] ConvertToDB(ImageSource imageSource)
     {
       if (imageSource is BitmapSource bitmapSource)
       {

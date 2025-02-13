@@ -865,6 +865,63 @@ DELIMITER ;
 -- Fertig: 22_spDeleteProductIngredient.sql
 
 
+-- HinzufÃ¼gen: 23_spGetImages.sql
+
+USE dbcommitandforget;
+select * from tblimage;
+DROP PROCEDURE IF EXISTS spGetImages;
+
+DELIMITER $$
+-- Laden von Bilder
+CREATE PROCEDURE spGetImages()
+
+BEGIN 
+SELECT 
+	nKey AS image_nKey,
+    vbImage AS image_vbImage,
+    bApproved AS image_bApproved,
+	dtCreationDate AS image_dtCreationDate,
+    bContestWon AS image_bContestWon
+    
+    FROM tblimage 
+    ORDER BY nKey;
+END $$
+
+DELIMITER ;
+
+
+
+
+-- Fertig: 23_spGetImages.sql
+
+
+-- HinzufÃ¼gen: 24_spCreateImage.sql
+
+USE dbcommitandforget;
+-- Erstellen von Ordner mit dem Rechnung zusammen 
+DROP PROCEDURE IF EXISTS spCreateImage;
+
+DELIMITER $$
+
+CREATE PROCEDURE spCreateImage(
+    p_Image LONGBLOB 
+)
+BEGIN
+    INSERT INTO tblImage (vbImage, bApproved, dtCreationDate, bContestWon)
+    VALUES (p_Image, 0, now(), 0);
+	
+    
+    SELECT nKey from tblimage WHERE vbImage = p_Image;
+
+
+END $$
+
+DELIMITER ;
+
+
+-- Fertig: 24_spCreateImage.sql
+
+
 -- HinzufÃ¼gen: 01_CreateTestData_tblMenuProductIngredient.sql
 
 -- Testdaten fÃ¼r Table: Menu

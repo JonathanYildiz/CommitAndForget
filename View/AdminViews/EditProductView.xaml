@@ -38,7 +38,7 @@
     <StackPanel Grid.Row="3" Grid.Column="1" Orientation="Horizontal" Margin="5">
       <Image Source="{Binding SelectedProduct.Image.Image}" Width="100" Height="100" Margin="5"/>
       <StackPanel Orientation="Vertical">
-        <Button Content="Remove" Command="{Binding RemoveImageCommand}" Width="75" Margin="5"/>
+        <Button Content="Remove" Command="{Binding RemoveImageFromProductCommand}" Width="75" Margin="5"/>
         <Button Content="Select" Command="{Binding SelectImageCommand}" Width="75" Margin="5"/>
       </StackPanel>
     </StackPanel>
