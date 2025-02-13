@@ -15,9 +15,14 @@ namespace CommitAndForget.Model
       get => Get<string>();
       set => Set(value);
     }
-    public double Quantity
+    public int Quantity
     {
-      get => Get<double>();
+      get => Get<int>();
+      set => Set(value);
+    }
+    public bool IsChecked
+    {
+      get => Get<bool>();
       set => Set(value);
     }
     #endregion Properties

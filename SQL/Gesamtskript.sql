@@ -270,7 +270,8 @@ CREATE PROCEDURE spRegisterUser(
     IN p_PostalCode NVARCHAR(200),
     IN p_City NVARCHAR(200),
 	IN p_Email NVARCHAR(200),
-    IN p_Password NVARCHAR(200)
+    IN p_Password NVARCHAR(200),
+    IN p_IsAdmin BIT
   
 )
 BEGIN
@@ -284,8 +285,8 @@ BEGIN
     IF v_Count > 0 THEN 
 		SELECT 'Fehler: Die E-Mail-Adresse ist bereits registriert.' AS Nachricht;
 	ELSE 
-		INSERT INTO tbluser (szFirstName, szLastName, szStreet, szHouseNumber, szPostalCode, szCity, szEmail, szPassword)
-        VALUES (p_FirstName, p_LastName,  p_Street, p_HouseNumber,  p_PostalCode, p_City, p_Email, p_Password);
+		INSERT INTO tbluser (szFirstName, szLastName, szStreet, szHouseNumber, szPostalCode, szCity, szEmail, szPassword, bIsAdmin)
+        VALUES (p_FirstName, p_LastName,  p_Street, p_HouseNumber,  p_PostalCode, p_City, p_Email, p_Password, p_IsAdmin);
         
         SELECT  nKey, szFirstName, szLastName, szStreet, szHouseNumber, szPostalCode, szCity, szEmail, bIsAdmin
         FROM tbluser 
@@ -367,15 +368,16 @@ DELIMITER $$
 CREATE PROCEDURE spCreateProduct(
 	p_Name VARCHAR(200),
 	p_Price  DECIMAL(5,2),
-    p_ImageLink INT 
+    p_ImageLink INT,
+    p_Energy INT
     )
 BEGIN
 	IF p_ImageLink IS NULL THEN
 		SET p_ImageLink = NULL;
 	END IF;
     
-   INSERT INTO tblproduct (szName, rPrice, nImageLink)
-   VALUES (p_Name, p_Price,  p_ImageLink);
+   INSERT INTO tblproduct (szName, rPrice, nImageLink, nEnergy)
+   VALUES (p_Name, p_Price,  p_ImageLink, p_Energy);
 END $$
 
 DELIMITER ;
@@ -396,13 +398,15 @@ CREATE PROCEDURE spUpdateProduct(
 	 p_Key INT,
 	 p_Name VARCHAR(200),
 	 p_Price  DECIMAL(5,2),
-     p_ImageLink INT
+     p_ImageLink INT,
+     p_Energy INT
     )
 BEGIN
    UPDATE tblproduct 
    SET 
 		szName = p_Name,
 		rPrice = p_Price,
+        nEnergy = p_Energy,
         nImageLink = CASE
 			WHEN p_ImageLink IS NOT NULL THEN p_ImageLink
             ELSE nImageLink
@@ -681,13 +685,17 @@ DROP PROCEDURE IF EXISTS spGetIngredients;
 
 DELIMITER $$
 -- Laden von Produkten mit Zutaten
-CREATE PROCEDURE spGetIngredients()
+CREATE PROCEDURE spGetIngredients(
+p_ProductLink INT
+)
 
 BEGIN 
 SELECT 
     i.nKey AS ingredient_nKey,
-    i.szName AS ingredient_szName
+    i.szName AS ingredient_szName,
+    pi.nQuantity AS ingredient_nQuantity
     FROM tblingredient i
+    LEFT JOIN tblproductingredient pi ON pi.nIngredientLink = i.nKey AND pi.nProductLink = p_ProductLink
     ORDER BY i.nKey;
 END $$
 
@@ -809,6 +817,52 @@ DELIMITER ;
 
 
 -- Fertig: 20_spAddProductToOrder.sql
+
+
+-- HinzufÃ¼gen: 21_spUpdateProductIngredient.sql
+
+USE dbcommitandforget;
+
+DROP PROCEDURE IF EXISTS spUpdateProductIngredient;
+
+DELIMITER $$
+CREATE PROCEDURE spUpdateProductIngredient(
+
+    p_IngredientLink INT,
+    p_ProductLink INT,
+    p_Quantity INT
+    )
+
+BEGIN
+    INSERT INTO tblproductingredient (nIngredientLink, nProductLink, nQuantity)
+    VALUES (p_IngredientLink, p_ProductLink, p_Quantity);
+    
+END $$
+
+DELIMITER ;
+
+-- Fertig: 21_spUpdateProductIngredient.sql
+
+
+-- HinzufÃ¼gen: 22_spDeleteProductIngredient.sql
+
+USE dbcommitandforget;
+
+DROP PROCEDURE IF EXISTS spDeleteProductIngredient;
+
+DELIMITER $$
+
+CREATE PROCEDURE spDeleteProductIngredient(
+	 p_Key INT
+    )
+BEGIN
+   DELETE FROM tblproductingredient WHERE nProductLink = p_Key;
+END $$
+
+DELIMITER ;
+
+
+-- Fertig: 22_spDeleteProductIngredient.sql
 
 
 -- HinzufÃ¼gen: 01_CreateTestData_tblMenuProductIngredient.sql

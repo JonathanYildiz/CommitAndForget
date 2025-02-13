@@ -58,14 +58,15 @@
   <Grid>
     <Grid.RowDefinitions>
       <RowDefinition Height="Auto"/>
+      <RowDefinition Height="30"/>
       <RowDefinition Height="*"/>
     </Grid.RowDefinitions>
 
     <TextBlock Text="User Management" FontSize="24" FontWeight="Bold" Foreground="#007ACC" HorizontalAlignment="Center" Margin="10"/>
+    <Button Grid.Row="1" Content="+" Width="30" Command="{Binding CreateUserCommand}"/>
 
-    <DataGrid ItemsSource="{Binding UserList}" Grid.Row="1">
+    <DataGrid ItemsSource="{Binding UserList}" Grid.Row="2">
       <DataGrid.Columns>
-        <DataGridTextColumn Header="ID" Binding="{Binding Key}" Width="Auto"/>
         <DataGridTextColumn Header="Vorname" Binding="{Binding FirstName}" Width="*"/>
         <DataGridTextColumn Header="Nachname" Binding="{Binding LastName}" Width="*"/>
         <DataGridTextColumn Header="Straße" Binding="{Binding Street}" Width="*"/>

@@ -7,6 +7,14 @@
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
       Title="AdminSelectionView">
+  
+  <Page.Resources>
+    <Style TargetType="Button">
+      <Setter Property="FontSize" Value="14"/>
+      <Setter Property="Height" Value="30"/>
+      <Setter Property="Margin" Value="5"/>
+    </Style>
+  </Page.Resources>
 
   <StackPanel Orientation="Vertical">
     <Button Content="Benutzerverwaltung" Command="{Binding NavigateToUserManagementCommand}"/>
