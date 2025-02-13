@@ -1,6 +1,7 @@
 ﻿using CommitAndForget.Converter;
 using CommitAndForget.Model;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Data;
 using System.IO;
 using System.Windows;
@@ -62,6 +63,76 @@ namespace CommitAndForget.Services.DataProvider
       {
         MessageBoxService.DisplayMessage(ex.Message, MessageBoxImage.Error);
         return [];
+      }
+    }
+
+    public static void UpdateProduct(ProductModel product)
+    {
+      try
+      {
+        var parameters = new Dictionary<string, object>
+        {
+          { "p_Key", product.Key },
+          { "p_Name", product.Name },
+          { "p_Energy", product.Energy },
+          { "p_Price", product.Price },
+          { "p_ImageLink", product.Image.Key == 0 ? null : product.Image.Key  }
+        };
+        DataBaseService.ExecuteSP("spUpdateProduct", parameters);
+      }
+      catch (Exception ex)
+      {
+        MessageBoxService.DisplayMessage(ex.Message, MessageBoxImage.Error);
+      }
+    }
+
+    public static void DeleteProduct(int productKey)
+    {
+      try
+      {
+        var parameters = new Dictionary<string, object>
+        {
+          { "p_Key", productKey }
+        };
+        DataBaseService.ExecuteSP("spDeleteProduct", parameters);
+      }
+      catch (Exception ex)
+      {
+        MessageBoxService.DisplayMessage(ex.Message, MessageBoxImage.Error);
+      }
+    }
+
+    public static void DeleteProductsIngredients(int key)
+    {
+      try
+      {
+        var parameters = new Dictionary<string, object>
+        {
+          { "p_Key", key }
+        };
+        DataBaseService.ExecuteSP("spDeleteProductIngredient", parameters);
+      }
+      catch (Exception ex)
+      {
+        MessageBoxService.DisplayMessage(ex.Message, MessageBoxImage.Error);
+      }
+    }
+
+    public static void AddProductIngredient(int productLink, int ingredientLink, double quantity)
+    {
+      try
+      {
+        var parameters = new Dictionary<string, object>
+        {
+          { "p_ProductLink", productLink },
+          { "p_IngredientLink", ingredientLink },
+          { "p_Quantity", quantity }
+        };
+        DataBaseService.ExecuteSP("spUpdateProductIngredient", parameters);
+      }
+      catch (Exception ex)
+      {
+        MessageBoxService.DisplayMessage(ex.Message, MessageBoxImage.Error);
       }
     }
   }

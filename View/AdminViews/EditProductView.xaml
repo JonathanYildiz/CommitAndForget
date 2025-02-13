@@ -1,0 +1,69 @@
+﻿<Window x:Class="CommitAndForget.View.AdminViews.EditProductView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+        xmlns:converter="clr-namespace:CommitAndForget.Converter"
+        xmlns:local="clr-namespace:CommitAndForget.View.AdminViews"
+        mc:Ignorable="d" 
+        Height="600" Width="400"
+        Title="EditProductView">
+
+  <Grid Margin="10">
+    <Grid.RowDefinitions>
+      <RowDefinition Height="Auto"/>
+      <RowDefinition Height="Auto"/>
+      <RowDefinition Height="Auto"/>
+      <RowDefinition Height="Auto"/>
+      <RowDefinition Height="*"/>
+      <RowDefinition Height="Auto"/>
+    </Grid.RowDefinitions>
+    <Grid.ColumnDefinitions>
+      <ColumnDefinition Width="Auto"/>
+      <ColumnDefinition Width="*"/>
+    </Grid.ColumnDefinitions>
+
+    <!-- Labels and TextBoxes for Product Properties -->
+    <TextBlock Text="Name:" Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" Margin="5"/>
+    <TextBox Text="{Binding SelectedProduct.Name}" Grid.Row="0" Grid.Column="1" Margin="5"/>
+
+    <TextBlock Text="Price:" Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" Margin="5"/>
+    <TextBox Text="{Binding SelectedProduct.Price}" Grid.Row="1" Grid.Column="1" Margin="5"/>
+
+    <TextBlock Text="Energy:" Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" Margin="5"/>
+    <TextBox Text="{Binding SelectedProduct.Energy}" Grid.Row="2" Grid.Column="1" Margin="5"/>
+
+    <!-- Image Section -->
+    <TextBlock Text="Image:" Grid.Row="3" Grid.Column="0" VerticalAlignment="Center" Margin="5"/>
+    <StackPanel Grid.Row="3" Grid.Column="1" Orientation="Horizontal" Margin="5">
+      <Image Source="{Binding SelectedProduct.Image.Image}" Width="100" Height="100" Margin="5"/>
+      <StackPanel Orientation="Vertical">
+        <Button Content="Remove" Command="{Binding RemoveImageCommand}" Width="75" Margin="5"/>
+        <Button Content="Select" Command="{Binding SelectImageCommand}" Width="75" Margin="5"/>
+      </StackPanel>
+    </StackPanel>
+
+    <!-- Ingredients Section -->
+    <TextBlock Text="Ingredients:" Grid.Row="4" Grid.Column="0" VerticalAlignment="Top" Margin="5"/>
+    <ListBox Grid.Row="4" Grid.Column="1" ItemsSource="{Binding IngredientList}" SelectionMode="Multiple" Margin="5">
+      <ListBox.ItemTemplate>
+        <DataTemplate>
+          <StackPanel Orientation="Horizontal">
+            <CheckBox Content="{Binding Name}"
+            IsChecked="{Binding IsChecked}"
+            Command="{Binding DataContext.ToggleIngredientCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+            CommandParameter="{Binding}" />
+            <TextBox Text="{Binding Quantity}" Width="50" Margin="5,0,0,0" VerticalAlignment="Center"/>
+          </StackPanel>
+        </DataTemplate>
+      </ListBox.ItemTemplate>
+    </ListBox>
+
+
+    <!-- Buttons -->
+    <StackPanel Grid.Row="5" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Center" Margin="10">
+      <Button Content="Save" Command="{Binding SaveProductCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}" Width="100" Margin="5"/>
+      <Button Content="Cancel" Command="{Binding CancelProductCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}" Width="100" Margin="5"/>
+    </StackPanel>
+  </Grid>
+</Window>

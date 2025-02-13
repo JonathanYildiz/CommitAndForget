@@ -90,17 +90,15 @@ namespace CommitAndForget.Services.DataProvider
           { "p_PostalCode", newUser.PostalCode },
           { "p_City", newUser.City },
           { "p_Email", newUser.Email },
-          { "p_Password", newUser.Password }
+          { "p_Password", newUser.Password },
+          { "p_IsAdmin", newUser.IsAdmin }
         };
         DataTable dt = DataBaseService.ExecuteSP("spRegisterUser", parameters);
 
         if (dt is not null && dt.Rows.Count == 1) // Es darf nur ein Benutzer zurückkommmen
         {
           if (dt.Columns.Contains("Nachricht") && dt.Rows[0]["Nachricht"] != DBNull.Value) // Fehlermeldungen aus der Datenbank abfangen
-          {
-            MessageBoxService.DisplayMessage(dt.Rows[0]["Nachricht"].ToString() ?? "DB-Fehler", MessageBoxImage.Warning);
             return null;
-          }
 
           user.Key = dt.Rows[0]["nKey"] != DBNull.Value ? (int)dt.Rows[0]["nKey"] : default;
           user.FirstName = dt.Rows[0]["szFirstName"] != DBNull.Value ? dt.Rows[0]["szFirstName"].ToString() ?? string.Empty : string.Empty;
@@ -138,7 +136,6 @@ namespace CommitAndForget.Services.DataProvider
     {
       try
       {
-        user.Key = 1234;
         var parameters = new Dictionary<string, object>
         {
           { "p_Key", user.Key },

@@ -23,9 +23,24 @@ namespace CommitAndForget.ViewModel
       get => Get<UserModel>();
       set => Set(value);
     }
+    public ProductModel SelectedProduct
+    {
+      get => Get<ProductModel>();
+      set => Set(value);
+    }
     public ObservableCollection<UserModel> UserList
     {
       get => Get<ObservableCollection<UserModel>>();
+      set => Set(value);
+    }
+    public ObservableCollection<ProductModel> ProductList
+    {
+      get => Get<ObservableCollection<ProductModel>>();
+      set => Set(value);
+    }
+    public ObservableCollection<IngredientModel> IngredientList
+    {
+      get => Get<ObservableCollection<IngredientModel>>();
       set => Set(value);
     }
     public Frame MainFrame
@@ -40,6 +55,7 @@ namespace CommitAndForget.ViewModel
     {
       CurrentUser = user;
       UserList = new ObservableCollection<UserModel>();
+      IngredientList = new ObservableCollection<IngredientModel>();
       CreateCommands();
     }
     #endregion Constructor
@@ -57,6 +73,11 @@ namespace CommitAndForget.ViewModel
       DeleteUserCommand = new RelayCommand<UserModel>(DeleteUser);
       SaveUserCommand = new RelayCommand<Window>(SaveUser);
       CancelUserCommand = new RelayCommand<Window>(CancelUser);
+      CreateUserCommand = new RelayCommand(CreateUser);
+      EditProductCommand = new RelayCommand<ProductModel>(EditProduct);
+      ToggleIngredientCommand = new RelayCommand<IngredientModel>(ToggleIngredient);
+      SaveProductCommand = new RelayCommand(SaveProduct);
+      DeleteProductCommand = new RelayCommand<ProductModel>(DeleteProduct);
     }
     public ICommand NavigateToUserManagementCommand { get; private set; }
     public ICommand NavigateToProductManagementCommand { get; private set; }
@@ -68,6 +89,11 @@ namespace CommitAndForget.ViewModel
     public ICommand DeleteUserCommand { get; private set; }
     public ICommand SaveUserCommand { get; private set; }
     public ICommand CancelUserCommand { get; private set; }
+    public ICommand CreateUserCommand { get; private set; }
+    public ICommand EditProductCommand { get; private set; }
+    public ICommand ToggleIngredientCommand { get; private set; }
+    public ICommand SaveProductCommand { get; private set; }
+    public ICommand DeleteProductCommand { get; private set; }
     #endregion Commands
 
     #region Methods
@@ -76,7 +102,11 @@ namespace CommitAndForget.ViewModel
       UserList = UserDataProvider.LoadUser();
       MainFrame?.Navigate(new UserManagementView() { DataContext = this });
     }
-    private void NavigateToProductManagement() => MainFrame?.Navigate(new ProductManagementView() { DataContext = this });
+    private void NavigateToProductManagement()
+    {
+      ProductList = ProductDataProvider.LoadProducts();
+      MainFrame?.Navigate(new ProductManagementView() { DataContext = this });
+    }
     private void NavigateToOrderManagement() => MainFrame?.Navigate(new OrderManagementView() { DataContext = this });
     private void NavigateToMenuManagement() => MainFrame?.Navigate(new MenuManagementView() { DataContext = this });
     private void NavigateToImageManagement() => MainFrame?.Navigate(new ImageManagementView() { DataContext = this });
@@ -99,15 +129,31 @@ namespace CommitAndForget.ViewModel
     {
       if (user is not null)
       {
-        UserDataProvider.DeleteUser(user.Key);
-        UserList.Remove(user);
+        var msgBox = MessageBox.Show("Möchten Sie den Benutzer wirklich löschen?", "Benutzer löschen", MessageBoxButton.YesNo, MessageBoxImage.Question);
+        if (msgBox == MessageBoxResult.Yes)
+        {
+          UserDataProvider.DeleteUser(user.Key);
+          UserList.Remove(user);
+        }
       }
     }
     private void SaveUser(Window? editWindow)
     {
       if (SelectedUser is not null)
-        UserDataProvider.UpdateUser(SelectedUser);
-
+      {
+        if (UserList.Any(UserList => UserList.Key == SelectedUser.Key)) // Wenn User vorhanden -> Updaten
+        {
+          UserDataProvider.UpdateUser(SelectedUser);
+        }
+        else
+        {
+          var addedUser = UserDataProvider.Register(SelectedUser); // Wenn nicht vorhanden -> Erstellen
+          if (addedUser is not null)
+            UserList.Add(addedUser);
+          else
+            return;
+        }
+      }
       SelectedUser = null;
       editWindow?.Close();
     }
@@ -115,6 +161,84 @@ namespace CommitAndForget.ViewModel
     {
       SelectedUser = null;
       editWindow?.Close();
+    }
+
+    private void CreateUser()
+    {
+      SelectedUser = new UserModel();
+      var editWindow = new EditUserView() { DataContext = this };
+      editWindow.WindowStartupLocation = WindowStartupLocation.CenterScreen;
+      editWindow.ShowDialog();
+    }
+    private void EditProduct(ProductModel? product)
+    {
+      if (product is not null)
+      {
+        IngredientList = IngredientDataProvider.LoadIngredients(product);
+        SelectedProduct = product;
+
+        foreach(var ingredient in IngredientList) //Checkboxes initialisieren
+        {
+          if (product.Ingredients.FirstOrDefault(i => i.Key == ingredient.Key) != null)
+            ingredient.IsChecked = true;
+        }
+
+        var editWindow = new EditProductView() { DataContext = this };
+        editWindow.WindowStartupLocation = WindowStartupLocation.CenterScreen;
+        editWindow.ShowDialog();
+      }
+    }
+    private void ToggleIngredient(IngredientModel? ingredient)
+    {
+      if (ingredient is not null)
+      {
+        var foundIngredient = SelectedProduct.Ingredients.FirstOrDefault(i => i.Key == ingredient.Key);
+
+        if (foundIngredient != null)
+          SelectedProduct.Ingredients.Remove(foundIngredient); // Entfernen
+        else
+          SelectedProduct.Ingredients.Add(ingredient); // Hinzufügen
+      }
+    }
+    private void SaveProduct()
+    {
+      if (SelectedProduct is not null)
+      {
+        if (ProductList.Any(p => p.Key == SelectedProduct.Key)) // Wenn Produkt vorhanden -> Updaten
+        {
+          ProductDataProvider.UpdateProduct(SelectedProduct);
+          ProductDataProvider.DeleteProductsIngredients(SelectedProduct.Key); // Alle Zutaten löschen
+          foreach (var ingredient in SelectedProduct.Ingredients)
+          {
+            var foundIngredient = IngredientList.FirstOrDefault(i => i.Key == ingredient.Key);
+            if (foundIngredient is null)
+              continue;
+
+            ProductDataProvider.AddProductIngredient(SelectedProduct.Key, ingredient.Key, foundIngredient.Quantity); // Zutaten hinzufügen
+          }
+        }
+        else
+        {
+          //var addedProduct = ProductDataProvider.AddProduct(SelectedProduct); // Wenn nicht vorhanden -> Erstellen
+          //if (addedProduct is not null)
+          //  ProductList.Add(addedProduct);
+          //else
+          //  return;
+        }
+      }
+      SelectedProduct = null;
+    }
+    private void DeleteProduct(ProductModel? prodct)
+    {
+      if (prodct is not null)
+      {
+        var msgBox = MessageBox.Show("Möchten Sie das Produkt wirklich löschen?", "Produkt löschen", MessageBoxButton.YesNo, MessageBoxImage.Question);
+        if (msgBox == MessageBoxResult.Yes)
+        {
+          ProductDataProvider.DeleteProduct(prodct.Key);
+          ProductList.Remove(prodct);
+        }
+      }
     }
     #endregion Methods
   }
