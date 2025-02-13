@@ -141,6 +141,27 @@ CREATE TABLE IF NOT EXISTS tblMenu (
         ON UPDATE CASCADE
 );
 
+-- Check if the tblOrderMenu table exists, if not, create it
+CREATE TABLE IF NOT EXISTS tblOrderMenu (
+    nKey INT AUTO_INCREMENT PRIMARY KEY,
+    nOrderLink INT NOT NULL,
+    nMenuLink INT NOT NULL,
+    nQuantity INT NOT NULL,
+    
+    -- Foreign key definition
+    CONSTRAINT fk_tblOrderMenu_Order 
+        FOREIGN KEY (nOrderLink) 
+        REFERENCES tblOrder(nKey) 
+        ON DELETE CASCADE 
+        ON UPDATE CASCADE,
+
+    CONSTRAINT fk_tblOrderMenu_Menu 
+        FOREIGN KEY (nMenuLink) 
+        REFERENCES tblMenu(nKey) 
+        ON DELETE CASCADE 
+        ON UPDATE CASCADE
+);
+
 -- Check if the tblProductMenu table exists, if not, create it
 CREATE TABLE IF NOT EXISTS tblProductMenu (
     nKey INT AUTO_INCREMENT PRIMARY KEY,
@@ -285,43 +306,49 @@ DROP PROCEDURE IF EXISTS spUpdateUser;
 DELIMITER $$
 
 CREATE PROCEDURE spUpdateUser(
-	IN p_Key INT, 
-	IN p_FirstName NVARCHAR(200),
-    IN p_LastName NVARCHAR(200),
-    IN p_Street NVARCHAR(200),
-    IN p_HouseNumber NVARCHAR(200),
-    IN p_PostalCode NVARCHAR(200),
-    IN p_City NVARCHAR(200),
-	IN p_Email NVARCHAR(200),
-    IN p_Password NVARCHAR(200)
+    IN p_Key INT, 
+    IN p_FirstName VARCHAR(200),
+    IN p_LastName VARCHAR(200),
+    IN p_Street VARCHAR(200),
+    IN p_HouseNumber VARCHAR(200),
+    IN p_PostalCode VARCHAR(200),
+    IN p_City VARCHAR(200),
+    IN p_Email VARCHAR(200),
+    IN p_Password VARCHAR(200),
+    IN p_IsAdmin bit
 )
 BEGIN
-	DECLARE v_Count INT;
--- Pruefen, ob die Mail-Passwort-Kombination existiert 
-	SELECT nKey, szFirstName, szLastName, szStreet, szHouseNumber, szPostalCode, szCity, szEmail, szPassword
+    DECLARE v_Count INT;
+    
+    -- PrÃ¼fen, ob der Benutzer existiert
+    SELECT COUNT(*)
+    INTO v_Count
     FROM tbluser
     WHERE nKey = p_Key;
    
-	IF v_Count = 0 THEN
-		SELECT 'Fehler: Benutzer ist nicht gefunden!' AS Nachricht;
+    IF v_Count = 0 THEN
+        SELECT 'Fehler: Benutzer ist nicht gefunden!' AS Nachricht;
     ELSE
-		UPDATE tbluser
+        -- Benutzer aktualisieren
+        UPDATE tbluser
         SET 
-			szFirstName = p_FirstName,
+            szFirstName = p_FirstName,
             szLastName = p_LastName,
             szStreet = p_Street,
             szHouseNumber = p_HouseNumber,
             szPostalCode = p_PostalCode, 
             szCity = p_City,
             szEmail = p_Email,
-            szPassword = p_Password
-		WHERE nKey = p_Key;
+            bIsAdmin = p_IsAdmin,
+            szPassword = coalesce(nullif(p_Password, ""), szPassword)
+        WHERE nKey = p_Key;
         
-        SELECT nKey, szFirstName, szLastName, szStreet, szHouseNumber, szPostalCode, szCity, szEmail
+        -- ZurÃ¼ckgeben der aktualisierten Benutzerdaten
+        SELECT nKey, szFirstName, szLastName, szStreet, szHouseNumber, szPostalCode, szCity, szEmail, bIsAdmin
         FROM tbluser 
         WHERE nKey = p_Key;
-	END IF;
-			
+    END IF;
+    
 END $$
 
 DELIMITER ;
@@ -670,6 +697,118 @@ DELIMITER ;
 
 
 -- Fertig: 16_spGetIngredients.sql
+
+
+-- HinzufÃ¼gen: 17_spCreateOrder.sql
+
+USE dbcommitandforget;
+-- Erstellen von Ordner mit dem Rechnung zusammen 
+DROP PROCEDURE IF EXISTS spCreateOrder;
+
+DELIMITER $$
+
+CREATE PROCEDURE spCreateOrder(
+	p_UserLink INT,
+    p_Paid BIT,
+    p_PaymentMethod NVARCHAR(200)
+    )
+BEGIN    
+	DECLARE p_InvoiceID INT;
+    DECLARE p_OrderID INT;
+    DECLARE p_InvoiceNumber INT;
+	
+    START TRANSACTION;
+    
+		SELECT COALESCE(MAX(nInvoiceNumber), 0) + 1 INTO p_InvoiceNumber from tblinvoice;  
+    
+		INSERT INTO tblinvoice (nInvoiceNumber, bPaid, szPaymentMethod)
+		VALUES (p_InvoiceNumber, p_Paid, p_PaymentMethod);
+    
+		SET p_InvoiceID = last_insert_id();
+    
+		INSERT INTO tblorder (dtOrderDate, nUserLink, nInvoiceLink)
+		VALUES (now(), p_UserLink, p_InvoiceID);
+    
+		SET p_OrderID = last_insert_id();
+    COMMIT;
+    
+    SELECT  p_OrderID as newOrderID, p_InvoiceID as newInvoiceID, p_InvoiceNumber AS InvoiceNumber;
+    
+END $$
+
+DELIMITER ;
+
+
+-- Fertig: 17_spCreateOrder.sql
+
+
+-- HinzufÃ¼gen: 18_spDeleteUser.sql
+
+USE dbcommitandforget;
+
+DROP PROCEDURE IF EXISTS spDeleteUser;
+
+DELIMITER $$
+
+CREATE PROCEDURE spDeleteUser(
+	 p_Key INT
+    )
+BEGIN
+   DELETE FROM tbluser WHERE nKey = p_Key;
+   
+END $$
+
+DELIMITER ;
+
+-- Fertig: 18_spDeleteUser.sql
+
+
+-- HinzufÃ¼gen: 19_spAddMenuToOrder.sql
+
+USE dbcommitandforget;
+-- Erstellen von Ordner mit dem Rechnung zusammen 
+DROP PROCEDURE IF EXISTS spAddMenuToOrder;
+
+DELIMITER $$
+
+CREATE PROCEDURE spAddMenuToOrder(
+	p_OrderLink INT,
+    p_MenuLink INT,
+    p_Quantity INT
+    )
+BEGIN    
+	INSERT INTO tblordermenu(nOrderLink, nMenuLink, nQuantity)
+    VALUES (p_OrderLink, p_MenuLink, p_Quantity);
+END $$
+
+DELIMITER ;
+
+
+-- Fertig: 19_spAddMenuToOrder.sql
+
+
+-- HinzufÃ¼gen: 20_spAddProductToOrder.sql
+
+USE dbcommitandforget;
+-- Erstellen von Ordner mit dem Rechnung zusammen 
+DROP PROCEDURE IF EXISTS spAddProductToOrder;
+
+DELIMITER $$
+
+CREATE PROCEDURE spAddProductToOrder(
+	p_OrderLink INT,
+    p_ProductLink INT,
+    p_Quantity INT
+    )
+BEGIN    
+	INSERT INTO tblorderproduct(nOrderLink, nProductLink, nQuantity)
+    VALUES (p_OrderLink, p_ProductLink, p_Quantity);
+END $$
+
+DELIMITER ;
+
+
+-- Fertig: 20_spAddProductToOrder.sql
 
 
 -- HinzufÃ¼gen: 01_CreateTestData_tblMenuProductIngredient.sql
