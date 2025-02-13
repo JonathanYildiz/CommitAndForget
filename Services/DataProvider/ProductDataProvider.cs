@@ -1,6 +1,7 @@
 ﻿using CommitAndForget.Converter;
 using CommitAndForget.Model;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Data;
 using System.IO;
 using System.Windows;
@@ -75,7 +76,7 @@ namespace CommitAndForget.Services.DataProvider
           { "p_Name", product.Name },
           { "p_Energy", product.Energy },
           { "p_Price", product.Price },
-          { "p_ImageLink", product.Image.Key }
+          { "p_ImageLink", product.Image.Key == 0 ? null : product.Image.Key  }
         };
         DataBaseService.ExecuteSP("spUpdateProduct", parameters);
       }
