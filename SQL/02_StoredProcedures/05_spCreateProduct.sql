@@ -17,6 +17,8 @@ BEGIN
     
    INSERT INTO tblproduct (szName, rPrice, nImageLink, nEnergy)
    VALUES (p_Name, p_Price,  p_ImageLink, p_Energy);
+   
+      SELECT LAST_INSERT_ID() AS nKey;
 END $$
 
 DELIMITER ;
