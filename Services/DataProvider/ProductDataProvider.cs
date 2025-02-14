@@ -135,5 +135,27 @@ namespace CommitAndForget.Services.DataProvider
         MessageBoxService.DisplayMessage(ex.Message, MessageBoxImage.Error);
       }
     }
+
+    public static int CreateProduct(ProductModel product)
+    {
+      try
+      {
+        var parameters = new Dictionary<string, object>
+        {
+          { "p_Name", product.Name },
+          { "p_Energy", product.Energy },
+          { "p_Price", product.Price },
+          { "p_ImageLink", product.Image.Key == 0 ? null : product.Image.Key }
+        };
+        DataTable dt = DataBaseService.ExecuteSP("spCreateProduct", parameters);
+        return dt.Rows[0]["nKey"] != DBNull.Value ? Convert.ToInt32(dt.Rows[0]["nKey"]) : default;
+      }
+      catch (Exception ex)
+      {
+        MessageBoxService.DisplayMessage(ex.Message, MessageBoxImage.Error);
+        return -1;
+
+      }
+    }
   }
 }

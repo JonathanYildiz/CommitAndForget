@@ -8,7 +8,26 @@
       d:DesignHeight="450" d:DesignWidth="800"
       Title="ImageManagementView">
 
-    <Grid>
-        
-    </Grid>
+  <Grid>
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+      <ItemsControl ItemsSource="{Binding ImageList}">
+        <ItemsControl.ItemTemplate>
+          <DataTemplate>
+            <StackPanel Orientation="Vertical" Margin="10">
+              <Image Source="{Binding Image}" Width="200" Height="200" Margin="5"/>
+              <TextBlock Text="{Binding Name}" HorizontalAlignment="Center" Margin="5"/>
+              <Button Content="Auswählen" Command="{Binding DataContext.ChooseImageCommand, RelativeSource={RelativeSource AncestorType=Page}}" CommandParameter="{Binding}" Margin="5"/>
+              <Button Content="Löschen" Command="{Binding DataContext.DeleteImageCommand, RelativeSource={RelativeSource AncestorType=Page}}" CommandParameter="{Binding}" Margin="5"/>
+            </StackPanel>
+          </DataTemplate>
+        </ItemsControl.ItemTemplate>
+        <ItemsControl.ItemsPanel>
+          <ItemsPanelTemplate>
+            <WrapPanel />
+          </ItemsPanelTemplate>
+        </ItemsControl.ItemsPanel>
+      </ItemsControl>
+    </ScrollViewer>
+    <Button Content="Add Image" Command="{Binding AddImageCommand}" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="10"/>
+  </Grid>
 </Page>

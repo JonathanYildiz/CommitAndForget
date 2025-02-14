@@ -36,5 +36,19 @@ namespace CommitAndForget.Model
       set => Set(value);
     }
     #endregion Properties
+
+    #region Constructor
+    public ImageModel()
+    {
+    }
+    public ImageModel(ImageModel image)
+    {
+      Key = image.Key;
+      Image = image.Image;
+      Approved = image.Approved;
+      CreationDate = image.CreationDate;
+      ContestWon = image.ContestWon;
+    }
+    #endregion Constructor
   }
 }

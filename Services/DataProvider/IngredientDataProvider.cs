@@ -7,13 +7,13 @@ namespace CommitAndForget.Services.DataProvider
 {
   public static class IngredientDataProvider
   {
-    public static ObservableCollection<IngredientModel> LoadIngredients(ProductModel product)
+    public static ObservableCollection<IngredientModel> LoadIngredients(int productLink)
     {
       try
       {
         var parameters = new Dictionary<string, object>
         {
-          { "p_ProductLink", product.Key }
+          { "p_ProductLink", productLink }
         };
 
         DataTable dt = DataBaseService.ExecuteSP("spGetIngredients", parameters);

@@ -378,6 +378,8 @@ BEGIN
     
    INSERT INTO tblproduct (szName, rPrice, nImageLink, nEnergy)
    VALUES (p_Name, p_Price,  p_ImageLink, p_Energy);
+   
+      SELECT LAST_INSERT_ID() AS nKey;
 END $$
 
 DELIMITER ;
@@ -407,10 +409,7 @@ BEGIN
 		szName = p_Name,
 		rPrice = p_Price,
         nEnergy = p_Energy,
-        nImageLink = CASE
-			WHEN p_ImageLink IS NOT NULL THEN p_ImageLink
-            ELSE nImageLink
-		END
+        nImageLink = p_ImageLink
    WHERE nKey = p_Key;
 END $$
 
@@ -920,6 +919,70 @@ DELIMITER ;
 
 
 -- Fertig: 24_spCreateImage.sql
+
+
+-- HinzufÃ¼gen: 25_spUpdateImage.sql
+
+DROP PROCEDURE IF EXISTS spUpdateImage;
+select * from tblimage;
+DELIMITER $$
+
+CREATE PROCEDURE spUpdateImage(
+    IN p_Key INT, 
+    IN p_Approved BIT,
+    IN p_ContestWon BIT
+)
+BEGIN
+    DECLARE v_Count INT;
+    
+    -- PrÃ¼fen, ob der Benutzer existiert
+    SELECT COUNT(*)
+    INTO v_Count
+    FROM tblimage
+    WHERE nKey = p_Key;
+   
+    IF v_Count = 0 THEN
+        SELECT 'Fehler: Bild konnte nicht gefunden werden!' AS Nachricht;
+    ELSE
+        -- Benutzer aktualisieren
+        UPDATE tblimage
+        SET 
+			bApproved = p_Approved,
+            bContestWon = p_ContestWon
+        WHERE nKey = p_Key;
+        
+        -- ZurÃ¼ckgeben der aktualisierten Bilderdaten
+        SELECT nKey, vbImage, bApproved, dtCreationDate, bContestWon
+        FROM tblimage 
+        WHERE nKey = p_Key;
+    END IF;
+    
+END $$
+
+DELIMITER ;
+
+-- Fertig: 25_spUpdateImage.sql
+
+
+-- HinzufÃ¼gen: 26_spDeleteImage.sql
+
+USE dbcommitandforget;
+
+DROP PROCEDURE IF EXISTS spDeleteImage;
+
+DELIMITER $$
+
+CREATE PROCEDURE spDeleteImage(
+	 p_Key INT
+    )
+BEGIN
+   DELETE FROM tblimage WHERE nKey = p_Key;
+   
+END $$
+
+DELIMITER ;
+
+-- Fertig: 26_spDeleteImage.sql
 
 
 -- HinzufÃ¼gen: 01_CreateTestData_tblMenuProductIngredient.sql

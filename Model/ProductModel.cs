@@ -53,6 +53,18 @@ namespace CommitAndForget.Model
     public ProductModel()
     {
       Quantity = 1;
+      Ingredients = new ObservableCollection<IngredientModel>();
+      Image = new ImageModel();
+    }
+    public ProductModel(ProductModel product)
+    {
+      Key = product.Key;
+      Name = product.Name;
+      Energy = product.Energy;
+      Price = product.Price;
+      Image = new ImageModel(product.Image);
+      Quantity = product.Quantity;
+      Ingredients = new ObservableCollection<IngredientModel>(product.Ingredients);
     }
     #endregion Constructor
   }

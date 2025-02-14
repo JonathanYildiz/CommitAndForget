@@ -5,6 +5,7 @@ using System.Windows.Input;
 using System.Windows.Media.Imaging;
 using CommitAndForget.Essentials;
 using CommitAndForget.Model;
+using CommitAndForget.Services;
 using CommitAndForget.Services.DataProvider;
 using CommitAndForget.View.AdminViews;
 using CommunityToolkit.Mvvm.Input;
@@ -26,6 +27,11 @@ namespace CommitAndForget.ViewModel
       set => Set(value);
     }
     public ProductModel SelectedProduct
+    {
+      get => Get<ProductModel>();
+      set => Set(value);
+    }
+    public ProductModel ProductBackup
     {
       get => Get<ProductModel>();
       set => Set(value);
@@ -85,7 +91,9 @@ namespace CommitAndForget.ViewModel
       EditProductCommand = new RelayCommand<ProductModel>(EditProduct);
       ToggleIngredientCommand = new RelayCommand<IngredientModel>(ToggleIngredient);
       SaveProductCommand = new RelayCommand(SaveProduct);
+      CancelProductCommand = new RelayCommand(CancelProduct);
       DeleteProductCommand = new RelayCommand<ProductModel>(DeleteProduct);
+      CreateProductCommand = new RelayCommand(CreateProduct);
       SelectImageCommand = new RelayCommand(SelectImage);
       AddImageCommand = new RelayCommand(AddImage);
       DeleteImageCommand = new RelayCommand<ImageModel>(DeleteImage);
@@ -106,7 +114,9 @@ namespace CommitAndForget.ViewModel
     public ICommand EditProductCommand { get; private set; }
     public ICommand ToggleIngredientCommand { get; private set; }
     public ICommand SaveProductCommand { get; private set; }
+    public ICommand CancelProductCommand { get; private set; }
     public ICommand DeleteProductCommand { get; private set; }
+    public ICommand CreateProductCommand { get; private set; }
     public ICommand SelectImageCommand { get; private set; }
     public ICommand AddImageCommand { get; private set; }
     public ICommand DeleteImageCommand { get; private set; }
@@ -115,6 +125,8 @@ namespace CommitAndForget.ViewModel
     #endregion Commands
 
     #region Methods
+
+    #region Navigation
     private void NavigateToUserManagement()
     {
       UserList = UserDataProvider.LoadUser();
@@ -127,12 +139,20 @@ namespace CommitAndForget.ViewModel
     }
     private void NavigateToOrderManagement() => MainFrame?.Navigate(new OrderManagementView() { DataContext = this });
     private void NavigateToMenuManagement() => MainFrame?.Navigate(new MenuManagementView() { DataContext = this });
-    private void NavigateToImageManagement() => MainFrame?.Navigate(new ImageManagementView() { DataContext = this });
+    private void NavigateToImageManagement() 
+    {
+      ImageList = ImageDataProvider.LoadImages(); 
+      MainFrame?.Navigate(new ImageManagementView() { DataContext = this });
+    }
     private void NavigateBack()
     {
       if (MainFrame.NavigationService.CanGoBack)
         MainFrame.NavigationService.GoBack();
     }
+    private void CloseCurrentWindow() => Application.Current.Windows.OfType<Window>().SingleOrDefault(w => w.IsActive)?.Close();
+    #endregion Navigation
+
+    #region User
     private void EditUser(UserModel? user)
     {
       if (user is not null)
@@ -183,16 +203,29 @@ namespace CommitAndForget.ViewModel
 
     private void CreateUser()
     {
-      SelectedUser = new UserModel();
-      var editWindow = new EditUserView() { DataContext = this };
-      editWindow.WindowStartupLocation = WindowStartupLocation.CenterScreen;
-      editWindow.ShowDialog();
+      try
+      {
+        SelectedUser = new UserModel();
+        var editWindow = new EditUserView() { DataContext = this };
+        editWindow.WindowStartupLocation = WindowStartupLocation.CenterScreen;
+        editWindow.ShowDialog();
+      }
+      catch (Exception ex)
+      {
+        MessageBoxService.DisplayMessage(ex.Message, MessageBoxImage.Error);
+      }
     }
+    #endregion User
+
+    #region Product
     private void EditProduct(ProductModel? product)
     {
       if (product is not null)
       {
-        IngredientList = IngredientDataProvider.LoadIngredients(product);
+        // Produkut wegspeichern falls abgebrochen wird
+        ProductBackup = new ProductModel(product);
+
+        IngredientList = IngredientDataProvider.LoadIngredients(product.Key);
         SelectedProduct = product;
 
         foreach (var ingredient in IngredientList) //Checkboxes initialisieren
@@ -237,14 +270,29 @@ namespace CommitAndForget.ViewModel
         }
         else
         {
-          //var addedProduct = ProductDataProvider.AddProduct(SelectedProduct); // Wenn nicht vorhanden -> Erstellen
-          //if (addedProduct is not null)
-          //  ProductList.Add(addedProduct);
-          //else
-          //  return;
+          SelectedProduct.Key = ProductDataProvider.CreateProduct(SelectedProduct); // Wenn nicht vorhanden -> Erstellen
+          if (SelectedProduct.Key > 0)
+          {
+            foreach (var ingredient in SelectedProduct.Ingredients)
+              ProductDataProvider.AddProductIngredient(SelectedProduct.Key, ingredient.Key, ingredient.Quantity);
+
+            ProductList.Add(new ProductModel(SelectedProduct));
+          }
+          else
+            return;
         }
       }
       SelectedProduct = null;
+      ProductBackup = null;
+      CloseCurrentWindow();
+    }
+    private void CancelProduct()
+    {
+      if (ProductBackup is not null)
+        SelectedProduct = new ProductModel(ProductBackup);
+
+      SelectedProduct = null;
+      ProductBackup = null;
       CloseCurrentWindow();
     }
     private void DeleteProduct(ProductModel? prodct)
@@ -259,6 +307,24 @@ namespace CommitAndForget.ViewModel
         }
       }
     }
+    public void CreateProduct()
+    {
+      try
+      {
+        IngredientList = IngredientDataProvider.LoadIngredients(-1); // Alle Zutaten laden
+        SelectedProduct = new ProductModel();
+        var editWindow = new EditProductView() { DataContext = this };
+        editWindow.WindowStartupLocation = WindowStartupLocation.CenterScreen;
+        editWindow.ShowDialog();
+      }
+      catch (Exception ex)
+      {
+        MessageBoxService.DisplayMessage(ex.Message, MessageBoxImage.Error);
+      }
+    }
+    #endregion Product
+
+    #region Image
     private void SelectImage()
     {
       ImageList = ImageDataProvider.LoadImages();
@@ -304,8 +370,8 @@ namespace CommitAndForget.ViewModel
       SelectedProduct.Image.Image = null;
       SelectedProduct.Image.Key = 0;
     }
-
-    private void CloseCurrentWindow() => Application.Current.Windows.OfType<Window>().SingleOrDefault(w => w.IsActive)?.Close();
+    #endregion Image
+    
     #endregion Methods
   }
 }

@@ -58,12 +58,14 @@
   <Grid>
     <Grid.RowDefinitions>
       <RowDefinition Height="Auto"/>
+      <RowDefinition Height="Auto"/>
       <RowDefinition Height="*"/>
     </Grid.RowDefinitions>
 
     <TextBlock Text="Product Management" FontSize="24" FontWeight="Bold" Foreground="#007ACC" HorizontalAlignment="Center" Margin="10"/>
+    <Button Grid.Row="1" Content="+" Width="30" Command="{Binding CreateProductCommand}"/>
 
-    <DataGrid ItemsSource="{Binding ProductList}" Grid.Row="1" SelectedItem="{Binding SelectedProduct}">
+    <DataGrid ItemsSource="{Binding ProductList}" Grid.Row="2" SelectedItem="{Binding SelectedProduct}">
       <DataGrid.Columns>
         <DataGridTemplateColumn Header="Image" Width="Auto">
           <DataGridTemplateColumn.CellTemplate>
@@ -74,7 +76,6 @@
         </DataGridTemplateColumn>
         <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="*"/>
         <DataGridTextColumn Header="Price" Binding="{Binding Price, StringFormat=C}" Width="*"/>
-        <DataGridTextColumn Header="Description" Binding="{Binding Description}" Width="*"/>
         <DataGridTemplateColumn Header="Actions" Width="Auto">
           <DataGridTemplateColumn.CellTemplate>
             <DataTemplate>
