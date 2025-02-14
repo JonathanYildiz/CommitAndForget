@@ -255,6 +255,23 @@ namespace CommitAndForget.ViewModel
     {
       if (SelectedProduct is not null)
       {
+        // Eingaben überprüfen
+        if (string.IsNullOrEmpty(SelectedProduct.Name))
+        {
+          MessageBoxService.DisplayMessage("Name darf nicht leer sein", MessageBoxImage.Information);
+          return;
+        }
+        else if (SelectedProduct.Price == 0)
+        {
+          MessageBoxService.DisplayMessage("Preis darf nicht 0 sein", MessageBoxImage.Information);
+          return;
+        }
+        else if (SelectedProduct.Ingredients?.Count == 0)
+        {
+          MessageBoxService.DisplayMessage("Es muss mindestens eine Zutat zugewiesen werden", MessageBoxImage.Information);
+          return;
+        }
+
         if (ProductList.Any(p => p.Key == SelectedProduct.Key)) // Wenn Produkt vorhanden -> Updaten
         {
           ProductDataProvider.UpdateProduct(SelectedProduct);
