@@ -47,6 +47,8 @@ namespace CommitAndForget.Model
     public MenuModel()
     {
       Quantity = 1;
+      ProductList = new ObservableCollection<ProductModel>();
+      Image = new ImageModel();
     }
 
     public MenuModel(MenuModel menu)

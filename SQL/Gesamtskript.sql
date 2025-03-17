@@ -471,6 +471,8 @@ BEGIN
     
    INSERT INTO tblmenu (szName, rPrice, nImageLink)
    VALUES (p_Name, p_Price, p_ImageLink);
+   
+   SELECT LAST_INSERT_ID() AS nKey;
 END $$
 
 DELIMITER ;
@@ -610,7 +612,9 @@ DROP PROCEDURE IF EXISTS spGetProducts;
 
 DELIMITER $$
 -- Laden von Produkten mit Zutaten
-CREATE PROCEDURE spGetProducts()
+CREATE PROCEDURE spGetProducts(
+	p_MenuLink INT
+)
 
 BEGIN 
 SELECT 
@@ -622,11 +626,13 @@ SELECT
     img.vbImage AS image_vbImage,
     i.nKey AS ingredient_nKey,
     i.szName AS ingredient_szName,
-    pi.nQuantity AS ingredient_nQuantity
+    pi.nQuantity AS ingredient_nQuantity,
+    pm.nQuantity AS product_nQuantity
     FROM tblproduct p 
     LEFT JOIN tblproductingredient pi ON p.nKey = pi.nProductLink
     LEFT JOIN tblimage img ON p.nImageLink = img.nKey
     LEFT JOIN tblingredient i ON pi.nIngredientLink = i.nKey
+    LEFT JOIN tblproductmenu pm ON p.nKey = pm.nMenuLink AND pm.nMenuLink = p_MenuLink
     ORDER BY p.nKey, i.szName;
 END $$
 
@@ -883,16 +889,16 @@ CREATE PROCEDURE spGetImages()
 
 BEGIN 
 SELECT 
-	nKey AS image_nKey,
+	 img.nKey AS image_nKey,
     vbImage AS image_vbImage,
     bApproved AS image_bApproved,
 	 dtCreationDate AS image_dtCreationDate,
     bContestWon AS image_bContestWon,
-    szUploader = case when usr.bIsAdmin = 1 then 'admin' ELSE usr.szEmail end AS image_szUploader
+    case when usr.bIsAdmin = 1 then 'admin' ELSE usr.szEmail end AS image_szUploadedBy
     
     FROM tblimage img
     JOIN tbluser usr ON usr.nKey = img.nUserLink
-    ORDER BY nKey;
+    ORDER BY img.nKey;
 END $$
 
 DELIMITER ;
@@ -993,6 +999,52 @@ END $$
 DELIMITER ;
 
 -- Fertig: 26_spDeleteImage.sql
+
+
+-- HinzufÃ¼gen: 27_spDeleteMenuProduct.sql
+
+USE dbcommitandforget;
+
+DROP PROCEDURE IF EXISTS spDeleteMenuProduct;
+
+DELIMITER $$
+
+CREATE PROCEDURE spDeleteMenuProduct(
+	 p_Key INT
+    )
+BEGIN
+   DELETE FROM tblproductmenu WHERE nMenuLink = p_Key;
+END $$
+
+DELIMITER ;
+
+
+-- Fertig: 27_spDeleteMenuProduct.sql
+
+
+-- HinzufÃ¼gen: 28_spUpdateMenuProduct.sql
+
+USE dbcommitandforget;
+
+DROP PROCEDURE IF EXISTS spUpdateMenuProduct;
+
+DELIMITER $$
+CREATE PROCEDURE spUpdateMenuProduct(
+
+    p_MenuLink INT,
+    p_ProductLink INT,
+    p_Quantity INT
+    )
+
+BEGIN
+    INSERT INTO tblproductmenu (nMenuLink, nProductLink, nQuantity)
+    VALUES (p_MenuLink, p_ProductLink, p_Quantity);
+    
+END $$
+
+DELIMITER ;
+
+-- Fertig: 28_spUpdateMenuProduct.sql
 
 
 -- HinzufÃ¼gen: 01_CreateTestData_tblUser.sql

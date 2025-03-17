@@ -1,25 +1,20 @@
 ﻿using CommitAndForget.Converter;
 using CommitAndForget.Model;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
 using System.Data;
-using System.IO;
 using System.Windows;
-using System.Windows.Media.Imaging;
 
 namespace CommitAndForget.Services.DataProvider
 {
   public static class ProductDataProvider
   {
-    public static ObservableCollection<ProductModel> LoadProducts(int menuLink = 0)
+    public static ObservableCollection<ProductModel> LoadProducts()
     {
       try
       {
         var parameters = new Dictionary<string, object>();
-        if (menuLink != 0)
-          parameters.Add("p_MenuLink", menuLink);
 
-        DataTable dt = DataBaseService.ExecuteSP("spGetProducts");
+        DataTable dt = DataBaseService.ExecuteSP("spGetProducts", parameters);
         var productList = new ObservableCollection<ProductModel>();
 
         if (dt is not null && dt.Rows.Count > 0)
