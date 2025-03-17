@@ -74,6 +74,16 @@ namespace CommitAndForget.ViewModel
           return;
         }
 
+        if (Email == "1" && string.IsNullOrEmpty(Password)) // TODO nur zum debuggen, hinterher entfernen
+        {
+          var view = new MainView();
+          view.WindowStartupLocation = WindowStartupLocation.CenterScreen;
+          view.DataContext = new UserViewModel(new UserModel());
+          view.Show();
+          window?.Close();
+          return;
+        }
+
         if (string.IsNullOrEmpty(Email) || string.IsNullOrEmpty(Password))
         {
           MessageBoxService.DisplayMessage("Bitte geben Sie Ihre E-Mail und Ihr Passwort ein.", MessageBoxImage.Warning);
