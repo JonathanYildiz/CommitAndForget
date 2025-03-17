@@ -68,7 +68,7 @@ namespace CommitAndForget.ViewModel
         {
           var view = new MainView();
           view.WindowStartupLocation = WindowStartupLocation.CenterScreen;
-          view.DataContext = new AdminViewModel(new UserModel());
+          view.DataContext = new AdminViewModel(new UserModel { Key = 1 });
           view.Show();
           window?.Close();
           return;
@@ -78,7 +78,7 @@ namespace CommitAndForget.ViewModel
         {
           var view = new MainView();
           view.WindowStartupLocation = WindowStartupLocation.CenterScreen;
-          view.DataContext = new UserViewModel(new UserModel());
+          view.DataContext = new UserViewModel(new UserModel { Key = 2 });
           view.Show();
           window?.Close();
           return;

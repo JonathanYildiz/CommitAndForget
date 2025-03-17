@@ -154,7 +154,9 @@ namespace CommitAndForget.ViewModel
     private void NavigateToMenuManagement() => MainFrame?.Navigate(new MenuManagementView() { DataContext = this });
     private void NavigateToContestManagement() 
     {
-      ImageList = ImageDataProvider.LoadImages();
+      // Nur Bilder für den Contest laden, die von Usern hochgeladen wurden (Admins laden nur Produktbilder hoch)
+      IEnumerable<ImageModel> images = ImageDataProvider.LoadImages().Where(img => img.UploadedBy != "admin");
+      ImageList = new ObservableCollection<ImageModel>(images);
       CurrentContestImage = ImageList.FirstOrDefault();
       MainFrame?.Navigate(new ContestManagementView() { DataContext = this });
     }
@@ -163,7 +165,7 @@ namespace CommitAndForget.ViewModel
       if (MainFrame.NavigationService.CanGoBack)
         MainFrame.NavigationService.GoBack();
     }
-    private void CloseCurrentWindow() => Application.Current.Windows.OfType<Window>().SingleOrDefault(w => w.IsActive)?.Close();
+    private void CloseCurrentWindow() => Application.Current.Windows.OfType<Window>().FirstOrDefault(w => w.IsActive)?.Close();
     #endregion Navigation
 
     #region User
@@ -371,7 +373,7 @@ namespace CommitAndForget.ViewModel
       if (dialog.ShowDialog() == true)
       {
         image.Image = new BitmapImage(new Uri(dialog.FileName));
-        image = ImageDataProvider.UploadImage(image);
+        image = ImageDataProvider.UploadImage(image, CurrentUser.Key);
         if (image is not null)
           ImageList.Add(image);
       }
@@ -409,7 +411,7 @@ namespace CommitAndForget.ViewModel
       if (CurrentContestImage is not null && ImageList is not null)
       {
         var index = ImageList.IndexOf(CurrentContestImage);
-        if (index < ImageList.Count - 2) // Nächstes Bild
+        if (index < ImageList.Count - 1) // Nächstes Bild
           CurrentContestImage = ImageList[index + 1];
         else if (index == ImageList.Count - 1) // Am Ende -> Erstes Bild
           CurrentContestImage = ImageList[0];
