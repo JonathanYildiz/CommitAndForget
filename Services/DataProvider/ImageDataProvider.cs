@@ -23,6 +23,7 @@ namespace CommitAndForget.Services.DataProvider
             image.Approved = row["image_bApproved"] != DBNull.Value ? Convert.ToBoolean(row["image_bApproved"]) : default;
             image.CreationDate = row["image_dtCreationDate"] != DBNull.Value ? (DateTime)row["image_dtCreationDate"] : default;
             image.ContestWon = row["image_bContestWon"] != DBNull.Value ? Convert.ToBoolean(row["image_bContestWon"]) : default;
+            image.UploadedBy = row["image_szUploadedBy"] != DBNull.Value ? row["image_szUploadedBy"].ToString() ?? string.Empty : string.Empty;
 
             // Bild aus LONGBLOB laden
             if (row["image_vbImage"] != DBNull.Value)
@@ -61,13 +62,14 @@ namespace CommitAndForget.Services.DataProvider
       }
     }
 
-    public static ImageModel UploadImage(ImageModel image)
+    public static ImageModel UploadImage(ImageModel image, int userLink)
     {
       try
       {
         var parameters = new Dictionary<string, object>
         {
-          { "p_Image", ByteArrayToBitmapImageConverter.ConvertToDB(image.Image) }
+          { "p_Image", ByteArrayToBitmapImageConverter.ConvertToDB(image.Image) },
+          { "p_UserLink", userLink }
         };
         DataTable dt = DataBaseService.ExecuteSP("spCreateImage", parameters);
 
