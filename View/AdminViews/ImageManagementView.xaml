@@ -16,7 +16,6 @@
             <StackPanel Orientation="Vertical" Margin="10">
               <Image Source="{Binding Image}" Width="200" Height="200" Margin="5"/>
               <TextBlock Text="{Binding Name}" HorizontalAlignment="Center" Margin="5"/>
-              <Button Content="Auswählen" Command="{Binding DataContext.ChooseImageCommand, RelativeSource={RelativeSource AncestorType=Page}}" CommandParameter="{Binding}" Margin="5"/>
               <Button Content="Löschen" Command="{Binding DataContext.DeleteImageCommand, RelativeSource={RelativeSource AncestorType=Page}}" CommandParameter="{Binding}" Margin="5"/>
             </StackPanel>
           </DataTemplate>
