@@ -61,7 +61,7 @@
       <Button Grid.Row="2" Content="{Binding ShoppingCartQuantity}" Command="{Binding ToggleShowShoppingCartCommand}" Height="30"/>
     </Grid>
     <!--..ODER Warenkorb anzeigen-->
-    <view:ShoppingCartView Grid.Column="2" Visibility="{Binding ShowShoppingCart, Converter={StaticResource BoolToVisibilityConverter}, ConverterParameter=false}"/>
+    <view:ShoppingCartView Grid.Column="1" Visibility="{Binding ShowShoppingCart, Converter={StaticResource BoolToVisibilityConverter}, ConverterParameter=false}"/>
 
     <Button Grid.Column="2" Content=">" FontSize="24" FontWeight="Bold" Command="{Binding NavigateToProductCommand}"/>
     
