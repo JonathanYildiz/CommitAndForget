@@ -42,6 +42,12 @@ namespace CommitAndForget.Model
       set => Set(value);
     }
 
+    public bool IsChecked
+    {
+      get => Get<bool>();
+      set => Set(value);
+    }
+
     public ObservableCollection<IngredientModel> Ingredients
     {
       get => Get<ObservableCollection<IngredientModel>>();

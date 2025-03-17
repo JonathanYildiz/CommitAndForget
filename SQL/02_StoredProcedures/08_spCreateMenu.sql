@@ -16,6 +16,8 @@ BEGIN
     
    INSERT INTO tblmenu (szName, rPrice, nImageLink)
    VALUES (p_Name, p_Price, p_ImageLink);
+   
+   SELECT LAST_INSERT_ID() AS nKey;
 END $$
 
 DELIMITER ;
