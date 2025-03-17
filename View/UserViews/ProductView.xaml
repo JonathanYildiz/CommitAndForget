@@ -20,7 +20,7 @@
       <ColumnDefinition Width="2*"/>
     </Grid.ColumnDefinitions>
 
-    <Button Grid.Column="0" Content=">" FontSize="24" FontWeight="Bold" Command="{Binding NavigateToMenuCommand}"/>
+    <Button Grid.Column="0" Content="&lt;" FontSize="24" FontWeight="Bold" Command="{Binding NavigateToMenuCommand}"/>
     
     <!-- Entweder Zutatenliste...-->
     <Grid Grid.Column="1" Margin="10" Visibility="{Binding ShowShoppingCart, Converter={StaticResource BoolToVisibilityConverter}, ConverterParameter=true}">

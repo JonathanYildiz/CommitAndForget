@@ -23,7 +23,7 @@
 
 
     <!-- Menüliste -->
-    <Grid Grid.Column="1" Margin="10">
+    <Grid Grid.Column="0" Margin="10">
       <Label Content="Menüansicht" HorizontalAlignment="Center" FontSize="24" Margin="0,0,0,10"/>
       <ScrollViewer VerticalScrollBarVisibility="Auto">
         <ItemsControl ItemsSource="{Binding FilteredMenuList}">
@@ -47,7 +47,7 @@
     </Grid>
 
     <!-- Entweder Zutatenliste...-->
-    <Grid Grid.Column="2" Margin="10" Visibility="{Binding ShowShoppingCart, Converter={StaticResource BoolToVisibilityConverter}, ConverterParameter=true}">
+    <Grid Grid.Column="1" Margin="10" Visibility="{Binding ShowShoppingCart, Converter={StaticResource BoolToVisibilityConverter}, ConverterParameter=true}">
       <Grid.RowDefinitions>
         <RowDefinition Height="80"/>
         <RowDefinition/>
@@ -63,7 +63,7 @@
     <!--..ODER Warenkorb anzeigen-->
     <view:ShoppingCartView Grid.Column="2" Visibility="{Binding ShowShoppingCart, Converter={StaticResource BoolToVisibilityConverter}, ConverterParameter=false}"/>
 
-    <Button Grid.Column="0" Content="&lt;" FontSize="24" FontWeight="Bold" Command="{Binding NavigateToProductCommand}"/>
+    <Button Grid.Column="2" Content=">" FontSize="24" FontWeight="Bold" Command="{Binding NavigateToProductCommand}"/>
     
   </Grid>
 </Page>
