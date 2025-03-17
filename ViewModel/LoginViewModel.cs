@@ -53,10 +53,10 @@ namespace CommitAndForget.ViewModel
       ConfirmRegistrationCommand = new RelayCommand<Window>(ConfirmRegistration);
       CancelCommand = new RelayCommand<Window>(Cancel);
     }
-    public ICommand LoginCommand { get; private set; }
-    public ICommand ShowRegistrationWindowCommand { get; private set; }
-    public ICommand ConfirmRegistrationCommand { get; private set; }
-    public ICommand CancelCommand { get; private set; }
+    public ICommand LoginCommand { get; set; }
+    public ICommand ShowRegistrationWindowCommand { get; set; }
+    public ICommand ConfirmRegistrationCommand { get; set; }
+    public ICommand CancelCommand { get; set; }
     #endregion Commands
 
     #region Methods

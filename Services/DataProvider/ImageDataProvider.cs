@@ -99,5 +99,20 @@ namespace CommitAndForget.Services.DataProvider
         MessageBoxService.DisplayMessage(ex.Message, MessageBoxImage.Error);
       }
     }
+
+    public static void ApproveImage(ImageModel currentContestImage)
+    {
+      try
+      {
+        if (currentContestImage is null)
+          return;
+
+        // Todo: Implementieren
+      }
+      catch (Exception ex)
+      {
+        MessageBoxService.DisplayMessage(ex.Message, MessageBoxImage.Error);
+      }
+    }
   }
 }

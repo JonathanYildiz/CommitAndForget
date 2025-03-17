@@ -36,6 +36,11 @@ namespace CommitAndForget.ViewModel
       get => Get<ProductModel>();
       set => Set(value);
     }
+    public ImageModel CurrentContestImage
+    {
+      get => Get<ImageModel>();
+      set => Set(value);
+    }
     public ObservableCollection<UserModel> UserList
     {
       get => Get<ObservableCollection<UserModel>>();
@@ -81,7 +86,7 @@ namespace CommitAndForget.ViewModel
       NavigateToProductManagementCommand = new RelayCommand(NavigateToProductManagement);
       NavigateToOrderManagementCommand = new RelayCommand(NavigateToOrderManagement);
       NavigateToMenuManagementCommand = new RelayCommand(NavigateToMenuManagement);
-      NavigateToContestManagementCommand = new RelayCommand(NavigateToImageManagement);
+      NavigateToContestManagementCommand = new RelayCommand(NavigateToContestManagement);
       NavigateBackCommand = new RelayCommand(NavigateBack);
       EditUserCommand = new RelayCommand<UserModel>(EditUser);
       DeleteUserCommand = new RelayCommand<UserModel>(DeleteUser);
@@ -99,29 +104,37 @@ namespace CommitAndForget.ViewModel
       DeleteImageCommand = new RelayCommand<ImageModel>(DeleteImage);
       ChooseImageCommand = new RelayCommand<ImageModel>(ChooseImage);
       RemoveImageFromProductCommand = new RelayCommand(RemoveImageFromProduct);
+      NextContestImageCommand = new RelayCommand(NextContestImage);
+      PreviousContestImageCommand = new RelayCommand(PreviousContestImage);
+      ApproveContestImageCommand = new RelayCommand(ApproveContestImage);
+      DeleteContestImageCommand = new RelayCommand(DeleteContestImage);
     }
-    public ICommand NavigateToUserManagementCommand { get; private set; }
-    public ICommand NavigateToProductManagementCommand { get; private set; }
-    public ICommand NavigateToOrderManagementCommand { get; private set; }
-    public ICommand NavigateToMenuManagementCommand { get; private set; }
-    public ICommand NavigateToContestManagementCommand { get; private set; }
-    public ICommand NavigateBackCommand { get; private set; }
-    public ICommand EditUserCommand { get; private set; }
-    public ICommand DeleteUserCommand { get; private set; }
-    public ICommand SaveUserCommand { get; private set; }
-    public ICommand CancelUserCommand { get; private set; }
-    public ICommand CreateUserCommand { get; private set; }
-    public ICommand EditProductCommand { get; private set; }
-    public ICommand ToggleIngredientCommand { get; private set; }
-    public ICommand SaveProductCommand { get; private set; }
-    public ICommand CancelProductCommand { get; private set; }
-    public ICommand DeleteProductCommand { get; private set; }
-    public ICommand CreateProductCommand { get; private set; }
-    public ICommand SelectImageCommand { get; private set; }
-    public ICommand AddImageCommand { get; private set; }
-    public ICommand DeleteImageCommand { get; private set; }
-    public ICommand ChooseImageCommand { get; private set; }
-    public ICommand RemoveImageFromProductCommand { get; private set; }
+    public ICommand NavigateToUserManagementCommand { get; set; }
+    public ICommand NavigateToProductManagementCommand { get; set; }
+    public ICommand NavigateToOrderManagementCommand { get; set; }
+    public ICommand NavigateToMenuManagementCommand { get; set; }
+    public ICommand NavigateToContestManagementCommand { get; set; }
+    public ICommand NavigateBackCommand { get; set; }
+    public ICommand EditUserCommand { get; set; }
+    public ICommand DeleteUserCommand { get; set; }
+    public ICommand SaveUserCommand { get; set; }
+    public ICommand CancelUserCommand { get; set; }
+    public ICommand CreateUserCommand { get; set; }
+    public ICommand EditProductCommand { get; set; }
+    public ICommand ToggleIngredientCommand { get; set; }
+    public ICommand SaveProductCommand { get; set; }
+    public ICommand CancelProductCommand { get; set; }
+    public ICommand DeleteProductCommand { get; set; }
+    public ICommand CreateProductCommand { get; set; }
+    public ICommand SelectImageCommand { get; set; }
+    public ICommand AddImageCommand { get; set; }
+    public ICommand DeleteImageCommand { get; set; }
+    public ICommand ChooseImageCommand { get; set; }
+    public ICommand RemoveImageFromProductCommand { get; set; }
+    public ICommand NextContestImageCommand { get; set; }
+    public ICommand PreviousContestImageCommand { get; set; }
+    public ICommand ApproveContestImageCommand { get; set; }
+    public ICommand DeleteContestImageCommand { get; set; }
     #endregion Commands
 
     #region Methods
@@ -139,9 +152,10 @@ namespace CommitAndForget.ViewModel
     }
     private void NavigateToOrderManagement() => MainFrame?.Navigate(new OrderManagementView() { DataContext = this });
     private void NavigateToMenuManagement() => MainFrame?.Navigate(new MenuManagementView() { DataContext = this });
-    private void NavigateToImageManagement() 
+    private void NavigateToContestManagement() 
     {
-      ImageList = ImageDataProvider.LoadImages(); 
+      ImageList = ImageDataProvider.LoadImages();
+      CurrentContestImage = ImageList.FirstOrDefault();
       MainFrame?.Navigate(new ContestManagementView() { DataContext = this });
     }
     private void NavigateBack()
@@ -388,7 +402,46 @@ namespace CommitAndForget.ViewModel
       SelectedProduct.Image.Key = 0;
     }
     #endregion Image
-    
+
+    #region Contest
+    private void NextContestImage()
+    {
+      if (CurrentContestImage is not null && ImageList is not null)
+      {
+        var index = ImageList.IndexOf(CurrentContestImage);
+        if (index < ImageList.Count - 2) // Nächstes Bild
+          CurrentContestImage = ImageList[index + 1];
+        else if (index == ImageList.Count - 1) // Am Ende -> Erstes Bild
+          CurrentContestImage = ImageList[0];
+      }
+    }
+    private void PreviousContestImage()
+    {
+      if (CurrentContestImage is not null && ImageList is not null)
+      {
+        var index = ImageList.IndexOf(CurrentContestImage);
+        if (index > 0) // Vorheriges Bild
+          CurrentContestImage = ImageList[index - 1];
+        else if (index == 0) // Am Anfang -> Letztes Bild
+          CurrentContestImage = ImageList[ImageList.Count - 1];
+      }
+    }
+    private void ApproveContestImage() => ImageDataProvider.ApproveImage(CurrentContestImage);
+    private void DeleteContestImage()
+    {
+      if (CurrentContestImage is not null)
+      {
+        var msgBox = MessageBox.Show("Möchten Sie das Bild wirklich löschen?", "Bild löschen", MessageBoxButton.YesNo, MessageBoxImage.Question);
+        if (msgBox == MessageBoxResult.Yes)
+        {
+          ImageDataProvider.DeleteImage(CurrentContestImage.Key);
+          ImageList.Remove(CurrentContestImage);
+        }
+      }
+    }
+
+    #endregion Contest
+
     #endregion Methods
   }
 }
