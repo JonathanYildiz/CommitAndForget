@@ -9,6 +9,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
+using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Threading;
 using CommitAndForget.Essentials;
@@ -17,6 +18,7 @@ using CommitAndForget.Services;
 using CommitAndForget.Services.DataProvider;
 using CommitAndForget.View.UserViews;
 using CommunityToolkit.Mvvm.Input;
+using Microsoft.Win32;
 
 namespace CommitAndForget.ViewModel
 {
@@ -124,6 +126,7 @@ namespace CommitAndForget.ViewModel
       RemoveMenuFromShoppingCartCommand = new RelayCommand<MenuModel>(RemoveMenuFromShoppingCart);
       NavigateToPaymentCommand = new RelayCommand(NavigateToPayment);
       PayCommand = new RelayCommand<string>(Pay);
+      AddImageCommand = new RelayCommand(AddImage);
     }
     public ICommand NavigateToUserOrderCommand { get; set; }
     public ICommand NavigateBackCommand { get; set; }
@@ -139,6 +142,7 @@ namespace CommitAndForget.ViewModel
     public ICommand RemoveMenuFromShoppingCartCommand { get; set; }
     public ICommand NavigateToPaymentCommand { get; set; }
     public ICommand PayCommand { get; set; }
+    public ICommand AddImageCommand {  get; set; }
     #endregion Commands
 
     #region Methods
@@ -328,6 +332,19 @@ namespace CommitAndForget.ViewModel
       {
         MenuShoppingCart?.Remove(menu);
         OnPropertyChanged(nameof(ShoppingCartQuantity));
+      }
+    }
+    private void AddImage()
+    {
+      var image = new ImageModel();
+      var dialog = new OpenFileDialog();
+      dialog.Filter = "Bild-Dateien (*.jpg, *.jpeg, *.png)|*.jpg;*.jpeg;*.png";
+      if (dialog.ShowDialog() == true)
+      {
+        image.Image = new BitmapImage(new Uri(dialog.FileName));
+        image = ImageDataProvider.UploadImage(image, CurrentUser.Key);
+        if (image is not null)
+          ImageList.Add(image);
       }
     }
     #endregion Methods

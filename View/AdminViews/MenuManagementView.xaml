@@ -37,8 +37,10 @@
           <DataGridTemplateColumn.CellTemplate>
             <DataTemplate>
               <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                <Button Content="Edit" Command="{Binding DataContext.EditMenuCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}" CommandParameter="{Binding}"/>
-                <Button Content="Delete" Command="{Binding DataContext.DeleteMenuCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}" CommandParameter="{Binding}"/>
+                <Button Content="Edit" Style="{StaticResource AddButton}"
+                        Command="{Binding DataContext.EditMenuCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}" CommandParameter="{Binding}"/>
+                <Button Content="Delete" Style="{StaticResource AddButton}"
+                        Command="{Binding DataContext.DeleteMenuCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}" CommandParameter="{Binding}"/>
               </StackPanel>
             </DataTemplate>
           </DataGridTemplateColumn.CellTemplate>
