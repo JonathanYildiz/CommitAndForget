@@ -9,6 +9,26 @@
       Title="ImageManagementView">
 
   <Grid>
-    
+    <Grid.RowDefinitions>
+      <RowDefinition Height="8*" />
+      <RowDefinition Height="2*" />
+    </Grid.RowDefinitions>
+    <Grid.ColumnDefinitions>
+      <ColumnDefinition/>
+      <ColumnDefinition/>
+    </Grid.ColumnDefinitions>
+    <DockPanel Grid.Row="0" Grid.Column="0">
+      <Image Source="{Binding CurrentContestImage}" Width="200" Height="200" Margin="5"/>
+      <TextBlock Text="E-Mail@email.com"/>
+    </DockPanel>
+
+
+    <WrapPanel Grid.Row="0" Grid.Column="1" VerticalAlignment="Stretch">
+      <Button Content="Freischalten"/>
+      <Button Content="Löschen"/>
+    </WrapPanel>
+
+    <Button Grid.Row="1" Grid.Column="0" Content="Vorheriges Bild" Command="{Binding LastContestImage}"/>
+    <Button Grid.Row="1" Grid.Column="1" Content="Nächstes Bild" Command="{Binding NextContestImage}"/>
   </Grid>
 </Page>

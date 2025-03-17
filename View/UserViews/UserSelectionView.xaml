@@ -18,8 +18,8 @@
         <ColumnDefinition/>
         <ColumnDefinition/>
       </Grid.ColumnDefinitions>
-      <Button x:Name="OrderButton" Command="{Binding NavigateToUserOrderCommand}">Bestellen</Button>
-      <Button Grid.Column="1">Funny Dinner Contest</Button>
+      <Button x:Name="OrderButton" Content="Bestellen" Command="{Binding NavigateToUserOrderCommand}"></Button>
+      <Button Grid.Column="1" Content="Funny Dinner Contest" Command="{Binding NavigateToFunnyDinnerContestCommand}"></Button>
     </Grid>
   </Grid>
 </Page>
