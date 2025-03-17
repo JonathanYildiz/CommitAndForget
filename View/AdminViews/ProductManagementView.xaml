@@ -9,50 +9,7 @@
       Title="ProductManagmentView">
 
   <Page.Resources>
-    <!-- Style for DataGrid -->
-    <Style TargetType="DataGrid">
-      <Setter Property="AutoGenerateColumns" Value="False"/>
-      <Setter Property="CanUserAddRows" Value="False"/>
-      <Setter Property="IsReadOnly" Value="True"/>
-      <Setter Property="Margin" Value="10"/>
-      <Setter Property="RowBackground" Value="White"/>
-      <Setter Property="AlternatingRowBackground" Value="#F0F0F0"/>
-      <Setter Property="GridLinesVisibility" Value="None"/>
-      <Setter Property="ColumnHeaderHeight" Value="40"/>
-      <Setter Property="RowHeight" Value="35"/>
-      <Setter Property="ColumnHeaderStyle">
-        <Setter.Value>
-          <Style TargetType="DataGridColumnHeader">
-            <Setter Property="Background" Value="#007ACC"/>
-            <Setter Property="Foreground" Value="White"/>
-            <Setter Property="FontWeight" Value="Bold"/>
-            <Setter Property="HorizontalContentAlignment" Value="Center"/>
-          </Style>
-        </Setter.Value>
-      </Setter>
-    </Style>
-
-    <!-- Style for Buttons -->
-    <Style TargetType="Button">
-      <Setter Property="Margin" Value="5"/>
-      <Setter Property="Padding" Value="5,2"/>
-      <Setter Property="Background" Value="#007ACC"/>
-      <Setter Property="Foreground" Value="White"/>
-      <Setter Property="BorderBrush" Value="#007ACC"/>
-      <Setter Property="FontWeight" Value="Bold"/>
-      <Setter Property="HorizontalAlignment" Value="Center"/>
-      <Setter Property="VerticalAlignment" Value="Center"/>
-      <Setter Property="Cursor" Value="Hand"/>
-      <Setter Property="Template">
-        <Setter.Value>
-          <ControlTemplate TargetType="Button">
-            <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="1" CornerRadius="3">
-              <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
-            </Border>
-          </ControlTemplate>
-        </Setter.Value>
-      </Setter>
-    </Style>
+    <ResourceDictionary Source="../../Resources/ResourceDictionary.xaml" />
   </Page.Resources>
 
   <Grid>
@@ -63,7 +20,7 @@
     </Grid.RowDefinitions>
 
     <TextBlock Text="Product Management" FontSize="24" FontWeight="Bold" Foreground="#007ACC" HorizontalAlignment="Center" Margin="10"/>
-    <Button Grid.Row="1" Content="+" Width="30" Command="{Binding CreateProductCommand}"/>
+    <Button Grid.Row="1" Content="+" Width="30" Command="{Binding CreateProductCommand}" Style="{StaticResource AddButton}"/>
 
     <DataGrid ItemsSource="{Binding ProductList}" Grid.Row="2" SelectedItem="{Binding SelectedProduct}">
       <DataGrid.Columns>
