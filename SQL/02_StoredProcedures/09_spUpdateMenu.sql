@@ -15,10 +15,7 @@ BEGIN
    SET 
 		szName = p_Name,
 		rPrice = p_Price,
-        nImageLink = CASE
-			WHEN p_ImageLink IS NOT NULL THEN p_ImageLink
-            ELSE nImageLink
-		END
+      nImageLink = p_ImageLink
    WHERE nKey = p_Key;
 END $$
 

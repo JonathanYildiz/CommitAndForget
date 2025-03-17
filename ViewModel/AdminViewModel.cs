@@ -123,6 +123,7 @@ namespace CommitAndForget.ViewModel
       // Menüverwaltung
       CreateMenuCommand = new RelayCommand(CreateMenu);
       EditMenuCommand = new RelayCommand<MenuModel>(EditMenu);
+      ToggleProductCommand = new RelayCommand<ProductModel>(ToggleProduct);
       DeleteMenuCommand = new RelayCommand<MenuModel>(DeleteMenu);
       SaveMenuCommand = new RelayCommand(SaveMenu);
 
@@ -132,9 +133,10 @@ namespace CommitAndForget.ViewModel
       ChooseImageCommand = new RelayCommand<ImageModel>(ChooseImage);
       SelectImageCommand = new RelayCommand(SelectImage);
       AddImageCommand = new RelayCommand(AddImage);
+      RemoveImageFromProductCommand = new RelayCommand(RemoveImageFromProduct);
+      RemoveImageFromMenuCommand = new RelayCommand(RemoveImageFromMenu); 
 
       // Contestverwaltung
-      RemoveImageFromProductCommand = new RelayCommand(RemoveImageFromProduct);
       NextContestImageCommand = new RelayCommand(NextContestImage);
       PreviousContestImageCommand = new RelayCommand(PreviousContestImage);
       ApproveContestImageCommand = new RelayCommand(ApproveContestImage);
@@ -159,6 +161,7 @@ namespace CommitAndForget.ViewModel
     public ICommand CreateProductCommand { get; set; }
     public ICommand CreateMenuCommand { get; set; }
     public ICommand EditMenuCommand { get; set; }
+    public ICommand ToggleProductCommand { get; set; }
     public ICommand DeleteMenuCommand { get; set; }
     public ICommand SaveMenuCommand { get; set; }
     public ICommand SelectImageCommand { get; set; }
@@ -166,6 +169,7 @@ namespace CommitAndForget.ViewModel
     public ICommand DeleteImageCommand { get; set; }
     public ICommand ChooseImageCommand { get; set; }
     public ICommand RemoveImageFromProductCommand { get; set; }
+    public ICommand RemoveImageFromMenuCommand { get; set; }
     public ICommand NextContestImageCommand { get; set; }
     public ICommand PreviousContestImageCommand { get; set; }
     public ICommand ApproveContestImageCommand { get; set; }
@@ -403,7 +407,7 @@ namespace CommitAndForget.ViewModel
     {
       try
       {
-        ProductList = ProductDataProvider.LoadProducts(-1); // Alle Produkte laden
+        ProductList = ProductDataProvider.LoadProducts(); // Alle Produkte laden
         SelectedMenu = new MenuModel();
         var editWindow = new EditMenuView() { DataContext = this };
         editWindow.WindowStartupLocation = WindowStartupLocation.CenterScreen;
@@ -438,7 +442,7 @@ namespace CommitAndForget.ViewModel
         if (MenuList.Any(p => p.Key == SelectedMenu.Key)) // Wenn Produkt vorhanden -> Updaten
         {
           MenuDataProvider.UpdateMenu(SelectedMenu);
-          MenuDataProvider.DeleteMenuProduct(SelectedProduct.Key); // Alle Produkte zum Menü löschen
+          MenuDataProvider.DeleteMenuProduct(SelectedMenu.Key); // Alle Produkte zum Menü löschen
           foreach (var product in SelectedMenu.ProductList)
           {
             var foundProduct = ProductList.FirstOrDefault(p => p.Key == product.Key);
@@ -467,6 +471,19 @@ namespace CommitAndForget.ViewModel
       CloseCurrentWindow();
     }
 
+    private void ToggleProduct(ProductModel? product)
+    {
+      if (product is not null)
+      {
+        var foundProduct = SelectedMenu?.ProductList?.FirstOrDefault(i => i.Key == product.Key);
+
+        if (foundProduct != null)
+          SelectedMenu?.ProductList?.Remove(foundProduct); // Entfernen
+        else
+          SelectedMenu?.ProductList?.Add(product); // Hinzufügen
+      }
+    }
+
     private void DeleteMenu(MenuModel? menu)
     {
       if (menu is not null)
@@ -487,13 +504,22 @@ namespace CommitAndForget.ViewModel
         // Menü wegspeichern falls abgebrochen wird
         MenuBackup = new MenuModel(menu);
 
-        ProductList = ProductDataProvider.LoadProducts(menu.Key);
+        ProductList = ProductDataProvider.LoadProducts();
         SelectedMenu = menu;
 
         foreach (var product in ProductList) //Checkboxes initialisieren
         {
-          if (menu.ProductList.FirstOrDefault(p => p.Key == product.Key) != null)
+          var foundProduct = menu.ProductList.FirstOrDefault(p => p.Key == product.Key);
+          if (foundProduct != null)
+          {
             product.IsChecked = true;
+            product.Quantity = foundProduct.Quantity;
+          }
+          else
+          {
+            product.IsChecked = false;
+            product.Quantity = 0;
+          }
         }
 
         var editWindow = new EditMenuView() { DataContext = this };
@@ -554,8 +580,19 @@ namespace CommitAndForget.ViewModel
     }
     private void RemoveImageFromProduct()
     {
-      SelectedProduct.Image.Image = null;
-      SelectedProduct.Image.Key = 0;
+      if (SelectedProduct != null && SelectedProduct.Image != null)
+      {
+        SelectedProduct.Image.Image = null;
+        SelectedProduct.Image.Key = 0;
+      }
+    }
+    private void RemoveImageFromMenu()
+    {
+      if (SelectedMenu != null && SelectedMenu.Image != null)
+      {
+        SelectedMenu.Image.Image = null;
+        SelectedMenu.Image.Key = 0;
+      }
     }
     #endregion Image
 

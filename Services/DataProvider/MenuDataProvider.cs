@@ -57,32 +57,11 @@ namespace CommitAndForget.Services.DataProvider
               product = new ProductModel();
               product.Key = productKey;
               product.Name = row["product_szName"] != DBNull.Value ? row["product_szName"].ToString() ?? string.Empty : string.Empty;
-              product.Energy = row["product_nEnergy"] != DBNull.Value ? (int)row["product_nEnergy"] : default;
-              product.Price = row["product_rPrice"] != DBNull.Value ? (double)(decimal)row["product_rPrice"] : default;
               product.Quantity = row["product_nQuantity"] != DBNull.Value ? (int)row["product_nQuantity"] : default;
-
-              var img = new ImageModel();
-              img.Key = row["imageProduct_nKey"] != DBNull.Value ? (int)row["imageProduct_nKey"] : default;
-              // Bild aus LONGBLOB laden
-              if (row["imageProduct_vbImage"] != DBNull.Value)
-              {
-                byte[] imageData = (byte[])row["imageProduct_vbImage"];
-                img.Image = ByteArrayToBitmapImageConverter.LoadImage(imageData);
-              }
-              product.Image = img;
-
-              product.Ingredients = new ObservableCollection<IngredientModel>();
 
               menu.ProductList.Add(product);
             }
-
-            // Zutaten zum Produkt laden
-            var ingredient = new IngredientModel();
-            ingredient.Key = row["ingredient_nKey"] != DBNull.Value ? (int)row["ingredient_nKey"] : default;
-            ingredient.Name = row["ingredient_szName"] != DBNull.Value ? row["ingredient_szName"].ToString() ?? string.Empty : string.Empty;
-            ingredient.Quantity = row["ingredient_nQuantity"] != DBNull.Value ? (int)row["ingredient_nQuantity"] : default;
-
-            product.Ingredients.Add(ingredient);
+            
           }
         }
         return menuList;
