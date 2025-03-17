@@ -438,6 +438,7 @@ namespace CommitAndForget.ViewModel
         {
           ImageDataProvider.DeleteImage(CurrentContestImage.Key);
           ImageList.Remove(CurrentContestImage);
+          CurrentContestImage = ImageList.FirstOrDefault();
         }
       }
     }
