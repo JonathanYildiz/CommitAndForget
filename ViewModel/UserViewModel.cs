@@ -109,6 +109,7 @@ namespace CommitAndForget.ViewModel
       NavigateBackCommand = new RelayCommand(NavigateBack);
       NavigateToMenuCommand = new RelayCommand(NavigateToMenu);
       NavigateToProductCommand = new RelayCommand(NavigateToProduct);
+      NavigateToFunnyDinnerContestCommand = new RelayCommand(NavigateToFunnyDinnerContest);
       ToggleShowShoppingCartCommand = new RelayCommand(ToggleShowShoppingCart);
       AddProductToShoppingCartCommand = new RelayCommand<ProductModel>(AddProductToShoppingCart);
       AddMenuToShoppingCartCommand = new RelayCommand<MenuModel>(AddMenuToShoppingCart);
@@ -123,6 +124,7 @@ namespace CommitAndForget.ViewModel
     public ICommand NavigateBackCommand { get; set; }
     public ICommand NavigateToMenuCommand { get; set; }
     public ICommand NavigateToProductCommand { get; set; }
+    public ICommand NavigateToFunnyDinnerContestCommand { get; set; }
     public ICommand ToggleShowShoppingCartCommand { get; set; }
     public ICommand AddProductToShoppingCartCommand { get; set; }
     public ICommand AddMenuToShoppingCartCommand { get; set; }
@@ -181,6 +183,8 @@ namespace CommitAndForget.ViewModel
       FilteredProductList.Filter = FilterProducts;
       MainFrame?.Navigate(new ProductView() { DataContext = this });
     }
+
+    private void NavigateToFunnyDinnerContest() => MainFrame?.Navigate(new FunnyDinnerContestView() { DataContext = this });
 
     private void ToggleShowShoppingCart() => ShowShoppingCart = !ShowShoppingCart;
 
