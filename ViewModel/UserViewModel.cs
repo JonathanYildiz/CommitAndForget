@@ -119,19 +119,19 @@ namespace CommitAndForget.ViewModel
       NavigateToPaymentCommand = new RelayCommand(NavigateToPayment);
       PayCommand = new RelayCommand<string>(Pay);
     }
-    public ICommand NavigateToUserOrderCommand { get; private set; }
-    public ICommand NavigateBackCommand { get; private set; }
-    public ICommand NavigateToMenuCommand { get; private set; }
-    public ICommand NavigateToProductCommand { get; private set; }
-    public ICommand ToggleShowShoppingCartCommand { get; private set; }
-    public ICommand AddProductToShoppingCartCommand { get; private set; }
-    public ICommand AddMenuToShoppingCartCommand { get; private set; }
-    public ICommand ShowProductInfoCommand { get; private set; }
-    public ICommand ShowMenuInfoCommand { get; private set; }
-    public ICommand RemoveProductFromShoppingCartCommand { get; private set; }
-    public ICommand RemoveMenuFromShoppingCartCommand { get; private set; }
-    public ICommand NavigateToPaymentCommand { get; private set; }
-    public ICommand PayCommand { get; private set; }
+    public ICommand NavigateToUserOrderCommand { get; set; }
+    public ICommand NavigateBackCommand { get; set; }
+    public ICommand NavigateToMenuCommand { get; set; }
+    public ICommand NavigateToProductCommand { get; set; }
+    public ICommand ToggleShowShoppingCartCommand { get; set; }
+    public ICommand AddProductToShoppingCartCommand { get; set; }
+    public ICommand AddMenuToShoppingCartCommand { get; set; }
+    public ICommand ShowProductInfoCommand { get; set; }
+    public ICommand ShowMenuInfoCommand { get; set; }
+    public ICommand RemoveProductFromShoppingCartCommand { get; set; }
+    public ICommand RemoveMenuFromShoppingCartCommand { get; set; }
+    public ICommand NavigateToPaymentCommand { get; set; }
+    public ICommand PayCommand { get; set; }
     #endregion Commands
 
     #region Methods

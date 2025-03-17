@@ -36,6 +36,11 @@ namespace CommitAndForget.ViewModel
       get => Get<ProductModel>();
       set => Set(value);
     }
+    public ImageModel CurrentContestImage
+    {
+      get => Get<ImageModel>();
+      set => Set(value);
+    }
     public ObservableCollection<UserModel> UserList
     {
       get => Get<ObservableCollection<UserModel>>();
@@ -98,30 +103,31 @@ namespace CommitAndForget.ViewModel
       AddImageCommand = new RelayCommand(AddImage);
       DeleteImageCommand = new RelayCommand<ImageModel>(DeleteImage);
       ChooseImageCommand = new RelayCommand<ImageModel>(ChooseImage);
-      RemoveImageFromProductCommand = new RelayCommand(RemoveImageFromProduct);
+      RemoveImageFromProductCommand = new RelayCommand(RemoveImageFromProduct);    
     }
-    public ICommand NavigateToUserManagementCommand { get; private set; }
-    public ICommand NavigateToProductManagementCommand { get; private set; }
-    public ICommand NavigateToOrderManagementCommand { get; private set; }
-    public ICommand NavigateToMenuManagementCommand { get; private set; }
-    public ICommand NavigateToContestManagementCommand { get; private set; }
-    public ICommand NavigateBackCommand { get; private set; }
-    public ICommand EditUserCommand { get; private set; }
-    public ICommand DeleteUserCommand { get; private set; }
-    public ICommand SaveUserCommand { get; private set; }
-    public ICommand CancelUserCommand { get; private set; }
-    public ICommand CreateUserCommand { get; private set; }
-    public ICommand EditProductCommand { get; private set; }
-    public ICommand ToggleIngredientCommand { get; private set; }
-    public ICommand SaveProductCommand { get; private set; }
-    public ICommand CancelProductCommand { get; private set; }
-    public ICommand DeleteProductCommand { get; private set; }
-    public ICommand CreateProductCommand { get; private set; }
-    public ICommand SelectImageCommand { get; private set; }
-    public ICommand AddImageCommand { get; private set; }
-    public ICommand DeleteImageCommand { get; private set; }
-    public ICommand ChooseImageCommand { get; private set; }
-    public ICommand RemoveImageFromProductCommand { get; private set; }
+    public ICommand NavigateToUserManagementCommand { get; set; }
+    public ICommand NavigateToProductManagementCommand { get; set; }
+    public ICommand NavigateToOrderManagementCommand { get; set; }
+    public ICommand NavigateToMenuManagementCommand { get; set; }
+    public ICommand NavigateToContestManagementCommand { get; set; }
+    public ICommand NavigateBackCommand { get; set; }
+    public ICommand EditUserCommand { get; set; }
+    public ICommand DeleteUserCommand { get; set; }
+    public ICommand SaveUserCommand { get; set; }
+    public ICommand CancelUserCommand { get; set; }
+    public ICommand CreateUserCommand { get; set; }
+    public ICommand EditProductCommand { get; set; }
+    public ICommand ToggleIngredientCommand { get; set; }
+    public ICommand SaveProductCommand { get; set; }
+    public ICommand CancelProductCommand { get; set; }
+    public ICommand DeleteProductCommand { get; set; }
+    public ICommand CreateProductCommand { get; set; }
+    public ICommand SelectImageCommand { get; set; }
+    public ICommand AddImageCommand { get; set; }
+    public ICommand DeleteImageCommand { get; set; }
+    public ICommand ChooseImageCommand { get; set; }
+    public ICommand RemoveImageFromProductCommand { get; set; }
+    public ICommand NextImageCommand { get; set; }
     #endregion Commands
 
     #region Methods
