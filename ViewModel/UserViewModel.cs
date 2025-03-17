@@ -63,6 +63,11 @@ namespace CommitAndForget.ViewModel
       get => Get<ObservableCollection<MenuModel>>();
       set => Set(value);
     }
+    public ObservableCollection<ImageModel> ImageList
+    {
+      get => Get<ObservableCollection<ImageModel>>();
+      set => Set(value);
+    }
     public IngredientModel SelectedIngredient
     {
       get => Get<IngredientModel>();
@@ -184,7 +189,13 @@ namespace CommitAndForget.ViewModel
       MainFrame?.Navigate(new ProductView() { DataContext = this });
     }
 
-    private void NavigateToFunnyDinnerContest() => MainFrame?.Navigate(new FunnyDinnerContestView() { DataContext = this });
+    private void NavigateToFunnyDinnerContest()
+    {
+      // Keine Produktbilder laden
+      IEnumerable<ImageModel> images = ImageDataProvider.LoadImages().Where(img => img.UploadedBy != "admin");
+      ImageList = new ObservableCollection<ImageModel>(images);
+      MainFrame?.Navigate(new FunnyDinnerContestView() { DataContext = this });
+    }
 
     private void ToggleShowShoppingCart() => ShowShoppingCart = !ShowShoppingCart;
 
