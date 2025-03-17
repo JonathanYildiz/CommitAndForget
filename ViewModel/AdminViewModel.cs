@@ -376,7 +376,7 @@ namespace CommitAndForget.ViewModel
     }
     private void ChooseImage(ImageModel? image)
     {
-      if (image is not null)
+      if (image is not null && SelectedProduct is not null)
       {
         SelectedProduct.Image = image;
         CloseCurrentWindow();
