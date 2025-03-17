@@ -86,7 +86,7 @@ namespace CommitAndForget.ViewModel
       NavigateToProductManagementCommand = new RelayCommand(NavigateToProductManagement);
       NavigateToOrderManagementCommand = new RelayCommand(NavigateToOrderManagement);
       NavigateToMenuManagementCommand = new RelayCommand(NavigateToMenuManagement);
-      NavigateToContestManagementCommand = new RelayCommand(NavigateToImageManagement);
+      NavigateToContestManagementCommand = new RelayCommand(NavigateToContestManagement);
       NavigateBackCommand = new RelayCommand(NavigateBack);
       EditUserCommand = new RelayCommand<UserModel>(EditUser);
       DeleteUserCommand = new RelayCommand<UserModel>(DeleteUser);
@@ -103,7 +103,11 @@ namespace CommitAndForget.ViewModel
       AddImageCommand = new RelayCommand(AddImage);
       DeleteImageCommand = new RelayCommand<ImageModel>(DeleteImage);
       ChooseImageCommand = new RelayCommand<ImageModel>(ChooseImage);
-      RemoveImageFromProductCommand = new RelayCommand(RemoveImageFromProduct);    
+      RemoveImageFromProductCommand = new RelayCommand(RemoveImageFromProduct);
+      NextContestImageCommand = new RelayCommand(NextContestImage);
+      PreviousContestImageCommand = new RelayCommand(PreviousContestImage);
+      ApproveContestImageCommand = new RelayCommand(ApproveContestImage);
+      DeleteContestImageCommand = new RelayCommand(DeleteContestImage);
     }
     public ICommand NavigateToUserManagementCommand { get; set; }
     public ICommand NavigateToProductManagementCommand { get; set; }
@@ -127,7 +131,10 @@ namespace CommitAndForget.ViewModel
     public ICommand DeleteImageCommand { get; set; }
     public ICommand ChooseImageCommand { get; set; }
     public ICommand RemoveImageFromProductCommand { get; set; }
-    public ICommand NextImageCommand { get; set; }
+    public ICommand NextContestImageCommand { get; set; }
+    public ICommand PreviousContestImageCommand { get; set; }
+    public ICommand ApproveContestImageCommand { get; set; }
+    public ICommand DeleteContestImageCommand { get; set; }
     #endregion Commands
 
     #region Methods
@@ -145,9 +152,10 @@ namespace CommitAndForget.ViewModel
     }
     private void NavigateToOrderManagement() => MainFrame?.Navigate(new OrderManagementView() { DataContext = this });
     private void NavigateToMenuManagement() => MainFrame?.Navigate(new MenuManagementView() { DataContext = this });
-    private void NavigateToImageManagement() 
+    private void NavigateToContestManagement() 
     {
-      ImageList = ImageDataProvider.LoadImages(); 
+      ImageList = ImageDataProvider.LoadImages();
+      CurrentContestImage = ImageList.FirstOrDefault();
       MainFrame?.Navigate(new ContestManagementView() { DataContext = this });
     }
     private void NavigateBack()
@@ -394,7 +402,46 @@ namespace CommitAndForget.ViewModel
       SelectedProduct.Image.Key = 0;
     }
     #endregion Image
-    
+
+    #region Contest
+    private void NextContestImage()
+    {
+      if (CurrentContestImage is not null && ImageList is not null)
+      {
+        var index = ImageList.IndexOf(CurrentContestImage);
+        if (index < ImageList.Count - 2) // Nächstes Bild
+          CurrentContestImage = ImageList[index + 1];
+        else if (index == ImageList.Count - 1) // Am Ende -> Erstes Bild
+          CurrentContestImage = ImageList[0];
+      }
+    }
+    private void PreviousContestImage()
+    {
+      if (CurrentContestImage is not null && ImageList is not null)
+      {
+        var index = ImageList.IndexOf(CurrentContestImage);
+        if (index > 0) // Vorheriges Bild
+          CurrentContestImage = ImageList[index - 1];
+        else if (index == 0) // Am Anfang -> Letztes Bild
+          CurrentContestImage = ImageList[ImageList.Count - 1];
+      }
+    }
+    private void ApproveContestImage() => ImageDataProvider.ApproveImage(CurrentContestImage);
+    private void DeleteContestImage()
+    {
+      if (CurrentContestImage is not null)
+      {
+        var msgBox = MessageBox.Show("Möchten Sie das Bild wirklich löschen?", "Bild löschen", MessageBoxButton.YesNo, MessageBoxImage.Question);
+        if (msgBox == MessageBoxResult.Yes)
+        {
+          ImageDataProvider.DeleteImage(CurrentContestImage.Key);
+          ImageList.Remove(CurrentContestImage);
+        }
+      }
+    }
+
+    #endregion Contest
+
     #endregion Methods
   }
 }
