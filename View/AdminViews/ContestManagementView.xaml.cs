@@ -2,9 +2,9 @@
 
 namespace CommitAndForget.View.AdminViews
 {
-  public partial class ImageManagementView : Page
+  public partial class ContestManagementView : Page
   {
-    public ImageManagementView()
+    public ContestManagementView()
     {
       InitializeComponent();
     }

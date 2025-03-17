@@ -81,7 +81,7 @@ namespace CommitAndForget.ViewModel
       NavigateToProductManagementCommand = new RelayCommand(NavigateToProductManagement);
       NavigateToOrderManagementCommand = new RelayCommand(NavigateToOrderManagement);
       NavigateToMenuManagementCommand = new RelayCommand(NavigateToMenuManagement);
-      NavigateToImageManagementCommand = new RelayCommand(NavigateToImageManagement);
+      NavigateToContestManagementCommand = new RelayCommand(NavigateToImageManagement);
       NavigateBackCommand = new RelayCommand(NavigateBack);
       EditUserCommand = new RelayCommand<UserModel>(EditUser);
       DeleteUserCommand = new RelayCommand<UserModel>(DeleteUser);
@@ -104,7 +104,7 @@ namespace CommitAndForget.ViewModel
     public ICommand NavigateToProductManagementCommand { get; private set; }
     public ICommand NavigateToOrderManagementCommand { get; private set; }
     public ICommand NavigateToMenuManagementCommand { get; private set; }
-    public ICommand NavigateToImageManagementCommand { get; private set; }
+    public ICommand NavigateToContestManagementCommand { get; private set; }
     public ICommand NavigateBackCommand { get; private set; }
     public ICommand EditUserCommand { get; private set; }
     public ICommand DeleteUserCommand { get; private set; }
@@ -142,7 +142,7 @@ namespace CommitAndForget.ViewModel
     private void NavigateToImageManagement() 
     {
       ImageList = ImageDataProvider.LoadImages(); 
-      MainFrame?.Navigate(new ImageManagementView() { DataContext = this });
+      MainFrame?.Navigate(new ContestManagementView() { DataContext = this });
     }
     private void NavigateBack()
     {

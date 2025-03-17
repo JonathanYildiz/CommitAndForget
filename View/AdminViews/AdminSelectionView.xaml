@@ -20,7 +20,7 @@
     <Button Content="Benutzerverwaltung" Command="{Binding NavigateToUserManagementCommand}"/>
     <Button Content="Produktverwaltung" Command="{Binding NavigateToProductManagementCommand}"/>
     <Button Content="Menüverwaltung" Command="{Binding NavigateToMenuManagementCommand}"/>
-    <Button Content="Bildverwaltung" Command="{Binding NavigateToImageManagementCommand}"/>
+    <Button Content="Contestverwaltung" Command="{Binding NavigateToContestManagementCommand}"/>
     <Button Content="Bestellungsverwaltung" Command="{Binding NavigateToOrderManagementCommand}"/>
   </StackPanel>
 </Page>
