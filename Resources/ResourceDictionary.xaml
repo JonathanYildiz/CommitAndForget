@@ -87,7 +87,6 @@
     </Setter>
   </Style>
 
-
   <Style TargetType="TextBox">
     <Setter Property="MaxWidth" Value="300" />
     <Setter Property="Height" Value="30" />
