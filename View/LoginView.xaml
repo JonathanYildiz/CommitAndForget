@@ -74,10 +74,18 @@
         </Grid.RowDefinitions>
         <Grid Grid.Row="1">
           <Label>Benutzername</Label>
-          <TextBox Text="{Binding Email}"></TextBox>
+          <TextBox Text="{Binding Email}">
+            <TextBox.InputBindings>
+              <KeyBinding Key="Enter" Command="{Binding LoginCommand}" CommandParameter="{Binding ElementName=loginWindow}"/>
+            </TextBox.InputBindings>
+          </TextBox>
         </Grid>
 
-       <TextBox Grid.Row="2" Text="{Binding Password}"></TextBox>
+       <TextBox Grid.Row="2" Text="{Binding Password}">
+          <TextBox.InputBindings>
+            <KeyBinding Key="Enter" Command="{Binding LoginCommand}" CommandParameter="{Binding ElementName=loginWindow}"/>
+          </TextBox.InputBindings>
+       </TextBox>
 
         <Button Grid.Row="3" Content="Anmelden" 
                 Command="{Binding LoginCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}"/>
