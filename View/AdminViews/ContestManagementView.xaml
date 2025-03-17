@@ -19,7 +19,7 @@
     </Grid.ColumnDefinitions>
     <DockPanel Grid.Row="0" Grid.Column="0">
       <Image Source="{Binding CurrentContestImage.Image}" Width="200" Height="200" Margin="5"/>
-      <TextBlock Text="E-Mail@email.com"/>
+      <TextBlock Text="{Binding CurrentContestImage.UploadedBy}"/>
     </DockPanel>
 
 
