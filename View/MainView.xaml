@@ -24,8 +24,8 @@
       <ColumnDefinition Width="8*"/>
       <ColumnDefinition/>
     </Grid.ColumnDefinitions>
-    <Button Grid.Row="0" FontSize="36" Command="{Binding NavigateBackCommand}">←</Button>
-    <Button Grid.Row="0" Grid.Column="3" FontSize="36">...</Button>
+    <Button Grid.Row="0" FontSize="36" Command="{Binding NavigateBackCommand}" Style="{StaticResource BorderlessButton}" Content="←"></Button>
+    <Button Grid.Row="0" Grid.Column="3" FontSize="36" Style="{StaticResource BorderlessButton}" Content="..."></Button>
     
     <Frame Grid.Row="1" Grid.ColumnSpan="4" x:Name="MainFrame" NavigationUIVisibility="Hidden" />
   </Grid>
