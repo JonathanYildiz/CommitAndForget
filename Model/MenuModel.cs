@@ -48,6 +48,16 @@ namespace CommitAndForget.Model
     {
       Quantity = 1;
     }
+
+    public MenuModel(MenuModel menu)
+    {
+      Key = menu.Key;
+      Name = menu.Name;
+      Price = menu.Price;
+      Image = new ImageModel(menu.Image);
+      Quantity = menu.Quantity;
+      ProductList = new ObservableCollection<ProductModel>(menu.ProductList);
+    }
     #endregion Constructor
   }
 }

@@ -31,9 +31,19 @@ namespace CommitAndForget.ViewModel
       get => Get<ProductModel>();
       set => Set(value);
     }
+    public MenuModel SelectedMenu
+    {
+      get => Get<MenuModel>();
+      set => Set(value);
+    }
     public ProductModel ProductBackup
     {
       get => Get<ProductModel>();
+      set => Set(value);
+    }
+    public MenuModel MenuBackup
+    {
+      get => Get<MenuModel>();
       set => Set(value);
     }
     public ImageModel CurrentContestImage
@@ -44,6 +54,11 @@ namespace CommitAndForget.ViewModel
     public ObservableCollection<UserModel> UserList
     {
       get => Get<ObservableCollection<UserModel>>();
+      set => Set(value);
+    }
+    public ObservableCollection<MenuModel> MenuList
+    {
+      get => Get<ObservableCollection<MenuModel>>();
       set => Set(value);
     }
     public ObservableCollection<ProductModel> ProductList
@@ -82,27 +97,43 @@ namespace CommitAndForget.ViewModel
     #region Commands
     private void CreateCommands()
     {
+      // Navigation
       NavigateToUserManagementCommand = new RelayCommand(NavigateToUserManagement);
       NavigateToProductManagementCommand = new RelayCommand(NavigateToProductManagement);
       NavigateToOrderManagementCommand = new RelayCommand(NavigateToOrderManagement);
       NavigateToMenuManagementCommand = new RelayCommand(NavigateToMenuManagement);
       NavigateToContestManagementCommand = new RelayCommand(NavigateToContestManagement);
       NavigateBackCommand = new RelayCommand(NavigateBack);
+
+      // Benutzerverwaltung
       EditUserCommand = new RelayCommand<UserModel>(EditUser);
       DeleteUserCommand = new RelayCommand<UserModel>(DeleteUser);
       SaveUserCommand = new RelayCommand<Window>(SaveUser);
       CancelUserCommand = new RelayCommand<Window>(CancelUser);
       CreateUserCommand = new RelayCommand(CreateUser);
+
+      // Produktverwaltung
       EditProductCommand = new RelayCommand<ProductModel>(EditProduct);
       ToggleIngredientCommand = new RelayCommand<IngredientModel>(ToggleIngredient);
       SaveProductCommand = new RelayCommand(SaveProduct);
       CancelProductCommand = new RelayCommand(CancelProduct);
       DeleteProductCommand = new RelayCommand<ProductModel>(DeleteProduct);
       CreateProductCommand = new RelayCommand(CreateProduct);
-      SelectImageCommand = new RelayCommand(SelectImage);
-      AddImageCommand = new RelayCommand(AddImage);
+
+      // Menüverwaltung
+      CreateMenuCommand = new RelayCommand(CreateMenu);
+      EditMenuCommand = new RelayCommand<MenuModel>(EditMenu);
+      DeleteMenuCommand = new RelayCommand<MenuModel>(DeleteMenu);
+      SaveMenuCommand = new RelayCommand(SaveMenu);
+
+
+      // Bildauswahl und -upload für Produkte und Menüs
       DeleteImageCommand = new RelayCommand<ImageModel>(DeleteImage);
       ChooseImageCommand = new RelayCommand<ImageModel>(ChooseImage);
+      SelectImageCommand = new RelayCommand(SelectImage);
+      AddImageCommand = new RelayCommand(AddImage);
+
+      // Contestverwaltung
       RemoveImageFromProductCommand = new RelayCommand(RemoveImageFromProduct);
       NextContestImageCommand = new RelayCommand(NextContestImage);
       PreviousContestImageCommand = new RelayCommand(PreviousContestImage);
@@ -126,6 +157,10 @@ namespace CommitAndForget.ViewModel
     public ICommand CancelProductCommand { get; set; }
     public ICommand DeleteProductCommand { get; set; }
     public ICommand CreateProductCommand { get; set; }
+    public ICommand CreateMenuCommand { get; set; }
+    public ICommand EditMenuCommand { get; set; }
+    public ICommand DeleteMenuCommand { get; set; }
+    public ICommand SaveMenuCommand { get; set; }
     public ICommand SelectImageCommand { get; set; }
     public ICommand AddImageCommand { get; set; }
     public ICommand DeleteImageCommand { get; set; }
@@ -147,12 +182,18 @@ namespace CommitAndForget.ViewModel
     }
     private void NavigateToProductManagement()
     {
+      SelectedMenu = null; // Null zuweisen um beim Bild auswählen zwischen Menü und Produkt zu unterscheiden
       ProductList = ProductDataProvider.LoadProducts();
       MainFrame?.Navigate(new ProductManagementView() { DataContext = this });
     }
     private void NavigateToOrderManagement() => MainFrame?.Navigate(new OrderManagementView() { DataContext = this });
-    private void NavigateToMenuManagement() => MainFrame?.Navigate(new MenuManagementView() { DataContext = this });
-    private void NavigateToContestManagement() 
+    private void NavigateToMenuManagement()
+    {
+      SelectedProduct = null; // Null zuweisen um beim Bild auswählen zwischen Menü und Produkt zu unterscheiden
+      MenuList = MenuDataProvider.LoadMenus();
+      MainFrame?.Navigate(new MenuManagementView() { DataContext = this });
+    }
+    private void NavigateToContestManagement()
     {
       // Nur Bilder für den Contest laden, die von Usern hochgeladen wurden (Admins laden nur Produktbilder hoch)
       IEnumerable<ImageModel> images = ImageDataProvider.LoadImages().Where(img => img.UploadedBy != "admin");
@@ -357,6 +398,111 @@ namespace CommitAndForget.ViewModel
     }
     #endregion Product
 
+    #region Menu
+    public void CreateMenu()
+    {
+      try
+      {
+        ProductList = ProductDataProvider.LoadProducts(-1); // Alle Produkte laden
+        SelectedMenu = new MenuModel();
+        var editWindow = new EditMenuView() { DataContext = this };
+        editWindow.WindowStartupLocation = WindowStartupLocation.CenterScreen;
+        editWindow.ShowDialog();
+      }
+      catch (Exception ex)
+      {
+        MessageBoxService.DisplayMessage(ex.Message, MessageBoxImage.Error);
+      }
+    }
+    private void SaveMenu()
+    {
+      if (SelectedMenu is not null)
+      {
+        // Eingaben überprüfen
+        if (string.IsNullOrEmpty(SelectedMenu.Name))
+        {
+          MessageBoxService.DisplayMessage("Name darf nicht leer sein", MessageBoxImage.Information);
+          return;
+        }
+        else if (SelectedMenu.Price == 0)
+        {
+          MessageBoxService.DisplayMessage("Preis darf nicht 0 sein", MessageBoxImage.Information);
+          return;
+        }
+        else if (SelectedMenu.ProductList?.Count == 0)
+        {
+          MessageBoxService.DisplayMessage("Es muss mindestens ein Produkt zugewiesen werden", MessageBoxImage.Information);
+          return;
+        }
+
+        if (MenuList.Any(p => p.Key == SelectedMenu.Key)) // Wenn Produkt vorhanden -> Updaten
+        {
+          MenuDataProvider.UpdateMenu(SelectedMenu);
+          MenuDataProvider.DeleteMenuProduct(SelectedProduct.Key); // Alle Produkte zum Menü löschen
+          foreach (var product in SelectedMenu.ProductList)
+          {
+            var foundProduct = ProductList.FirstOrDefault(p => p.Key == product.Key);
+            if (foundProduct is null)
+              continue;
+
+            MenuDataProvider.AddMenuProduct(SelectedMenu.Key, product.Key, foundProduct.Quantity); // Produkt hinzufügen
+          }
+        }
+        else
+        {
+          SelectedMenu.Key = MenuDataProvider.CreateMenu(SelectedMenu); // Wenn nicht vorhanden -> Erstellen
+          if (SelectedMenu.Key > 0)
+          {
+            foreach (var product in SelectedMenu.ProductList)
+              MenuDataProvider.AddMenuProduct(SelectedMenu.Key, product.Key, product.Quantity);
+
+            MenuList.Add(new MenuModel(SelectedMenu));
+          }
+          else
+            return;
+        }
+      }
+      SelectedMenu = null;
+      MenuBackup = null;
+      CloseCurrentWindow();
+    }
+
+    private void DeleteMenu(MenuModel? menu)
+    {
+      if (menu is not null)
+      {
+        var msgBox = MessageBox.Show("Möchten Sie das Menü wirklich löschen?", "Produkt löschen", MessageBoxButton.YesNo, MessageBoxImage.Question);
+        if (msgBox == MessageBoxResult.Yes)
+        {
+          MenuDataProvider.DeleteMenu(menu.Key);
+          MenuList.Remove(menu);
+        }
+      }
+    }
+
+    private void EditMenu(MenuModel? menu)
+    {
+      if (menu is not null)
+      {
+        // Menü wegspeichern falls abgebrochen wird
+        MenuBackup = new MenuModel(menu);
+
+        ProductList = ProductDataProvider.LoadProducts(menu.Key);
+        SelectedMenu = menu;
+
+        foreach (var product in ProductList) //Checkboxes initialisieren
+        {
+          if (menu.ProductList.FirstOrDefault(p => p.Key == product.Key) != null)
+            product.IsChecked = true;
+        }
+
+        var editWindow = new EditMenuView() { DataContext = this };
+        editWindow.WindowStartupLocation = WindowStartupLocation.CenterScreen;
+        editWindow.ShowDialog();
+      }
+    }
+    #endregion Menu
+
     #region Image
     private void SelectImage()
     {
@@ -392,9 +538,17 @@ namespace CommitAndForget.ViewModel
     }
     private void ChooseImage(ImageModel? image)
     {
-      if (image is not null && SelectedProduct is not null)
+      if (image is null)
+        return;
+
+      if (SelectedProduct is not null)
       {
         SelectedProduct.Image = image;
+        CloseCurrentWindow();
+      }
+      else if (SelectedMenu is not null)
+      {
+        SelectedMenu.Image = image;
         CloseCurrentWindow();
       }
     }

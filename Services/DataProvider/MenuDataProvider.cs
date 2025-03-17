@@ -93,5 +93,95 @@ namespace CommitAndForget.Services.DataProvider
         return [];
       }
     }
+
+    public static void DeleteMenu(int menuKey)
+    {
+      try
+      {
+        var parameters = new Dictionary<string, object>
+        {
+          { "p_Key", menuKey }
+        };
+        DataBaseService.ExecuteSP("spDeleteMenu", parameters);
+      }
+      catch (Exception ex)
+      {
+        MessageBoxService.DisplayMessage(ex.Message, MessageBoxImage.Error);
+      }
+    }
+
+    public static void UpdateMenu(MenuModel menu)
+    {
+      try
+      {
+        var parameters = new Dictionary<string, object>
+        {
+          { "p_Key", menu.Key },
+          { "p_Name", menu.Name },
+          { "p_Price", menu.Price },
+          { "p_ImageLink", menu.Image.Key == 0 ? null : menu.Image.Key  }
+        };
+        DataBaseService.ExecuteSP("spUpdateMenu", parameters);
+      }
+      catch (Exception ex)
+      {
+        MessageBoxService.DisplayMessage(ex.Message, MessageBoxImage.Error);
+      }
+    }
+
+    public static void DeleteMenuProduct(int key)
+    {
+      try
+      {
+        var parameters = new Dictionary<string, object>
+        {
+          { "p_Key", key }
+        };
+        DataBaseService.ExecuteSP("spDeleteMenuProduct", parameters);
+      }
+      catch (Exception ex)
+      {
+        MessageBoxService.DisplayMessage(ex.Message, MessageBoxImage.Error);
+      }
+    }
+
+    public static void AddMenuProduct(int menuLink, int productLink, double quantity)
+    {
+      try
+      {
+        var parameters = new Dictionary<string, object>
+        {
+          { "p_MenuLink", menuLink },
+          { "p_ProductLink", productLink },
+          { "p_Quantity", quantity }
+        };
+        DataBaseService.ExecuteSP("spUpdateMenuProduct", parameters);
+      }
+      catch (Exception ex)
+      {
+        MessageBoxService.DisplayMessage(ex.Message, MessageBoxImage.Error);
+      }
+    }
+
+    public static int CreateMenu(MenuModel menu)
+    {
+      try
+      {
+        var parameters = new Dictionary<string, object>
+        {
+          { "p_Name", menu.Name },
+          { "p_Price", menu.Price },
+          { "p_ImageLink", menu.Image.Key == 0 ? null : menu.Image.Key }
+        };
+        DataTable dt = DataBaseService.ExecuteSP("spCreateMenu", parameters);
+        return dt.Rows[0]["nKey"] != DBNull.Value ? Convert.ToInt32(dt.Rows[0]["nKey"]) : default;
+      }
+      catch (Exception ex)
+      {
+        MessageBoxService.DisplayMessage(ex.Message, MessageBoxImage.Error);
+        return -1;
+
+      }
+    }
   }
 }

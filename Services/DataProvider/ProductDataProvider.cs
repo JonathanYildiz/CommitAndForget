@@ -11,10 +11,14 @@ namespace CommitAndForget.Services.DataProvider
 {
   public static class ProductDataProvider
   {
-    public static ObservableCollection<ProductModel> LoadProducts()
+    public static ObservableCollection<ProductModel> LoadProducts(int menuLink = 0)
     {
       try
       {
+        var parameters = new Dictionary<string, object>();
+        if (menuLink != 0)
+          parameters.Add("p_MenuLink", menuLink);
+
         DataTable dt = DataBaseService.ExecuteSP("spGetProducts");
         var productList = new ObservableCollection<ProductModel>();
 
