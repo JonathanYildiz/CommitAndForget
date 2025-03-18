@@ -40,6 +40,11 @@ namespace CommitAndForget.Model
       get => Get<string>();
       set => Set(value);
     }
+    public int Rating
+    {
+      get => Get<int>();
+      set => Set(value);
+    }
     #endregion Properties
 
     #region Constructor
