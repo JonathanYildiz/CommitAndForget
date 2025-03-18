@@ -3,6 +3,7 @@
                     xmlns:conv="clr-namespace:CommitAndForget.Converter">
 
   <conv:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
+  <conv:RatingToVisibilityConverter x:Key="RatingToVisibilityConverter"/>
   <!-- Style for borderless Buttons -->
   <Style TargetType="Button" x:Key="BorderlessButton">
     <Setter Property="HorizontalAlignment" Value="Center" />

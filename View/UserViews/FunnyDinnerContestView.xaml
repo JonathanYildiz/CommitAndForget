@@ -26,24 +26,24 @@
                    HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Stretch="Fill"/>
               <DockPanel HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="3">
                 <Button Height="32" Width="32"
-                        Command="{Binding DataContext.RateImageCommand}" CommandParameter="1">
-                  <Image Source="\Pizza.png" Visibility="{Binding IsOneStarPressed, Converter={StaticResource BoolToVisibilityConverter}}"/>
+                        Command="{Binding DataContext.RateImageCommand}">
+                  <Image Source="\Pizza.png" Visibility="{Binding Rating, Converter={StaticResource RatingToVisibilityConverter}, ConverterParameter=1}"/>
                 </Button>
                 <Button Height="32" Width="32"
-                        Command="{Binding RateImageCommand}" CommandParameter="2">
-                  <Image Source="\Pizza.png" Visibility="{Binding IsTwoStarPressed, Converter={StaticResource BoolToVisibilityConverter}}"/>
+                        Command="{Binding RateImageCommand}">
+                  <Image Source="\Pizza.png" Visibility="{Binding Rating, Converter={StaticResource RatingToVisibilityConverter}, ConverterParameter=1}"/>
                 </Button>
                 <Button Height="32" Width="32"
-                        Command="{Binding RateImageCommand}" CommandParameter="3">
-                  <Image Source="\Pizza.png" Visibility="{Binding IsThreeStarPressed, Converter={StaticResource BoolToVisibilityConverter}}"/>
+                        Command="{Binding RateImageCommand}">
+                  <Image Source="\Pizza.png" Visibility="{Binding Rating, Converter={StaticResource RatingToVisibilityConverter}, ConverterParameter=1}"/>
                 </Button>
                 <Button Height="32" Width="32"
-                        Command="{Binding RateImageCommand}" CommandParameter="4">
-                  <Image Source="\Pizza.png" Visibility="{Binding IsFourStarPressed, Converter={StaticResource BoolToVisibilityConverter}}"/>
+                        Command="{Binding RateImageCommand}">
+                  <Image Source="\Pizza.png" Visibility="{Binding Rating, Converter={StaticResource RatingToVisibilityConverter}, ConverterParameter=1}"/>
                 </Button>
                 <Button Height="32" Width="32"
-                        Command="{Binding RateImageCommand}" CommandParameter="5">
-                  <Image Source="\Pizza.png" Visibility="{Binding IsFiveStarPressed, Converter={StaticResource BoolToVisibilityConverter}}"/>
+                        Command="{Binding RateImageCommand}">
+                  <Image Source="\Pizza.png" Visibility="{Binding Rating, Converter={StaticResource RatingToVisibilityConverter}, ConverterParameter=1}"/>
                 </Button>
               </DockPanel>
             </Grid>

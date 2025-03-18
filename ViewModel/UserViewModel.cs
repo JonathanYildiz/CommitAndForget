@@ -159,7 +159,7 @@ namespace CommitAndForget.ViewModel
       NavigateToPaymentCommand = new RelayCommand(NavigateToPayment);
       PayCommand = new RelayCommand<string>(Pay);
       AddImageCommand = new RelayCommand(AddImage);
-      RateImageCommand = new RelayCommand<int>(RateImage);
+      RateImageCommand = new RelayCommand<ImageModel>(RateImage);
     }
     public ICommand NavigateToUserOrderCommand { get; set; }
     public ICommand NavigateBackCommand { get; set; }
@@ -382,48 +382,9 @@ namespace CommitAndForget.ViewModel
       }
     }
 
-    private void RateImage(int starRating)
+    private void RateImage(ImageModel im)
     {
-      if (starRating == 5)
-      {
-        IsOneStarPressed = true;
-        IsTwoStarPressed = true;
-        IsThreeStarPressed = true;
-        IsFourStarPressed = true;
-        IsFiveStarPressed = true;
-      }
-      else if (starRating == 4)
-      {
-        IsOneStarPressed = true;
-        IsTwoStarPressed = true;
-        IsThreeStarPressed = true;
-        IsFourStarPressed = true;
-        IsFiveStarPressed = false;
-      }
-      else if (starRating == 3)
-      {
-        IsOneStarPressed = true;
-        IsTwoStarPressed = true;
-        IsThreeStarPressed = true;
-        IsFourStarPressed = false;
-        IsFiveStarPressed = false;
-      }
-      else if (starRating == 2)
-      {
-        IsOneStarPressed = true;
-        IsTwoStarPressed = true;
-        IsThreeStarPressed = false;
-        IsFourStarPressed = false;
-        IsFiveStarPressed = false;
-      }
-      else if (starRating == 1)
-      {
-        IsOneStarPressed = true;
-        IsTwoStarPressed = false;
-        IsThreeStarPressed = false;
-        IsFourStarPressed = false;
-        IsFiveStarPressed = false;
-      }
+
     }
     #endregion Methods
   }
