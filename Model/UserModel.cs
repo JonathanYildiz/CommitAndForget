@@ -65,5 +65,38 @@ namespace CommitAndForget.Model
       set => Set(value);
     }
     #endregion Properties
+
+    #region Constructor
+    public UserModel() { }
+    public UserModel (UserModel user)
+    {
+      Key = user.Key;
+      FirstName = user.FirstName;
+      LastName = user.LastName;
+      Street = user.Street;
+      HouseNumber = user.HouseNumber;
+      PostalCode = user.PostalCode;
+      City = user.City;
+      Email = user.Email;
+      Password = user.Password;
+      IsAdmin = user.IsAdmin;
+    }
+    #endregion Constructor
+
+    #region Methods
+    public void RollbackChanges(UserModel backupUser)
+    {
+      Key = backupUser.Key;
+      FirstName = backupUser.FirstName;
+      LastName = backupUser.LastName;
+      Street = backupUser.Street;
+      HouseNumber = backupUser.HouseNumber;
+      PostalCode = backupUser.PostalCode;
+      City = backupUser.City;
+      Email = backupUser.Email;
+      Password = backupUser.Password;
+      IsAdmin = backupUser.IsAdmin;
+    }
+    #endregion Methods
   }
 }
