@@ -35,6 +35,30 @@ namespace CommitAndForget.Model
       get => Get<bool>();
       set => Set(value);
     }
+    public string UploadedBy
+    {
+      get => Get<string>();
+      set => Set(value);
+    }
+    public decimal Rating
+    {
+      get => Get<decimal>();
+      set => Set(value);
+    }
     #endregion Properties
+
+    #region Constructor
+    public ImageModel()
+    {
+    }
+    public ImageModel(ImageModel image)
+    {
+      Key = image.Key;
+      Image = image.Image;
+      Approved = image.Approved;
+      CreationDate = image.CreationDate;
+      ContestWon = image.ContestWon;
+    }
+    #endregion Constructor
   }
 }

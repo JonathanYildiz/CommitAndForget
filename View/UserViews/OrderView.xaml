@@ -5,9 +5,12 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:CommitAndForget.View.UserViews"
       mc:Ignorable="d" 
-      d:DesignHeight="450" d:DesignWidth="800"
-      >
-
+      d:DesignHeight="450" d:DesignWidth="800">
+ 
+  <Page.Resources>
+    <ResourceDictionary Source="../../Resources/ResourceDictionary.xaml" />
+  </Page.Resources>
+  
   <Grid>
     <Grid.RowDefinitions>
       <RowDefinition Height="*" />
@@ -18,8 +21,20 @@
         <ColumnDefinition/>
         <ColumnDefinition/>
       </Grid.ColumnDefinitions>
-      <Button Grid.Column="0" Command="{Binding NavigateToMenuCommand}">Menü</Button>
-      <Button Grid.Column="1" Command="{Binding NavigateToProductCommand}">Einzelne Produkte</Button>
+      <Button Grid.Column="0" Command="{Binding NavigateToMenuCommand}" Style="{StaticResource NavigationButton}">
+        <TextBlock Text="Menü"
+                   TextWrapping="Wrap"
+                   TextAlignment="Center"
+                   VerticalAlignment="Center"
+                   HorizontalAlignment="Center"/>
+      </Button>
+      <Button Grid.Column="1" Command="{Binding NavigateToProductCommand}" Style="{StaticResource NavigationButton}">
+        <TextBlock Text="Einzelne Produkte"
+                   TextWrapping="Wrap"
+                   TextAlignment="Center"
+                   VerticalAlignment="Center"
+                   HorizontalAlignment="Center"/>
+      </Button>
     </Grid>
   </Grid>
 </Page>

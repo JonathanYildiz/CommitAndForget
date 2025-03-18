@@ -7,13 +7,13 @@ namespace CommitAndForget.Services.DataProvider
 {
   public static class IngredientDataProvider
   {
-    public static ObservableCollection<IngredientModel> LoadIngredients(ProductModel product)
+    public static ObservableCollection<IngredientModel> LoadIngredients(int productLink)
     {
       try
       {
         var parameters = new Dictionary<string, object>
         {
-          { "p_ProductLink", product.Key }
+          { "p_ProductLink", productLink }
         };
 
         DataTable dt = DataBaseService.ExecuteSP("spGetIngredients", parameters);
@@ -28,7 +28,8 @@ namespace CommitAndForget.Services.DataProvider
             ingredient.Name = row["ingredient_szName"] != DBNull.Value ? row["ingredient_szName"].ToString() ?? string.Empty : string.Empty;
             ingredient.Quantity = row["ingredient_nQuantity"] != DBNull.Value ? (int)row["ingredient_nQuantity"] : default;
 
-            ingredientList.Add(ingredient);
+            if (!ingredientList.Any(i => i.Key == ingredient.Key)) // Nicht doppelt hinzufügen
+              ingredientList.Add(ingredient);
           }
         }
         return ingredientList;

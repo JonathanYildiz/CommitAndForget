@@ -1,0 +1,116 @@
+﻿<Page x:Class="CommitAndForget.View.UserViews.FunnyDinnerContestView"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:CommitAndForget.View.UserViews" 
+      xmlns:sys="clr-namespace:System;assembly=mscorlib"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800"
+      Title="FunnyDinnerContestView"
+      FontSize="24">
+  <Page.Resources>
+    <ResourceDictionary Source="../../Resources/ResourceDictionary.xaml" />
+  </Page.Resources>
+  <Grid>
+    <ScrollViewer>
+      <ItemsControl ItemsSource="{Binding ImageList}">
+        <ItemsControl.ItemsPanel>
+          <ItemsPanelTemplate>
+            <WrapPanel />
+          </ItemsPanelTemplate>
+        </ItemsControl.ItemsPanel>
+        <ItemsControl.ItemTemplate>
+          <DataTemplate>
+            <Grid Height="256" Width="256">
+              <Image Source="{Binding Image}" Height="auto" Width="auto" MaxHeight="256" MaxWidth="256" Margin="3"
+                   HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Stretch="Fill"/>
+              <DockPanel HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="3">
+                <Button Height="32" Width="32"
+                        Command="{Binding Data.RateImageCommand, Source={StaticResource BindingProxy}}">
+                  <Button.CommandParameter>
+                    <MultiBinding Converter="{StaticResource MultiParameterConverter}">
+                      <Binding />
+                      <Binding>
+                        <Binding.Source>
+                          <sys:Decimal>1</sys:Decimal>
+                        </Binding.Source>
+                      </Binding>
+                    </MultiBinding>
+                  </Button.CommandParameter>
+                  <Image Source="\Pizza.png" Visibility="{Binding Rating, Converter={StaticResource RatingToVisibilityConverter}, ConverterParameter=1}"/>
+                </Button>
+                <Button Height="32" Width="32"
+                              Command="{Binding Data.RateImageCommand, Source={StaticResource BindingProxy}}">
+                  <Button.CommandParameter>
+                    <MultiBinding Converter="{StaticResource MultiParameterConverter}">
+                      <Binding />
+                      <Binding>
+                        <Binding.Source>
+                          <sys:Decimal>2</sys:Decimal>
+                        </Binding.Source>
+                      </Binding>
+                    </MultiBinding>
+                  </Button.CommandParameter>
+                  <Image Source="\Pizza.png" Visibility="{Binding Rating, Converter={StaticResource RatingToVisibilityConverter}, ConverterParameter=2}"/>
+                </Button>
+                <Button Height="32" Width="32"
+                             Command="{Binding Data.RateImageCommand, Source={StaticResource BindingProxy}}">
+                  <Button.CommandParameter>
+                    <MultiBinding Converter="{StaticResource MultiParameterConverter}">
+                      <Binding />
+                      <Binding>
+                        <Binding.Source>
+                          <sys:Decimal>3</sys:Decimal>
+                        </Binding.Source>
+                      </Binding>
+                    </MultiBinding>
+                  </Button.CommandParameter>
+                  <Image Source="\Pizza.png" Visibility="{Binding Rating, Converter={StaticResource RatingToVisibilityConverter}, ConverterParameter=3}"/>
+                </Button>
+                <Button Height="32" Width="32"
+                              Command="{Binding Data.RateImageCommand, Source={StaticResource BindingProxy}}">
+                  <Button.CommandParameter>
+                    <MultiBinding Converter="{StaticResource MultiParameterConverter}">
+                      <Binding />
+                      <Binding>
+                        <Binding.Source>
+                          <sys:Decimal>4</sys:Decimal>
+                        </Binding.Source>
+                      </Binding>
+                    </MultiBinding>
+                  </Button.CommandParameter>
+                  <Image Source="\Pizza.png" Visibility="{Binding Rating, Converter={StaticResource RatingToVisibilityConverter}, ConverterParameter=4}"/>
+                </Button>
+                <Button Height="32" Width="32"
+                             Command="{Binding Data.RateImageCommand, Source={StaticResource BindingProxy}}">
+                  <Button.CommandParameter>
+                    <MultiBinding Converter="{StaticResource MultiParameterConverter}">
+                      <Binding />
+                      <Binding>
+                        <Binding.Source>
+                          <sys:Decimal>5</sys:Decimal>
+                        </Binding.Source>
+                      </Binding>
+                    </MultiBinding>
+                  </Button.CommandParameter>
+                  <Image Source="\Pizza.png" Visibility="{Binding Rating, Converter={StaticResource RatingToVisibilityConverter}, ConverterParameter=5}"/>
+                </Button>
+              </DockPanel>
+            </Grid>
+          </DataTemplate>
+        </ItemsControl.ItemTemplate>
+      </ItemsControl>
+    </ScrollViewer>
+    <StackPanel VerticalAlignment="Bottom" HorizontalAlignment="Left" Background="#007ACC" Margin="10">
+      <Button Content="¥" Style="{StaticResource AddButton}" 
+              Command="{Binding ViewWinnerCommand}"
+              Margin="0" Padding="0" Width="30"/>
+      <Button Content="+"  Style="{StaticResource AddButton}" 
+              Command="{Binding AddImageCommand}"
+              Margin="0" Padding="0" Width="30"/>
+    </StackPanel>
+
+  </Grid>
+
+</Page>

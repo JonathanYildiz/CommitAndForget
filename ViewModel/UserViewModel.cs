@@ -9,6 +9,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
+using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Threading;
 using CommitAndForget.Essentials;
@@ -17,6 +18,7 @@ using CommitAndForget.Services;
 using CommitAndForget.Services.DataProvider;
 using CommitAndForget.View.UserViews;
 using CommunityToolkit.Mvvm.Input;
+using Microsoft.Win32;
 
 namespace CommitAndForget.ViewModel
 {
@@ -63,6 +65,11 @@ namespace CommitAndForget.ViewModel
       get => Get<ObservableCollection<MenuModel>>();
       set => Set(value);
     }
+    public ObservableCollection<ImageModel> ImageList
+    {
+      get => Get<ObservableCollection<ImageModel>>();
+      set => Set(value);
+    }
     public IngredientModel SelectedIngredient
     {
       get => Get<IngredientModel>();
@@ -73,7 +80,6 @@ namespace CommitAndForget.ViewModel
         FilteredMenuList?.Refresh();
       }
     }
-
     // Anzahl der Produkte und Menüs im Warenkorb zusammenrechnen
     public int ShoppingCartQuantity => (ProductShoppingCart?.Sum(item => item.Quantity) ?? 0) + (MenuShoppingCart?.Sum(item => item.Quantity) ?? 0);
 
@@ -109,6 +115,7 @@ namespace CommitAndForget.ViewModel
       NavigateBackCommand = new RelayCommand(NavigateBack);
       NavigateToMenuCommand = new RelayCommand(NavigateToMenu);
       NavigateToProductCommand = new RelayCommand(NavigateToProduct);
+      NavigateToFunnyDinnerContestCommand = new RelayCommand(NavigateToFunnyDinnerContest);
       ToggleShowShoppingCartCommand = new RelayCommand(ToggleShowShoppingCart);
       AddProductToShoppingCartCommand = new RelayCommand<ProductModel>(AddProductToShoppingCart);
       AddMenuToShoppingCartCommand = new RelayCommand<MenuModel>(AddMenuToShoppingCart);
@@ -118,20 +125,25 @@ namespace CommitAndForget.ViewModel
       RemoveMenuFromShoppingCartCommand = new RelayCommand<MenuModel>(RemoveMenuFromShoppingCart);
       NavigateToPaymentCommand = new RelayCommand(NavigateToPayment);
       PayCommand = new RelayCommand<string>(Pay);
+      AddImageCommand = new RelayCommand(AddImage);
+      RateImageCommand = new RelayCommand<Tuple<ImageModel, decimal>>(RateImage);
     }
-    public ICommand NavigateToUserOrderCommand { get; private set; }
-    public ICommand NavigateBackCommand { get; private set; }
-    public ICommand NavigateToMenuCommand { get; private set; }
-    public ICommand NavigateToProductCommand { get; private set; }
-    public ICommand ToggleShowShoppingCartCommand { get; private set; }
-    public ICommand AddProductToShoppingCartCommand { get; private set; }
-    public ICommand AddMenuToShoppingCartCommand { get; private set; }
-    public ICommand ShowProductInfoCommand { get; private set; }
-    public ICommand ShowMenuInfoCommand { get; private set; }
-    public ICommand RemoveProductFromShoppingCartCommand { get; private set; }
-    public ICommand RemoveMenuFromShoppingCartCommand { get; private set; }
-    public ICommand NavigateToPaymentCommand { get; private set; }
-    public ICommand PayCommand { get; private set; }
+    public ICommand NavigateToUserOrderCommand { get; set; }
+    public ICommand NavigateBackCommand { get; set; }
+    public ICommand NavigateToMenuCommand { get; set; }
+    public ICommand NavigateToProductCommand { get; set; }
+    public ICommand NavigateToFunnyDinnerContestCommand { get; set; }
+    public ICommand ToggleShowShoppingCartCommand { get; set; }
+    public ICommand AddProductToShoppingCartCommand { get; set; }
+    public ICommand AddMenuToShoppingCartCommand { get; set; }
+    public ICommand ShowProductInfoCommand { get; set; }
+    public ICommand ShowMenuInfoCommand { get; set; }
+    public ICommand RemoveProductFromShoppingCartCommand { get; set; }
+    public ICommand RemoveMenuFromShoppingCartCommand { get; set; }
+    public ICommand NavigateToPaymentCommand { get; set; }
+    public ICommand PayCommand { get; set; }
+    public ICommand AddImageCommand {  get; set; }
+    public ICommand RateImageCommand { get; set; }
     #endregion Commands
 
     #region Methods
@@ -182,6 +194,14 @@ namespace CommitAndForget.ViewModel
       MainFrame?.Navigate(new ProductView() { DataContext = this });
     }
 
+    private void NavigateToFunnyDinnerContest()
+    {
+      // Keine Produktbilder laden
+      IEnumerable<ImageModel> images = ImageDataProvider.LoadImages(CurrentUser.Key).Where(img => img.UploadedBy != "admin");
+      ImageList = new ObservableCollection<ImageModel>(images);
+      MainFrame?.Navigate(new FunnyDinnerContestView() { DataContext = this });
+    }
+
     private void ToggleShowShoppingCart() => ShowShoppingCart = !ShowShoppingCart;
 
     private void NavigateToPayment()
@@ -192,8 +212,23 @@ namespace CommitAndForget.ViewModel
 
     private void Pay(string? paymentMethod)
     {
+      // Abfangen, wenn die Warenkörbe leer sind
+      if (MenuShoppingCart is null || MenuShoppingCart.Count == 0)
+        if (ProductShoppingCart is null || ProductShoppingCart.Count == 0)
+          return;
+
       if (paymentMethod is not null)
       {
+        int orderNumber = OrderDataProvider.CreateOrder(CurrentUser.Key, paymentMethod);
+        if (orderNumber == -1)
+        {
+          MessageBoxService.DisplayMessage("Fehler beim Erstellen der Bestellung", MessageBoxImage.Error);
+          return;
+        }
+
+        OrderDataProvider.AddProductsToOrder(ProductShoppingCart, orderNumber);
+        OrderDataProvider.AddMenusToOrder(MenuShoppingCart, orderNumber);
+
         MenuShoppingCart?.Clear();
         ProductShoppingCart?.Clear();
         OnPropertyChanged(nameof(ShoppingCartQuantity));
@@ -313,6 +348,31 @@ namespace CommitAndForget.ViewModel
       {
         MenuShoppingCart?.Remove(menu);
         OnPropertyChanged(nameof(ShoppingCartQuantity));
+      }
+    }
+    private void AddImage()
+    {
+      var image = new ImageModel();
+      var dialog = new OpenFileDialog();
+      dialog.Filter = "Bild-Dateien (*.jpg, *.jpeg, *.png)|*.jpg;*.jpeg;*.png";
+      if (dialog.ShowDialog() == true)
+      {
+        image.Image = new BitmapImage(new Uri(dialog.FileName));
+        image = ImageDataProvider.UploadImage(image, CurrentUser.Key);
+        if (image is not null)
+          ImageList.Add(image);
+      }
+    }
+
+    private void RateImage(Tuple<ImageModel, decimal> parameter)
+    {
+      ImageModel selectedImage = parameter.Item1;
+      decimal rating = parameter.Item2;
+
+      if (selectedImage != null && rating > 0)
+      {
+        selectedImage.Rating = rating;
+        ImageDataProvider.SetRating(selectedImage, CurrentUser.Key);
       }
     }
     #endregion Methods

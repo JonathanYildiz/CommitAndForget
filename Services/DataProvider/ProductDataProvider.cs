@@ -1,11 +1,8 @@
 ﻿using CommitAndForget.Converter;
 using CommitAndForget.Model;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
 using System.Data;
-using System.IO;
 using System.Windows;
-using System.Windows.Media.Imaging;
 
 namespace CommitAndForget.Services.DataProvider
 {
@@ -15,7 +12,9 @@ namespace CommitAndForget.Services.DataProvider
     {
       try
       {
-        DataTable dt = DataBaseService.ExecuteSP("spGetProducts");
+        var parameters = new Dictionary<string, object>();
+
+        DataTable dt = DataBaseService.ExecuteSP("spGetProducts", parameters);
         var productList = new ObservableCollection<ProductModel>();
 
         if (dt is not null && dt.Rows.Count > 0)
@@ -32,6 +31,7 @@ namespace CommitAndForget.Services.DataProvider
               product.Name = row["product_szName"] != DBNull.Value ? row["product_szName"].ToString() ?? string.Empty : string.Empty;
               product.Energy = row["product_nEnergy"] != DBNull.Value ? (int)row["product_nEnergy"] : default;
               product.Price = row["product_rPrice"] != DBNull.Value ? (double)(decimal)row["product_rPrice"] : default;
+              product.OrderCount = row["product_nOrderCount"] != DBNull.Value ? (int)row["product_nOrderCount"] : default;
 
               var img = new ImageModel();
               img.Key = row["image_nKey"] != DBNull.Value ? (int)row["image_nKey"] : default;
@@ -133,6 +133,28 @@ namespace CommitAndForget.Services.DataProvider
       catch (Exception ex)
       {
         MessageBoxService.DisplayMessage(ex.Message, MessageBoxImage.Error);
+      }
+    }
+
+    public static int CreateProduct(ProductModel product)
+    {
+      try
+      {
+        var parameters = new Dictionary<string, object>
+        {
+          { "p_Name", product.Name },
+          { "p_Energy", product.Energy },
+          { "p_Price", product.Price },
+          { "p_ImageLink", product.Image.Key == 0 ? null : product.Image.Key }
+        };
+        DataTable dt = DataBaseService.ExecuteSP("spCreateProduct", parameters);
+        return dt.Rows[0]["nKey"] != DBNull.Value ? Convert.ToInt32(dt.Rows[0]["nKey"]) : default;
+      }
+      catch (Exception ex)
+      {
+        MessageBoxService.DisplayMessage(ex.Message, MessageBoxImage.Error);
+        return -1;
+
       }
     }
   }

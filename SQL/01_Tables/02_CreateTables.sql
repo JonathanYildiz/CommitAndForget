@@ -19,7 +19,15 @@ CREATE TABLE IF NOT EXISTS tblImage (
     vbImage LONGBLOB, 
     bApproved BIT DEFAULT 0,
     dtCreationDate DATE NOT NULL DEFAULT (CURDATE()),
-    bContestWon BIT DEFAULT 0
+    bContestWon BIT DEFAULT 0,
+	nUserLink INT,
+	
+	-- Foreign key definition
+	CONSTRAINT fk_tblImage_User 
+        FOREIGN KEY (nUserLink) 
+        REFERENCES tblUser(nKey) 
+        ON DELETE CASCADE 
+        ON UPDATE CASCADE
 );
 
 -- Check if the tblRating table exists, if not, create it

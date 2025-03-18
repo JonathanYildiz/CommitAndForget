@@ -8,6 +8,10 @@
       d:DesignHeight="450" d:DesignWidth="800"
       Title="UserSelectionView">
 
+  <Page.Resources>
+    <ResourceDictionary Source="../../Resources/ResourceDictionary.xaml" />
+  </Page.Resources>
+  
   <Grid>
     <Grid.RowDefinitions>
       <RowDefinition Height="*" />
@@ -18,8 +22,20 @@
         <ColumnDefinition/>
         <ColumnDefinition/>
       </Grid.ColumnDefinitions>
-      <Button x:Name="OrderButton" Command="{Binding NavigateToUserOrderCommand}">Bestellen</Button>
-      <Button Grid.Column="1">Funny Dinner Contest</Button>
+      <Button Grid.Column="0" Command="{Binding NavigateToUserOrderCommand}" Style="{StaticResource NavigationButton}">
+        <TextBlock Text="Bestellen"
+                   TextWrapping="Wrap"
+                   TextAlignment="Center"
+                   VerticalAlignment="Center"
+                   HorizontalAlignment="Center"/>
+      </Button>
+      <Button Grid.Column="1" Command="{Binding NavigateToFunnyDinnerContestCommand}" Style="{StaticResource NavigationButton}">
+        <TextBlock Text="Funny Dinner Contest"
+                   TextWrapping="Wrap"
+                   TextAlignment="Center"
+                   VerticalAlignment="Center"
+                   HorizontalAlignment="Center"/>
+      </Button>
     </Grid>
   </Grid>
 </Page>

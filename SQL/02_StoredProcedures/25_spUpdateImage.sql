@@ -10,7 +10,7 @@ CREATE PROCEDURE spUpdateImage(
 BEGIN
     DECLARE v_Count INT;
     
-    -- Prüfen, ob der Benutzer existiert
+    -- Prüfen, ob das Image existiert
     SELECT COUNT(*)
     INTO v_Count
     FROM tblimage

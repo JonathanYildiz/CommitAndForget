@@ -7,60 +7,25 @@
         mc:Ignorable="d"
         Title="MacApple" Height="450" Width="800" MinWidth="300" MinHeight="300"
         x:Name="loginWindow"
-        WindowStartupLocation="CenterScreen">
- 
+        WindowStartupLocation="CenterScreen"
+        FontSize="16">
+
   <Window.Resources>
-    <Style TargetType="Button">
-      <Setter Property="HorizontalAlignment" Value="Center" />
-      <Setter Property="VerticalAlignment" Value="Center" />
-      <Setter Property="Background" Value="Transparent" />
-      <Setter Property="Foreground" Value="Cyan" />
-      <Setter Property="BorderBrush" Value="Transparent" />
-      <Setter Property="FontSize" Value="14" />
-      <Setter Property="FontWeight" Value="Bold" />
-      <Setter Property="Template">
-        <Setter.Value>
-          <ControlTemplate TargetType="Button">
-            <Border x:Name="border" 
-                                Background="{TemplateBinding Background}"
-                                BorderBrush="{TemplateBinding BorderBrush}"
-                                CornerRadius="5">
-              <ContentPresenter>
-                <ContentPresenter.Effect>
-                  <DropShadowEffect Color="Black"
-                                             Direction="320"
-                                             ShadowDepth="2"
-                                             Opacity="0.5"
-                                             BlurRadius="1"/>
-                </ContentPresenter.Effect>
-              </ContentPresenter>
-            </Border>
-            <ControlTemplate.Triggers>
-              <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="Background" Value="#80000000"/>
-              </Trigger>
-            </ControlTemplate.Triggers>
-          </ControlTemplate>
-        </Setter.Value>
-      </Setter>
-    </Style>
-    
-    <Style TargetType="TextBox">
-      <Setter Property="MaxWidth" Value="300" />
-      <Setter Property="Height" Value="30" />
-      <Setter Property="FontSize" Value="20" />
-    </Style>
+    <ResourceDictionary Source="../Resources/ResourceDictionary.xaml"/>
   </Window.Resources>
-  
+
   <Grid>
     <Image Grid.Column="0"
            Width="auto" Stretch="Fill"
            Source="\Pizza.png"/>
     <Grid>
       <Grid.ColumnDefinitions>
-        <ColumnDefinition Width="2*"/> <!--Column 0-->
-        <ColumnDefinition Width="6*"/> <!--Column 1-->
-        <ColumnDefinition Width="2*"/> <!--Column 2-->
+        <ColumnDefinition Width="2*"/>
+        <!--Column 0-->
+        <ColumnDefinition Width="6*"/>
+        <!--Column 1-->
+        <ColumnDefinition Width="2*"/>
+        <!--Column 2-->
       </Grid.ColumnDefinitions>
 
       <Grid Grid.Column="1">
@@ -74,19 +39,27 @@
         </Grid.RowDefinitions>
         <Grid Grid.Row="1">
           <Label>Benutzername</Label>
-          <TextBox Text="{Binding Email}"></TextBox>
+          <TextBox Text="{Binding Email, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+            <TextBox.InputBindings>
+              <KeyBinding Key="Enter" Command="{Binding LoginCommand}" CommandParameter="{Binding ElementName=loginWindow}"/>
+            </TextBox.InputBindings>
+          </TextBox>
         </Grid>
 
-       <TextBox Grid.Row="2" Text="{Binding Password}"></TextBox>
+        <TextBox Grid.Row="2" Text="{Binding Password, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+          <TextBox.InputBindings>
+            <KeyBinding Key="Enter" Command="{Binding LoginCommand}" CommandParameter="{Binding ElementName=loginWindow}"/>
+          </TextBox.InputBindings>
+        </TextBox>
 
-        <Button Grid.Row="3" Content="Anmelden" 
+        <Button Grid.Row="3" Content="Anmelden" Style="{StaticResource BorderlessButton}"
                 Command="{Binding LoginCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}"/>
 
-        <Button Grid.Row="4" Content="Registrieren" 
+        <Button Grid.Row="4" Content="Registrieren" Style="{StaticResource BorderlessButton}"
                 Command="{Binding ShowRegistrationWindowCommand}" />
 
       </Grid>
-  </Grid>
-    
+    </Grid>
+
   </Grid>
 </Window>

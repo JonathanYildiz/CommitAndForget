@@ -42,6 +42,18 @@ namespace CommitAndForget.Model
       set => Set(value);
     }
 
+    public bool IsChecked
+    {
+      get => Get<bool>();
+      set => Set(value);
+    }
+
+    public int OrderCount
+    {
+      get => Get<int>();
+      set => Set(value);
+    }
+
     public ObservableCollection<IngredientModel> Ingredients
     {
       get => Get<ObservableCollection<IngredientModel>>();
@@ -53,7 +65,32 @@ namespace CommitAndForget.Model
     public ProductModel()
     {
       Quantity = 1;
+      Ingredients = new ObservableCollection<IngredientModel>();
+      Image = new ImageModel();
+    }
+    public ProductModel(ProductModel product)
+    {
+      Key = product.Key;
+      Name = product.Name;
+      Energy = product.Energy;
+      Price = product.Price;
+      Image = new ImageModel(product.Image);
+      Quantity = product.Quantity;
+      Ingredients = new ObservableCollection<IngredientModel>(product.Ingredients);
     }
     #endregion Constructor
+
+    #region Methods
+    public void RollbackChanges(ProductModel backupProduct)
+    {
+      Key = backupProduct.Key;
+      Name = backupProduct.Name;
+      Energy = backupProduct.Energy;
+      Price = backupProduct.Price;
+      Image = new ImageModel(backupProduct.Image);
+      Quantity = backupProduct.Quantity;
+      Ingredients = new ObservableCollection<IngredientModel>(backupProduct.Ingredients);
+    }
+    #endregion Methods
   }
 }

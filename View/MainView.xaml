@@ -10,39 +10,7 @@
         Loaded="Window_Loaded">
 
   <Window.Resources>
-    <Style TargetType="Button">
-      <Setter Property="HorizontalAlignment" Value="Center" />
-      <Setter Property="VerticalAlignment" Value="Center" />
-      <Setter Property="Background" Value="Transparent" />
-      <Setter Property="Foreground" Value="Cyan" />
-      <Setter Property="BorderBrush" Value="Transparent" />
-      <Setter Property="FontWeight" Value="Bold" />
-      <Setter Property="Template">
-        <Setter.Value>
-          <ControlTemplate TargetType="Button">
-            <Border x:Name="border" 
-                              Background="{TemplateBinding Background}"
-                              BorderBrush="{TemplateBinding BorderBrush}"
-                              CornerRadius="5">
-              <ContentPresenter>
-                <ContentPresenter.Effect>
-                  <DropShadowEffect Color="Black"
-                                           Direction="320"
-                                           ShadowDepth="2"
-                                           Opacity="0.5"
-                                           BlurRadius="1"/>
-                </ContentPresenter.Effect>
-              </ContentPresenter>
-            </Border>
-            <ControlTemplate.Triggers>
-              <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="Background" Value="#80000000"/>
-              </Trigger>
-            </ControlTemplate.Triggers>
-          </ControlTemplate>
-        </Setter.Value>
-      </Setter>
-    </Style>
+    <ResourceDictionary Source="../Resources/ResourceDictionary.xaml"/>
   </Window.Resources>
   
   <Grid Background="Pink">
@@ -56,8 +24,8 @@
       <ColumnDefinition Width="8*"/>
       <ColumnDefinition/>
     </Grid.ColumnDefinitions>
-    <Button Grid.Row="0" FontSize="36" Command="{Binding NavigateBackCommand}">←</Button>
-    <Button Grid.Row="0" Grid.Column="3" FontSize="36">...</Button>
+    <Button Grid.Row="0" FontSize="36" Command="{Binding NavigateBackCommand}" Style="{StaticResource BorderlessButton}" Content="←"></Button>
+    <Button Grid.Row="0" Grid.Column="3" FontSize="36" Style="{StaticResource BorderlessButton}" Content="..."></Button>
     
     <Frame Grid.Row="1" Grid.ColumnSpan="4" x:Name="MainFrame" NavigationUIVisibility="Hidden" />
   </Grid>

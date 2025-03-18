@@ -53,10 +53,10 @@ namespace CommitAndForget.ViewModel
       ConfirmRegistrationCommand = new RelayCommand<Window>(ConfirmRegistration);
       CancelCommand = new RelayCommand<Window>(Cancel);
     }
-    public ICommand LoginCommand { get; private set; }
-    public ICommand ShowRegistrationWindowCommand { get; private set; }
-    public ICommand ConfirmRegistrationCommand { get; private set; }
-    public ICommand CancelCommand { get; private set; }
+    public ICommand LoginCommand { get; set; }
+    public ICommand ShowRegistrationWindowCommand { get; set; }
+    public ICommand ConfirmRegistrationCommand { get; set; }
+    public ICommand CancelCommand { get; set; }
     #endregion Commands
 
     #region Methods
@@ -68,7 +68,17 @@ namespace CommitAndForget.ViewModel
         {
           var view = new MainView();
           view.WindowStartupLocation = WindowStartupLocation.CenterScreen;
-          view.DataContext = new AdminViewModel(new UserModel());
+          view.DataContext = new AdminViewModel(new UserModel { Key = 1 });
+          view.Show();
+          window?.Close();
+          return;
+        }
+
+        if (Email == "1" && string.IsNullOrEmpty(Password)) // TODO nur zum debuggen, hinterher entfernen
+        {
+          var view = new MainView();
+          view.WindowStartupLocation = WindowStartupLocation.CenterScreen;
+          view.DataContext = new UserViewModel(new UserModel { Key = 2 });
           view.Show();
           window?.Close();
           return;
