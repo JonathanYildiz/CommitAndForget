@@ -10,7 +10,6 @@
       FontSize="24">
   <Page.Resources>
     <ResourceDictionary Source="../../Resources/ResourceDictionary.xaml" />
-
   </Page.Resources>
   <Grid>
     <ScrollViewer>
@@ -26,11 +25,26 @@
               <Image Source="{Binding Image}" Height="auto" Width="auto" MaxHeight="256" MaxWidth="256" Margin="3"
                    HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Stretch="Fill"/>
               <DockPanel HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="3">
-                <Image Height="32" Width="32" Source="\Pizza.png"/>
-                <Image Height="32" Width="32" Source="\Pizza.png"/>
-                <Image Height="32" Width="32" Source="\Pizza.png"/>
-                <Image Height="32" Width="32" Source="\Pizza.png"/>
-                <Image Height="32" Width="32" Source="\Pizza.png"/>
+                <Button Height="32" Width="32"
+                        Command="{Binding DataContext.RateImageCommand}" CommandParameter="1">
+                  <Image Source="\Pizza.png" Visibility="{Binding IsOneStarPressed, Converter={StaticResource BoolToVisibilityConverter}}"/>
+                </Button>
+                <Button Height="32" Width="32"
+                        Command="{Binding RateImageCommand}" CommandParameter="2">
+                  <Image Source="\Pizza.png" Visibility="{Binding IsTwoStarPressed, Converter={StaticResource BoolToVisibilityConverter}}"/>
+                </Button>
+                <Button Height="32" Width="32"
+                        Command="{Binding RateImageCommand}" CommandParameter="3">
+                  <Image Source="\Pizza.png" Visibility="{Binding IsThreeStarPressed, Converter={StaticResource BoolToVisibilityConverter}}"/>
+                </Button>
+                <Button Height="32" Width="32"
+                        Command="{Binding RateImageCommand}" CommandParameter="4">
+                  <Image Source="\Pizza.png" Visibility="{Binding IsFourStarPressed, Converter={StaticResource BoolToVisibilityConverter}}"/>
+                </Button>
+                <Button Height="32" Width="32"
+                        Command="{Binding RateImageCommand}" CommandParameter="5">
+                  <Image Source="\Pizza.png" Visibility="{Binding IsFiveStarPressed, Converter={StaticResource BoolToVisibilityConverter}}"/>
+                </Button>
               </DockPanel>
             </Grid>
           </DataTemplate>

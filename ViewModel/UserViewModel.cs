@@ -81,6 +81,38 @@ namespace CommitAndForget.ViewModel
       }
     }
 
+    public bool IsOneStarPressed
+    {
+      get => Get<bool>();
+      set => Set(value);
+    }
+    public bool IsTwoStarPressed
+    {
+      get => Get<bool>();
+      set => Set(value);
+    }
+    public bool IsThreeStarPressed
+    {
+      get => Get<bool>();
+      set => Set(value);
+    }
+    public bool IsFourStarPressed
+    {
+      get => Get<bool>();
+      set => Set(value);
+    }
+    public bool IsFiveStarPressed
+    {
+      get => Get<bool>();
+      set => Set(value);
+    }
+
+    public int StarAmountPressed
+    {
+      get => Get<int>();
+      set => Set(value);
+    }
+
     // Anzahl der Produkte und Menüs im Warenkorb zusammenrechnen
     public int ShoppingCartQuantity => (ProductShoppingCart?.Sum(item => item.Quantity) ?? 0) + (MenuShoppingCart?.Sum(item => item.Quantity) ?? 0);
 
@@ -127,6 +159,7 @@ namespace CommitAndForget.ViewModel
       NavigateToPaymentCommand = new RelayCommand(NavigateToPayment);
       PayCommand = new RelayCommand<string>(Pay);
       AddImageCommand = new RelayCommand(AddImage);
+      RateImageCommand = new RelayCommand<int>(RateImage);
     }
     public ICommand NavigateToUserOrderCommand { get; set; }
     public ICommand NavigateBackCommand { get; set; }
@@ -143,6 +176,7 @@ namespace CommitAndForget.ViewModel
     public ICommand NavigateToPaymentCommand { get; set; }
     public ICommand PayCommand { get; set; }
     public ICommand AddImageCommand {  get; set; }
+    public ICommand RateImageCommand { get; set; }
     #endregion Commands
 
     #region Methods
@@ -345,6 +379,50 @@ namespace CommitAndForget.ViewModel
         image = ImageDataProvider.UploadImage(image, CurrentUser.Key);
         if (image is not null)
           ImageList.Add(image);
+      }
+    }
+
+    private void RateImage(int starRating)
+    {
+      if (starRating == 5)
+      {
+        IsOneStarPressed = true;
+        IsTwoStarPressed = true;
+        IsThreeStarPressed = true;
+        IsFourStarPressed = true;
+        IsFiveStarPressed = true;
+      }
+      else if (starRating == 4)
+      {
+        IsOneStarPressed = true;
+        IsTwoStarPressed = true;
+        IsThreeStarPressed = true;
+        IsFourStarPressed = true;
+        IsFiveStarPressed = false;
+      }
+      else if (starRating == 3)
+      {
+        IsOneStarPressed = true;
+        IsTwoStarPressed = true;
+        IsThreeStarPressed = true;
+        IsFourStarPressed = false;
+        IsFiveStarPressed = false;
+      }
+      else if (starRating == 2)
+      {
+        IsOneStarPressed = true;
+        IsTwoStarPressed = true;
+        IsThreeStarPressed = false;
+        IsFourStarPressed = false;
+        IsFiveStarPressed = false;
+      }
+      else if (starRating == 1)
+      {
+        IsOneStarPressed = true;
+        IsTwoStarPressed = false;
+        IsThreeStarPressed = false;
+        IsFourStarPressed = false;
+        IsFiveStarPressed = false;
       }
     }
     #endregion Methods

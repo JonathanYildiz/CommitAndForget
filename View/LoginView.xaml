@@ -39,14 +39,14 @@
         </Grid.RowDefinitions>
         <Grid Grid.Row="1">
           <Label>Benutzername</Label>
-          <TextBox Text="{Binding Email}">
+          <TextBox Text="{Binding Email, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
             <TextBox.InputBindings>
               <KeyBinding Key="Enter" Command="{Binding LoginCommand}" CommandParameter="{Binding ElementName=loginWindow}"/>
             </TextBox.InputBindings>
           </TextBox>
         </Grid>
 
-        <TextBox Grid.Row="2" Text="{Binding Password}">
+        <TextBox Grid.Row="2" Text="{Binding Password, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
           <TextBox.InputBindings>
             <KeyBinding Key="Enter" Command="{Binding LoginCommand}" CommandParameter="{Binding ElementName=loginWindow}"/>
           </TextBox.InputBindings>
