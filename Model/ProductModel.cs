@@ -48,6 +48,12 @@ namespace CommitAndForget.Model
       set => Set(value);
     }
 
+    public int OrderCount
+    {
+      get => Get<int>();
+      set => Set(value);
+    }
+
     public ObservableCollection<IngredientModel> Ingredients
     {
       get => Get<ObservableCollection<IngredientModel>>();

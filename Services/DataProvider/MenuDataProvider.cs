@@ -33,6 +33,7 @@ namespace CommitAndForget.Services.DataProvider
               menu.Key = menuKey;
               menu.Name = row["menu_szName"] != DBNull.Value ? row["menu_szName"].ToString() ?? string.Empty : string.Empty;
               menu.Price = row["menu_rPrice"] != DBNull.Value ? (double)(decimal)row["menu_rPrice"] : default;
+              menu.OrderCount = row["menu_nOrderCount"] != DBNull.Value ? (int)row["menu_nOrderCount"] : default;
 
               var img = new ImageModel();
               img.Key = row["imageMenu_nKey"] != DBNull.Value ? (int)row["imageMenu_nKey"] : default;

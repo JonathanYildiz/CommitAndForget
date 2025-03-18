@@ -31,6 +31,7 @@ namespace CommitAndForget.Services.DataProvider
               product.Name = row["product_szName"] != DBNull.Value ? row["product_szName"].ToString() ?? string.Empty : string.Empty;
               product.Energy = row["product_nEnergy"] != DBNull.Value ? (int)row["product_nEnergy"] : default;
               product.Price = row["product_rPrice"] != DBNull.Value ? (double)(decimal)row["product_rPrice"] : default;
+              product.OrderCount = row["product_nOrderCount"] != DBNull.Value ? (int)row["product_nOrderCount"] : default;
 
               var img = new ImageModel();
               img.Key = row["image_nKey"] != DBNull.Value ? (int)row["image_nKey"] : default;
