@@ -159,7 +159,7 @@ namespace CommitAndForget.ViewModel
       NavigateToPaymentCommand = new RelayCommand(NavigateToPayment);
       PayCommand = new RelayCommand<string>(Pay);
       AddImageCommand = new RelayCommand(AddImage);
-      RateImageCommand = new RelayCommand<ImageModel>(RateImage);
+      RateImageCommand = new RelayCommand<Tuple<ImageModel, int>>(RateImage);
     }
     public ICommand NavigateToUserOrderCommand { get; set; }
     public ICommand NavigateBackCommand { get; set; }
@@ -382,9 +382,16 @@ namespace CommitAndForget.ViewModel
       }
     }
 
-    private void RateImage(ImageModel im)
+    private void RateImage(Tuple<ImageModel, int> parameter)
     {
+      ImageModel selectedImage = parameter.Item1;
+      int rating = parameter.Item2;
 
+      if (selectedImage != null && rating > 0)
+      {
+        selectedImage.Rating = rating;
+        ImageDataProvider.SetRating(selectedImage, CurrentUser.Key);
+      }
     }
     #endregion Methods
   }

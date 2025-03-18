@@ -109,7 +109,32 @@ namespace CommitAndForget.Services.DataProvider
         if (currentContestImage is null)
           return;
 
-        // Todo: Implementieren
+        var parameters = new Dictionary<string, object>
+        {
+          { "p_ImageLink", currentContestImage.Key }
+        };
+        DataBaseService.ExecuteSP("spApproveImage", parameters);
+      }
+      catch (Exception ex)
+      {
+        MessageBoxService.DisplayMessage(ex.Message, MessageBoxImage.Error);
+      }
+    }
+
+    public static void SetRating(ImageModel selectedImage, int userLink)
+    {
+      try
+      {
+        if (selectedImage is null)
+          return;
+
+        var parameters = new Dictionary<string, object>
+        {
+          { "p_ImageLink", selectedImage.Key },
+          { "p_ImageRating", selectedImage.Rating },
+          { "p_UserLink", userLink }
+        };
+        DataBaseService.ExecuteSP("spRateImage", parameters);
       }
       catch (Exception ex)
       {
