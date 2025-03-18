@@ -159,7 +159,7 @@ namespace CommitAndForget.ViewModel
       NavigateToPaymentCommand = new RelayCommand(NavigateToPayment);
       PayCommand = new RelayCommand<string>(Pay);
       AddImageCommand = new RelayCommand(AddImage);
-      RateImageCommand = new RelayCommand<ImageModel>(RateImage);
+      RateImageCommand = new RelayCommand<Tuple<ImageModel, decimal>>(RateImage);
     }
     public ICommand NavigateToUserOrderCommand { get; set; }
     public ICommand NavigateBackCommand { get; set; }
@@ -230,7 +230,7 @@ namespace CommitAndForget.ViewModel
     private void NavigateToFunnyDinnerContest()
     {
       // Keine Produktbilder laden
-      IEnumerable<ImageModel> images = ImageDataProvider.LoadImages().Where(img => img.UploadedBy != "admin");
+      IEnumerable<ImageModel> images = ImageDataProvider.LoadImages(CurrentUser.Key).Where(img => img.UploadedBy != "admin");
       ImageList = new ObservableCollection<ImageModel>(images);
       MainFrame?.Navigate(new FunnyDinnerContestView() { DataContext = this });
     }
@@ -382,9 +382,16 @@ namespace CommitAndForget.ViewModel
       }
     }
 
-    private void RateImage(ImageModel im)
+    private void RateImage(Tuple<ImageModel, decimal> parameter)
     {
+      ImageModel selectedImage = parameter.Item1;
+      decimal rating = parameter.Item2;
 
+      if (selectedImage != null && rating > 0)
+      {
+        selectedImage.Rating = rating;
+        ImageDataProvider.SetRating(selectedImage, CurrentUser.Key);
+      }
     }
     #endregion Methods
   }

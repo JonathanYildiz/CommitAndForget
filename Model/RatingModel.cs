@@ -3,7 +3,7 @@
 namespace CommitAndForget.Model
 {
   public class RatingModel : NotifyObject
-  {
+  { // Todo löschen, wenn nicht benötigt
     #region Properties
     public int Key
     {

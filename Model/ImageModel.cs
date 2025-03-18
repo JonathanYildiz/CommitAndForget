@@ -40,9 +40,9 @@ namespace CommitAndForget.Model
       get => Get<string>();
       set => Set(value);
     }
-    public int Rating
+    public decimal Rating
     {
-      get => Get<int>();
+      get => Get<decimal>();
       set => Set(value);
     }
     #endregion Properties
