@@ -26,7 +26,7 @@
                    HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Stretch="Fill"/>
               <DockPanel HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="3">
                 <Button Height="32" Width="32"
-                        Command="{Binding DataContext.RateImageCommand}">
+                        Command="{Binding RateImageCommand}">
                   <Image Source="\Pizza.png" Visibility="{Binding Rating, Converter={StaticResource RatingToVisibilityConverter}, ConverterParameter=1}"/>
                 </Button>
                 <Button Height="32" Width="32"

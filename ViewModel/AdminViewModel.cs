@@ -24,7 +24,15 @@ namespace CommitAndForget.ViewModel
     public UserModel SelectedUser
     {
       get => Get<UserModel>();
-      set => Set(value);
+      set
+      {
+        Set(value);
+        OnPropertyChanged(nameof(IsUserSelected));
+      }
+    }
+    public bool IsUserSelected
+    {
+      get => SelectedUser != null;
     }
     public ProductModel SelectedProduct
     {
