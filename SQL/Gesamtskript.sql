@@ -500,10 +500,7 @@ BEGIN
    SET 
 		szName = p_Name,
 		rPrice = p_Price,
-        nImageLink = CASE
-			WHEN p_ImageLink IS NOT NULL THEN p_ImageLink
-            ELSE nImageLink
-		END
+      nImageLink = p_ImageLink
    WHERE nKey = p_Key;
 END $$
 
@@ -612,9 +609,7 @@ DROP PROCEDURE IF EXISTS spGetProducts;
 
 DELIMITER $$
 -- Laden von Produkten mit Zutaten
-CREATE PROCEDURE spGetProducts(
-	p_MenuLink INT
-)
+CREATE PROCEDURE spGetProducts()
 
 BEGIN 
 SELECT 
@@ -626,13 +621,11 @@ SELECT
     img.vbImage AS image_vbImage,
     i.nKey AS ingredient_nKey,
     i.szName AS ingredient_szName,
-    pi.nQuantity AS ingredient_nQuantity,
-    pm.nQuantity AS product_nQuantity
+    pi.nQuantity AS ingredient_nQuantity
     FROM tblproduct p 
     LEFT JOIN tblproductingredient pi ON p.nKey = pi.nProductLink
     LEFT JOIN tblimage img ON p.nImageLink = img.nKey
     LEFT JOIN tblingredient i ON pi.nIngredientLink = i.nKey
-    LEFT JOIN tblproductmenu pm ON p.nKey = pm.nMenuLink AND pm.nMenuLink = p_MenuLink
     ORDER BY p.nKey, i.szName;
 END $$
 
@@ -662,24 +655,13 @@ SELECT
     pm.nQuantity AS product_nQuantity,
     
 	p.nKey AS product_nKey,
-    p.szName AS product_szName,
-    p.nEnergy AS product_nEnergy,
-    p.rPrice AS product_rPrice,
-    imgProduct.nKey AS imageProduct_nKey,
-    imgProduct.vbImage AS imageProduct_vbImage,
-	pi.nQuantity AS ingredient_nQuantity,
-    
-    i.nKey AS ingredient_nKey,
-    i.szName AS ingredient_szName
+    p.szName AS product_szName
     
     FROM tblmenu m
+	 LEFT JOIN tblimage imgMenu ON m.nImageLink = imgMenu.nKey
     LEFT JOIN tblproductmenu pm ON m.nKey = pm.nMenuLink
     LEFT JOIN tblproduct p ON pm.nProductLink = p.nKey
-	LEFT JOIN tblimage imgMenu ON m.nImageLink = imgMenu.nKey
-	LEFT JOIN tblimage imgProduct ON m.nImageLink = imgProduct.nKey
-    LEFT JOIN tblproductingredient pi ON p.nKey = pi.nProductLink
-    LEFT JOIN tblingredient i ON pi.nIngredientLink = i.nKey
-    ORDER BY m.nKey, p.nKey, i.nKey;
+    ORDER BY m.nKey, p.nKey;
 END $$
 
 DELIMITER ;
@@ -885,20 +867,48 @@ DROP PROCEDURE IF EXISTS spGetImages;
 
 DELIMITER $$
 -- Laden von Bilder
-CREATE PROCEDURE spGetImages()
+CREATE PROCEDURE spGetImages(
+	p_UserLink INT
+)
 
 BEGIN 
-SELECT 
-	 img.nKey AS image_nKey,
-    vbImage AS image_vbImage,
-    bApproved AS image_bApproved,
-	 dtCreationDate AS image_dtCreationDate,
-    bContestWon AS image_bContestWon,
-    case when usr.bIsAdmin = 1 then 'admin' ELSE usr.szEmail end AS image_szUploadedBy
-    
-    FROM tblimage img
-    JOIN tbluser usr ON usr.nKey = img.nUserLink
-    ORDER BY img.nKey;
+
+-- Wenn GÃ¼ltiger Benutzer, dann Ratings des Benutzers dazu laden
+IF EXISTS (
+        SELECT 1
+        FROM tbluser u
+        WHERE u.nkey = p_UserLink 
+        AND u.bIsAdmin = 0
+    ) THEN
+
+			SELECT 
+				 img.nKey AS image_nKey,
+			    vbImage AS image_vbImage,
+			    bApproved AS image_bApproved,
+				 dtCreationDate AS image_dtCreationDate,
+			    bContestWon AS image_bContestWon,
+			    case when usr.bIsAdmin = 1 then 'admin' ELSE usr.szEmail end AS image_szUploadedBy,
+			    rat.nRating AS image_rRating
+			    FROM tblimage img
+			    JOIN tbluser usr ON usr.nKey = img.nUserLink
+			    left JOIN tblrating rat ON rat.nImageLink = img.nKey
+			    						 AND rat.nUserLink = p_UserLink
+			    ORDER BY img.nKey;
+		ELSE
+        -- Ansonsten alle Bilder laden
+        SELECT 
+				 img.nKey AS image_nKey,
+			    vbImage AS image_vbImage,
+			    bApproved AS image_bApproved,
+				 dtCreationDate AS image_dtCreationDate,
+			    bContestWon AS image_bContestWon,
+			    case when usr.bIsAdmin = 1 then 'admin' ELSE usr.szEmail end AS image_szUploadedBy,
+			    avg(rat.nRating) AS image_rRating
+			    FROM tblimage img
+			    JOIN tbluser usr ON usr.nKey = img.nUserLink
+			    left JOIN tblrating rat ON rat.nImageLink = img.nKey
+			    ORDER BY img.nKey;
+    END IF;
 END $$
 
 DELIMITER ;
@@ -1045,6 +1055,120 @@ END $$
 DELIMITER ;
 
 -- Fertig: 28_spUpdateMenuProduct.sql
+
+
+-- HinzufÃ¼gen: 29_spApproveImage.sql
+
+USE dbcommitandforget;
+
+DROP PROCEDURE IF EXISTS spApproveImage;
+
+DELIMITER $$
+CREATE PROCEDURE spApproveImage(
+
+    p_ImageLink INT
+    )
+
+BEGIN
+
+    UPDATE tblimage i
+    SET i.bApproved = 1
+    WHERE i.nKey = p_ImageLink;
+    
+END $$
+
+DELIMITER ;
+
+-- Fertig: 29_spApproveImage.sql
+
+
+-- HinzufÃ¼gen: 30_spRateImage.sql
+
+USE dbcommitandforget;
+
+DROP PROCEDURE IF EXISTS spRateImage;
+
+DELIMITER $$
+CREATE PROCEDURE spRateImage(
+
+    p_ImageLink INT,
+    p_ImageRating INT,
+    p_UserLink INT
+    )
+
+BEGIN
+    -- ÃœberprÃ¼fen, ob bereits ein Eintrag mit dem gleichen UserLink und ImageLink existiert
+    IF NOT EXISTS (
+        SELECT 1
+        FROM tblrating
+        WHERE nUserLink = p_UserLink AND nImageLink = p_ImageLink
+    ) THEN
+        -- Wenn kein Eintrag existiert, anlegen
+        INSERT INTO tblrating (nRating, nUserLink, nImageLink)
+        VALUES (p_ImageRating, p_UserLink, p_ImageLink);
+    ELSE
+        -- Wenn ein Eintrag existiert, aktualisiere den bestehenden Eintrag
+        UPDATE tblrating
+        SET nRating = p_ImageRating
+        WHERE nUserLink = p_UserLink AND nImageLink = p_ImageLink;
+    END IF;
+END $$
+
+DELIMITER ;
+
+-- Fertig: 30_spRateImage.sql
+
+
+-- HinzufÃ¼gen: 01_fnGetMenuOrderCount.sql
+
+USE dbcommitandforget;
+
+DROP FUNCTION IF EXISTS fnGetMenuOrderCount;
+
+DELIMITER $$
+
+CREATE FUNCTION fnGetMenuOrderCount(p_MenuLink INT)
+RETURNS INT
+DETERMINISTIC
+BEGIN
+    DECLARE orderCount INT;
+    
+    SELECT IFNULL(SUM(om.nQuantity), 0) INTO orderCount
+    FROM tblordermenu om
+    WHERE om.nMenuLink = p_MenuLink;
+    
+    RETURN orderCount;
+END $$
+
+DELIMITER ;
+
+-- Fertig: 01_fnGetMenuOrderCount.sql
+
+
+-- HinzufÃ¼gen: 02_fnGetProductOrderCount.sql
+
+USE dbcommitandforget;
+
+DROP FUNCTION IF EXISTS fnGetProductOrderCount;
+
+DELIMITER $$
+
+CREATE FUNCTION fnGetProductOrderCount(p_ProductLink INT)
+RETURNS INT
+DETERMINISTIC
+BEGIN
+    DECLARE orderCount INT;
+    
+    SELECT IFNULL(SUM(op.nQuantity), 0) INTO orderCount
+    FROM tblorderproduct op
+    WHERE op.nProductLink = p_ProductLink;
+    
+    RETURN orderCount;
+END $$
+
+DELIMITER ;
+
+-- Fertig: 02_fnGetProductOrderCount.sql
 
 
 -- HinzufÃ¼gen: 01_CreateTestData_tblUser.sql
