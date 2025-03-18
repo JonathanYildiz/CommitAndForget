@@ -7,13 +7,17 @@
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
       Title="PaymentView">
-
+  
+  <Page.Resources>
+    <ResourceDictionary Source="../../Resources/ResourceDictionary.xaml" />
+  </Page.Resources>
+  
   <Grid>
     <Grid.ColumnDefinitions>
       <ColumnDefinition/>
       <ColumnDefinition/>
     </Grid.ColumnDefinitions>
-    <Button Grid.Column="0" Content="Paypal" Command="{Binding PayCommand}" CommandParameter="Paypal"/>
-    <Button Grid.Column="1" Content="Bar" Command="{Binding PayCommand}" CommandParameter="Cash"/>
+    <Button Grid.Column="0" Content="Paypal" Command="{Binding PayCommand}" CommandParameter="Paypal" Style="{StaticResource NaviagtionButton}"/>
+    <Button Grid.Column="1" Content="Bar" Command="{Binding PayCommand}" CommandParameter="Cash" Style="{StaticResource NavigationButton}"/>
   </Grid>
 </Page>
