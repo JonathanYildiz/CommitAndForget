@@ -262,6 +262,7 @@ namespace CommitAndForget.ViewModel
         SelectedUser.RollbackChanges(userBackup);
 
       SelectedUser = null;
+      BackupModel = null;
       editWindow?.Close();
     }
 
