@@ -23,18 +23,15 @@
       <ColumnDefinition Width="8*"/>
     </Grid.ColumnDefinitions>
 
-    <StackPanel Visibility="{Binding IsUserSelected, Converter={StaticResource BoolToVisibilityConverter}}">
+    <StackPanel Visibility="{Binding IsUserSelected, Converter={StaticResource BoolToVisibilityConverter}}"
+                Margin="5">
       <TextBlock Grid.Column="0" Grid.ColumnSpan="2">
-        <Run Text="Das Lieblingsprodukt von"/>
-        <Run Text="{Binding SelectedUser.FirstName}"/>
-        <Run Text="ist:"/>
-        <Run Text="Jonathans linker Nippel"/>
+        <Run Text="Lieblingsprodukt:"/>
+        <Run Text="{Binding SelectedUser.MostOrderedProduct}"/>
       </TextBlock>
       <TextBlock Grid.Column="0" Grid.RowSpan="2">
-        <Run Text="Das Lieblingsmenü von"/>
-        <Run Text="{Binding SelectedUser.FirstName}"/>
-        <Run Text="ist:"/>
-        <Run Text="Jonathans rechter Nippel"/>
+        <Run Text="Lieblingsmenü:"/>
+        <Run Text="{Binding SelectedUser.MostOrderedMenu}"/>
       </TextBlock>
     </StackPanel>
     
