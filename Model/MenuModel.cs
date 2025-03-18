@@ -61,5 +61,17 @@ namespace CommitAndForget.Model
       ProductList = new ObservableCollection<ProductModel>(menu.ProductList);
     }
     #endregion Constructor
+
+    #region Methods
+    public void RollbackChanges(MenuModel backupMenu)
+    {
+      Key = backupMenu.Key;
+      Name = backupMenu.Name;
+      Price = backupMenu.Price;
+      Image = new ImageModel(backupMenu.Image);
+      Quantity = backupMenu.Quantity;
+      ProductList = new ObservableCollection<ProductModel>(backupMenu.ProductList);
+    }
+    #endregion Methods
   }
 }

@@ -73,5 +73,18 @@ namespace CommitAndForget.Model
       Ingredients = new ObservableCollection<IngredientModel>(product.Ingredients);
     }
     #endregion Constructor
+
+    #region Methods
+    public void RollbackChanges(ProductModel backupProduct)
+    {
+      Key = backupProduct.Key;
+      Name = backupProduct.Name;
+      Energy = backupProduct.Energy;
+      Price = backupProduct.Price;
+      Image = new ImageModel(backupProduct.Image);
+      Quantity = backupProduct.Quantity;
+      Ingredients = new ObservableCollection<IngredientModel>(backupProduct.Ingredients);
+    }
+    #endregion Methods
   }
 }

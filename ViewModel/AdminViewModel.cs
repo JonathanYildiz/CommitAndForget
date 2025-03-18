@@ -36,14 +36,9 @@ namespace CommitAndForget.ViewModel
       get => Get<MenuModel>();
       set => Set(value);
     }
-    public ProductModel ProductBackup
+    public object BackupModel // Um Änderungen rückgängig machen zu können
     {
-      get => Get<ProductModel>();
-      set => Set(value);
-    }
-    public MenuModel MenuBackup
-    {
-      get => Get<MenuModel>();
+      get => Get<object>();
       set => Set(value);
     }
     public ImageModel CurrentContestImage
@@ -126,6 +121,7 @@ namespace CommitAndForget.ViewModel
       ToggleProductCommand = new RelayCommand<ProductModel>(ToggleProduct);
       DeleteMenuCommand = new RelayCommand<MenuModel>(DeleteMenu);
       SaveMenuCommand = new RelayCommand(SaveMenu);
+      CancelMenuCommand = new RelayCommand(CancelMenu);
 
 
       // Bildauswahl und -upload für Produkte und Menüs
@@ -164,6 +160,7 @@ namespace CommitAndForget.ViewModel
     public ICommand ToggleProductCommand { get; set; }
     public ICommand DeleteMenuCommand { get; set; }
     public ICommand SaveMenuCommand { get; set; }
+    public ICommand CancelMenuCommand { get; set; }
     public ICommand SelectImageCommand { get; set; }
     public ICommand AddImageCommand { get; set; }
     public ICommand DeleteImageCommand { get; set; }
@@ -218,6 +215,9 @@ namespace CommitAndForget.ViewModel
     {
       if (user is not null)
       {
+        // User wegspeichern falls abgebrochen wird
+        BackupModel = new UserModel(user);
+
         SelectedUser = user;
         var editWindow = new EditUserView() { DataContext = this };
         editWindow.WindowStartupLocation = WindowStartupLocation.CenterScreen;
@@ -258,6 +258,9 @@ namespace CommitAndForget.ViewModel
     }
     private void CancelUser(Window? editWindow)
     {
+      if (BackupModel is not null && BackupModel is UserModel userBackup)
+        SelectedUser.RollbackChanges(userBackup);
+
       SelectedUser = null;
       editWindow?.Close();
     }
@@ -284,7 +287,7 @@ namespace CommitAndForget.ViewModel
       if (product is not null)
       {
         // Produkut wegspeichern falls abgebrochen wird
-        ProductBackup = new ProductModel(product);
+        BackupModel = new ProductModel(product);
 
         IngredientList = IngredientDataProvider.LoadIngredients(product.Key);
         SelectedProduct = product;
@@ -361,16 +364,16 @@ namespace CommitAndForget.ViewModel
         }
       }
       SelectedProduct = null;
-      ProductBackup = null;
+      BackupModel = null;
       CloseCurrentWindow();
     }
     private void CancelProduct()
     {
-      if (ProductBackup is not null)
-        SelectedProduct = new ProductModel(ProductBackup);
+      if (BackupModel is not null && BackupModel is ProductModel productBackup)
+        SelectedProduct.RollbackChanges(productBackup);
 
       SelectedProduct = null;
-      ProductBackup = null;
+      BackupModel = null;
       CloseCurrentWindow();
     }
     private void DeleteProduct(ProductModel? prodct)
@@ -467,7 +470,7 @@ namespace CommitAndForget.ViewModel
         }
       }
       SelectedMenu = null;
-      MenuBackup = null;
+      BackupModel = null;
       CloseCurrentWindow();
     }
 
@@ -502,7 +505,7 @@ namespace CommitAndForget.ViewModel
       if (menu is not null)
       {
         // Menü wegspeichern falls abgebrochen wird
-        MenuBackup = new MenuModel(menu);
+        BackupModel = new MenuModel(menu);
 
         ProductList = ProductDataProvider.LoadProducts();
         SelectedMenu = menu;
@@ -526,6 +529,16 @@ namespace CommitAndForget.ViewModel
         editWindow.WindowStartupLocation = WindowStartupLocation.CenterScreen;
         editWindow.ShowDialog();
       }
+    }
+
+    private void CancelMenu()
+    {
+      if (BackupModel is not null && BackupModel is MenuModel menuBackup)
+        SelectedMenu.RollbackChanges(menuBackup);
+
+      SelectedMenu = null;
+      BackupModel = null;
+      CloseCurrentWindow();
     }
     #endregion Menu
 
