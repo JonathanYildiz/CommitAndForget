@@ -33,7 +33,7 @@
                       <Binding />
                       <Binding>
                         <Binding.Source>
-                          <sys:Int32>1</sys:Int32>
+                          <sys:Decimal>1</sys:Decimal>
                         </Binding.Source>
                       </Binding>
                     </MultiBinding>
@@ -47,7 +47,7 @@
                       <Binding />
                       <Binding>
                         <Binding.Source>
-                          <sys:Int32>2</sys:Int32>
+                          <sys:Decimal>2</sys:Decimal>
                         </Binding.Source>
                       </Binding>
                     </MultiBinding>
@@ -61,7 +61,7 @@
                       <Binding />
                       <Binding>
                         <Binding.Source>
-                          <sys:Int32>3</sys:Int32>
+                          <sys:Decimal>3</sys:Decimal>
                         </Binding.Source>
                       </Binding>
                     </MultiBinding>
@@ -75,7 +75,7 @@
                       <Binding />
                       <Binding>
                         <Binding.Source>
-                          <sys:Int32>4</sys:Int32>
+                          <sys:Decimal>4</sys:Decimal>
                         </Binding.Source>
                       </Binding>
                     </MultiBinding>
@@ -89,7 +89,7 @@
                       <Binding />
                       <Binding>
                         <Binding.Source>
-                          <sys:Int32>5</sys:Int32>
+                          <sys:Decimal>5</sys:Decimal>
                         </Binding.Source>
                       </Binding>
                     </MultiBinding>

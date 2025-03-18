@@ -6,7 +6,7 @@ namespace CommitAndForget.Converter
   {
     public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
     {
-      if (value is int rating && Int32.TryParse(parameter.ToString(), out int buttonNumber))
+      if (value is decimal rating && Int32.TryParse(parameter.ToString(), out int buttonNumber))
         return rating >= buttonNumber ? System.Windows.Visibility.Visible : System.Windows.Visibility.Collapsed;
 
       return System.Windows.Visibility.Collapsed;

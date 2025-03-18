@@ -8,11 +8,15 @@ namespace CommitAndForget.Services.DataProvider
 {
   public static class ImageDataProvider
   {
-    public static ObservableCollection<ImageModel> LoadImages()
+    public static ObservableCollection<ImageModel> LoadImages(int userLink = 0)
     {
       try
       {
-        DataTable dt = DataBaseService.ExecuteSP("spGetImages");
+        var parameters = new Dictionary<string, object>
+        {
+          { "p_UserLink", userLink }
+        };
+        DataTable dt = DataBaseService.ExecuteSP("spGetImages", parameters);
         var imageList = new ObservableCollection<ImageModel>();
         if (dt is not null && dt.Rows.Count > 0)
         {
@@ -24,6 +28,7 @@ namespace CommitAndForget.Services.DataProvider
             image.CreationDate = row["image_dtCreationDate"] != DBNull.Value ? (DateTime)row["image_dtCreationDate"] : default;
             image.ContestWon = row["image_bContestWon"] != DBNull.Value ? Convert.ToBoolean(row["image_bContestWon"]) : default;
             image.UploadedBy = row["image_szUploadedBy"] != DBNull.Value ? row["image_szUploadedBy"].ToString() ?? string.Empty : string.Empty;
+            image.Rating = row["image_rRating"] != DBNull.Value ? Convert.ToDecimal(row["image_rRating"]) : default;
 
             // Bild aus LONGBLOB laden
             if (row["image_vbImage"] != DBNull.Value)
