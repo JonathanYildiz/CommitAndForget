@@ -80,39 +80,6 @@ namespace CommitAndForget.ViewModel
         FilteredMenuList?.Refresh();
       }
     }
-
-    public bool IsOneStarPressed
-    {
-      get => Get<bool>();
-      set => Set(value);
-    }
-    public bool IsTwoStarPressed
-    {
-      get => Get<bool>();
-      set => Set(value);
-    }
-    public bool IsThreeStarPressed
-    {
-      get => Get<bool>();
-      set => Set(value);
-    }
-    public bool IsFourStarPressed
-    {
-      get => Get<bool>();
-      set => Set(value);
-    }
-    public bool IsFiveStarPressed
-    {
-      get => Get<bool>();
-      set => Set(value);
-    }
-
-    public int StarAmountPressed
-    {
-      get => Get<int>();
-      set => Set(value);
-    }
-
     // Anzahl der Produkte und Menüs im Warenkorb zusammenrechnen
     public int ShoppingCartQuantity => (ProductShoppingCart?.Sum(item => item.Quantity) ?? 0) + (MenuShoppingCart?.Sum(item => item.Quantity) ?? 0);
 
@@ -245,8 +212,23 @@ namespace CommitAndForget.ViewModel
 
     private void Pay(string? paymentMethod)
     {
+      // Abfangen, wenn die Warenkörbe leer sind
+      if (MenuShoppingCart is null || MenuShoppingCart.Count == 0)
+        if (ProductShoppingCart is null || ProductShoppingCart.Count == 0)
+          return;
+
       if (paymentMethod is not null)
       {
+        int orderNumber = OrderDataProvider.CreateOrder(CurrentUser.Key, paymentMethod);
+        if (orderNumber == -1)
+        {
+          MessageBoxService.DisplayMessage("Fehler beim Erstellen der Bestellung", MessageBoxImage.Error);
+          return;
+        }
+
+        OrderDataProvider.AddProductsToOrder(ProductShoppingCart, orderNumber);
+        OrderDataProvider.AddMenusToOrder(MenuShoppingCart, orderNumber);
+
         MenuShoppingCart?.Clear();
         ProductShoppingCart?.Clear();
         OnPropertyChanged(nameof(ShoppingCartQuantity));
