@@ -64,6 +64,18 @@ namespace CommitAndForget.Model
       get => Get<bool>();
       set => Set(value);
     }
+
+    public string MostOrderedProduct
+    {
+      get => Get<string>();
+      set => Set(value);
+    }
+
+    public string MostOrderedMenu
+    {
+      get => Get<string>();
+      set => Set(value);
+    }
     #endregion Properties
 
     #region Constructor

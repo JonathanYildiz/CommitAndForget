@@ -161,6 +161,8 @@ namespace CommitAndForget.ViewModel
           {
             if (IngredientList.FirstOrDefault(i => i.Name == ingredient.Name) == null) // Nicht doppelt hinzufügen
               IngredientList.Add(ingredient);
+
+            product.Ingredients.Add(ingredient);
           }          
         }
       }
@@ -193,7 +195,7 @@ namespace CommitAndForget.ViewModel
     private void NavigateToFunnyDinnerContest()
     {
       // Keine Produktbilder laden
-      IEnumerable<ImageModel> images = ImageDataProvider.LoadImages(CurrentUser.Key).Where(img => img.UploadedBy != "admin");
+      IEnumerable<ImageModel> images = ImageDataProvider.LoadImages(CurrentUser.Key).Where(img => img.UploadedBy != "admin" && img.Approved);
       ImageList = new ObservableCollection<ImageModel>(images);
       MainFrame?.Navigate(new FunnyDinnerContestView() { DataContext = this });
     }

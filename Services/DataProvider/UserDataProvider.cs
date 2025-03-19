@@ -156,5 +156,51 @@ namespace CommitAndForget.Services.DataProvider
         MessageBoxService.DisplayMessage(ex.Message, MessageBoxImage.Error);
       }
     }
+
+    public static void GetUsersFavorites(UserModel user)
+    {
+      try
+      {
+        var parameters = new Dictionary<string, object>
+        {
+          { "p_UserLink", user.Key }
+        };
+
+        // Lieblingprodukt laden
+        DataTable dt = DataBaseService.ExecuteSP("spGetUsersFavoriteProduct", parameters);
+        if (dt is not null && dt.Rows.Count == 1)
+        {
+          // Lieblingsprodukt setzen
+          user.MostOrderedProduct = dt.Rows[0]["product_Name"] != DBNull.Value ? dt.Rows[0]["product_Name"].ToString() ?? string.Empty : string.Empty;
+
+          // Anzahl der Bestellungen setzen
+          if (!string.IsNullOrEmpty(user.MostOrderedProduct))
+          {
+            user.MostOrderedProduct += " (";
+            user.MostOrderedProduct += dt.Rows[0]["product_Count"] != DBNull.Value ? dt.Rows[0]["product_Count"].ToString() ?? string.Empty : string.Empty;
+            user.MostOrderedProduct += ")";
+          }
+        }
+
+        dt = DataBaseService.ExecuteSP("spGetUsersFavoriteMenu", parameters);
+        if (dt is not null && dt.Rows.Count == 1)
+        {
+          // Lieblingsmenü setzen
+          user.MostOrderedMenu = dt.Rows[0]["menu_Name"] != DBNull.Value ? dt.Rows[0]["menu_Name"].ToString() ?? string.Empty : string.Empty;
+
+          // Anzahl der Bestellungen setzen
+          if (!string.IsNullOrEmpty(user.MostOrderedMenu))
+          {
+            user.MostOrderedMenu += " (";
+            user.MostOrderedMenu += dt.Rows[0]["menu_Count"] != DBNull.Value ? dt.Rows[0]["menu_Count"].ToString() ?? string.Empty : string.Empty;
+            user.MostOrderedMenu += ")";
+          }
+        }
+      }
+      catch (Exception ex)
+      {
+        MessageBoxService.DisplayMessage(ex.Message, MessageBoxImage.Error);
+      }
+    }
   }
 }
