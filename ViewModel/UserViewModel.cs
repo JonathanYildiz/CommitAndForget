@@ -1,17 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Threading;
 using CommitAndForget.Essentials;
 using CommitAndForget.Model;
 using CommitAndForget.Services;
@@ -161,11 +154,12 @@ namespace CommitAndForget.ViewModel
       {
         foreach (var product in menu.ProductList)
         {
-          foreach (var ingredient in product.Ingredients)
+          var ingredients = IngredientDataProvider.LoadIngredients(product.Key);
+          foreach (var ingredient in ingredients)
           {
-            if (!IngredientList.Contains(ingredient))
+            if (IngredientList.FirstOrDefault(i => i.Name == ingredient.Name) == null) // Nicht doppelt hinzufügen
               IngredientList.Add(ingredient);
-          }
+          }          
         }
       }
 
@@ -184,7 +178,7 @@ namespace CommitAndForget.ViewModel
       {
         foreach (var ingredient in product.Ingredients)
         {
-          if (!IngredientList.Contains(ingredient))
+          if (IngredientList.FirstOrDefault(i => i.Name == ingredient.Name) == null) // Nicht doppelt hinzufügen
             IngredientList.Add(ingredient);
         }
       }
