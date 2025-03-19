@@ -92,6 +92,8 @@ namespace CommitAndForget.Model
       Email = user.Email;
       Password = user.Password;
       IsAdmin = user.IsAdmin;
+      MostOrderedMenu = user.MostOrderedMenu;
+      MostOrderedProduct = user.MostOrderedProduct;
     }
     #endregion Constructor
 
@@ -108,6 +110,8 @@ namespace CommitAndForget.Model
       Email = backupUser.Email;
       Password = backupUser.Password;
       IsAdmin = backupUser.IsAdmin;
+      MostOrderedMenu = backupUser.MostOrderedMenu;
+      MostOrderedProduct = backupUser.MostOrderedProduct;
     }
     #endregion Methods
   }
