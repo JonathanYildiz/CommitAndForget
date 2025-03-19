@@ -29,9 +29,10 @@
     <res:DropDownButton Grid.Row="0" Grid.Column="3" FontSize="36" Style="{StaticResource DropDownButtonStyle}" Content="...">
       <res:DropDownButton.DropDown>
         <ContextMenu>
-          <MenuItem Header="Ausloggen"/>
-          <MenuItem Header="Konto wechseln"/>
-          <MenuItem Header="Profil bearbeiten"/>
+          <MenuItem Header="Ausloggen" 
+                    Command="{Binding LogoutCommand}"/>
+          <MenuItem Header="Profil bearbeiten" 
+                    Command="{Binding EditUserCommand}"/>
         </ContextMenu>
       </res:DropDownButton.DropDown>
     </res:DropDownButton>

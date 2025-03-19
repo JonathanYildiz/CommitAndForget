@@ -120,6 +120,7 @@ namespace CommitAndForget.ViewModel
       PayCommand = new RelayCommand<string>(Pay);
       AddImageCommand = new RelayCommand(AddImage);
       RateImageCommand = new RelayCommand<Tuple<ImageModel, decimal>>(RateImage);
+      LogoutCommand = new RelayCommand(LogoutUser);
     }
     public ICommand NavigateToUserOrderCommand { get; set; }
     public ICommand NavigateBackCommand { get; set; }
@@ -137,6 +138,7 @@ namespace CommitAndForget.ViewModel
     public ICommand PayCommand { get; set; }
     public ICommand AddImageCommand {  get; set; }
     public ICommand RateImageCommand { get; set; }
+    public ICommand LogoutCommand { get; set; }
     #endregion Commands
 
     #region Methods
@@ -367,6 +369,17 @@ namespace CommitAndForget.ViewModel
       {
         selectedImage.Rating = rating;
         ImageDataProvider.SetRating(selectedImage, CurrentUser.Key);
+      }
+    }
+
+    private void LogoutUser()
+    {
+      if (MessageBoxService.LogoutMessage("Möchten Sie sich wirklich abmelden?", MessageBoxImage.Information) == MessageBoxResult.Yes)
+      {
+        var view = new LoginView();
+        view.WindowStartupLocation = WindowStartupLocation.CenterScreen;
+        view.DataContext = new LoginViewModel();
+        view.Show();
       }
     }
     #endregion Methods
