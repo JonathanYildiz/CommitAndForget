@@ -26,6 +26,9 @@ namespace CommitAndForget.ViewModel
       get => Get<UserModel>();
       set
       {
+        if (value != null)
+          UserDataProvider.GetUsersFavorites(value);
+
         Set(value);
         OnPropertyChanged(nameof(IsUserSelected));
       }
