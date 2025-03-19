@@ -4,7 +4,8 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:CommitAndForget.View"
-        xmlns:pg="clr-namespace:CommitAndForget.View.UserViews"
+        xmlns:pg="clr-namespace:CommitAndForget.View.UserViews" 
+        xmlns:res="clr-namespace:CommitAndForget.Resources"
         mc:Ignorable="d"
         Title="NutzerMainView" Height="450" Width="800"
         Loaded="Window_Loaded">
@@ -25,7 +26,15 @@
       <ColumnDefinition/>
     </Grid.ColumnDefinitions>
     <Button Grid.Row="0" FontSize="36" Command="{Binding NavigateBackCommand}" Style="{StaticResource BorderlessButton}" Content="←"></Button>
-    <Button Grid.Row="0" Grid.Column="3" FontSize="36" Style="{StaticResource BorderlessButton}" Content="..."></Button>
+    <res:DropDownButton Grid.Row="0" Grid.Column="3" FontSize="36" Style="{StaticResource DropDownButtonStyle}" Content="...">
+      <res:DropDownButton.DropDown>
+        <ContextMenu>
+          <MenuItem Header="Ausloggen"/>
+          <MenuItem Header="Konto wechseln"/>
+          <MenuItem Header="Profil bearbeiten"/>
+        </ContextMenu>
+      </res:DropDownButton.DropDown>
+    </res:DropDownButton>
     
     <Frame Grid.Row="1" Grid.ColumnSpan="4" x:Name="MainFrame" NavigationUIVisibility="Hidden" />
   </Grid>
