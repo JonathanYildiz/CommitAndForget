@@ -110,6 +110,7 @@ namespace CommitAndForget.ViewModel
       NavigateToMenuManagementCommand = new RelayCommand(NavigateToMenuManagement);
       NavigateToContestManagementCommand = new RelayCommand(NavigateToContestManagement);
       NavigateBackCommand = new RelayCommand(NavigateBack);
+      LogoutCommand = new RelayCommand<Window>(LogoutUser);
 
       // Benutzerverwaltung
       EditUserCommand = new RelayCommand<UserModel>(EditUser);
@@ -182,6 +183,7 @@ namespace CommitAndForget.ViewModel
     public ICommand PreviousContestImageCommand { get; set; }
     public ICommand ApproveContestImageCommand { get; set; }
     public ICommand DeleteContestImageCommand { get; set; }
+    public ICommand LogoutCommand { get; set; }
     #endregion Commands
 
     #region Methods
@@ -219,6 +221,18 @@ namespace CommitAndForget.ViewModel
         MainFrame.NavigationService.GoBack();
     }
     private void CloseCurrentWindow() => Application.Current.Windows.OfType<Window>().FirstOrDefault(w => w.IsActive)?.Close();
+
+    private void LogoutUser(Window? window)
+    {
+      if (MessageBoxService.LogoutMessage("Möchten Sie sich wirklich abmelden?", MessageBoxImage.Information) == MessageBoxResult.Yes)
+      {
+        //TODO: Fenster schließen
+        var view = new LoginView();
+        view.WindowStartupLocation = WindowStartupLocation.CenterScreen;
+        view.DataContext = new LoginViewModel();
+        view.Show();
+      }
+    }
     #endregion Navigation
 
     #region User

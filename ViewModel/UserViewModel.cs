@@ -120,7 +120,7 @@ namespace CommitAndForget.ViewModel
       PayCommand = new RelayCommand<string>(Pay);
       AddImageCommand = new RelayCommand(AddImage);
       RateImageCommand = new RelayCommand<Tuple<ImageModel, decimal>>(RateImage);
-      LogoutCommand = new RelayCommand(LogoutUser);
+      LogoutCommand = new RelayCommand<Window>(LogoutUser);
     }
     public ICommand NavigateToUserOrderCommand { get; set; }
     public ICommand NavigateBackCommand { get; set; }
@@ -374,10 +374,11 @@ namespace CommitAndForget.ViewModel
       }
     }
 
-    private void LogoutUser()
+    private void LogoutUser(Window? window)
     {
       if (MessageBoxService.LogoutMessage("Möchten Sie sich wirklich abmelden?", MessageBoxImage.Information) == MessageBoxResult.Yes)
       {
+        //TODO: Fenster schließen
         var view = new LoginView();
         view.WindowStartupLocation = WindowStartupLocation.CenterScreen;
         view.DataContext = new LoginViewModel();
