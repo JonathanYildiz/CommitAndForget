@@ -17,17 +17,18 @@ namespace CommitAndForget.Model
       set => Set(value);
     }
 
-    public int UserLink
+    public string UserMail
     {
-      get => Get<int>();
+      get => Get<string>();
       set => Set(value);
     }
 
-    public int InvoiceLink
+    public double TotalPrice
     {
-      get => Get<int>();
+      get => Get<double>();
       set => Set(value);
     }
+
     #endregion Properties
   }
 }

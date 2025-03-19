@@ -82,6 +82,11 @@ namespace CommitAndForget.ViewModel
       get => Get<ObservableCollection<ImageModel>>();
       set => Set(value);
     }
+    public ObservableCollection<OrderModel> OrderList
+    {
+      get => Get<ObservableCollection<OrderModel>>();
+      set => Set(value);
+    }
     public Frame MainFrame
     {
       get => Get<Frame>();
@@ -200,7 +205,11 @@ namespace CommitAndForget.ViewModel
       ProductList = ProductDataProvider.LoadProducts();
       MainFrame?.Navigate(new ProductManagementView() { DataContext = this });
     }
-    private void NavigateToOrderManagement() => MainFrame?.Navigate(new OrderManagementView() { DataContext = this });
+    private void NavigateToOrderManagement()
+    {
+      OrderList = OrderDataProvider.GetOrderHistory();
+      MainFrame?.Navigate(new OrderManagementView() { DataContext = this });
+    }
     private void NavigateToMenuManagement()
     {
       SelectedProduct = null; // Null zuweisen um beim Bild auswählen zwischen Menü und Produkt zu unterscheiden

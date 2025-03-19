@@ -64,11 +64,39 @@ namespace CommitAndForget.Services.DataProvider
             { "p_Quantity", menu.Quantity }
           };
           DataBaseService.ExecuteSP("spAddMenuToOrder", parameters);
-        }       
+        }
       }
       catch (Exception ex)
       {
         MessageBoxService.DisplayMessage(ex.Message, MessageBoxImage.Error);
+      }
+    }
+
+    public static ObservableCollection<OrderModel> GetOrderHistory()
+    {
+      try
+      {
+        var orders = new ObservableCollection<OrderModel>();
+        DataTable dt = DataBaseService.ExecuteSP("spGetOrderHistory");
+
+        if (dt != null && dt.Rows.Count > 0)
+        {
+          foreach (DataRow row in dt.Rows)
+          {
+            var order = new OrderModel();
+            order.Key = row["order_nKey"] != DBNull.Value ? (int)row["order_nKey"] : default;
+            order.OrderDate = row["order_CreationDate"] != DBNull.Value ? (DateTime)row["order_CreationDate"] : default;
+            order.TotalPrice = row["order_TotalPrice"] != DBNull.Value ? Convert.ToDouble(row["order_TotalPrice"].ToString()) : default;
+            order.UserMail = row["user_Mail"] != DBNull.Value ? row["user_Mail"].ToString() ?? string.Empty : string.Empty;
+            orders.Add(order);
+          }
+        }
+        return orders;
+      }
+      catch (Exception ex)
+      {
+        MessageBoxService.DisplayMessage(ex.Message, MessageBoxImage.Error);
+        return [];
       }
     }
   }
