@@ -10,6 +10,7 @@ using CommitAndForget.Services.DataProvider;
 using CommitAndForget.View.AdminViews;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Win32;
+using Mysqlx.Crud;
 
 namespace CommitAndForget.ViewModel
 {
@@ -158,6 +159,7 @@ namespace CommitAndForget.ViewModel
 
       // Bestellverwaltung
       DeleteOrderCommand = new RelayCommand<OrderModel>(DeleteOrder);
+      ShowOrderDetailsCommand = new RelayCommand<OrderModel>(ShowOrderDetails);
     }
     public ICommand NavigateToUserManagementCommand { get; set; }
     public ICommand NavigateToProductManagementCommand { get; set; }
@@ -194,6 +196,7 @@ namespace CommitAndForget.ViewModel
     public ICommand DeleteContestImageCommand { get; set; }
     public ICommand LogoutCommand { get; set; }
     public ICommand DeleteOrderCommand { get; set; }
+    public ICommand ShowOrderDetailsCommand { get; set; }
     #endregion Commands
 
     #region Methods
@@ -722,7 +725,19 @@ namespace CommitAndForget.ViewModel
             OrderList.Remove(order);
         }
       }
+    }
 
+    private void ShowOrderDetails(OrderModel? order)
+    {
+      if (order is not null)
+      {
+        string orderDetails = OrderDataProvider.GetOrderDetails(order.Key);
+        if (!string.IsNullOrEmpty(orderDetails))
+        {
+          orderDetails += $"\nGesamtpreis: {order.TotalPrice}";
+          MessageBoxService.DisplayMessage(orderDetails, MessageBoxImage.Information);
+        }
+      }
     }
 
     #endregion Order

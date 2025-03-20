@@ -1,5 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 using System.Data;
+using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using CommitAndForget.Model;
@@ -118,6 +119,38 @@ namespace CommitAndForget.Services.DataProvider
         MessageBoxService.DisplayMessage(ex.Message, MessageBoxImage.Error);
       }
       return false;
+    }
+
+    public static string GetOrderDetails(int orderId)
+    {
+      try
+      {
+        var orderDetails = new StringBuilder();
+        var parameters = new Dictionary<string, object>
+        {
+          { "p_OrderId", orderId }
+        };
+        DataTable dt = DataBaseService.ExecuteSP("spGetOrderDetails", parameters);
+        if (dt != null && dt.Rows.Count > 0)
+        {
+          foreach (DataRow row in dt.Rows)
+          {
+            string orderLine = "";
+            orderLine += row["item_Name"] != DBNull.Value ? row["item_Name"].ToString() : string.Empty;
+            orderLine += " ";
+            orderLine += row["item_Quantity"] != DBNull.Value ? row["item_Quantity"].ToString() : string.Empty;
+            orderLine += "x ";
+            orderLine += row["item_Price"] != DBNull.Value ? row["item_Price"].ToString() : string.Empty;
+            orderDetails.AppendLine(orderLine);
+          }
+        }
+        return orderDetails.ToString();
+      }
+      catch (Exception ex)
+      {
+        MessageBoxService.DisplayMessage(ex.Message, MessageBoxImage.Error);
+        return string.Empty;
+      }
     }
   }
 }
