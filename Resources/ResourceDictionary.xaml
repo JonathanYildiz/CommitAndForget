@@ -214,6 +214,8 @@
 
   <Style TargetType="DataGridCell">
     <Setter Property="TextBlock.TextAlignment" Value="Center" />
+    <Setter Property="VerticalAlignment" Value="Center" />
+    <Setter Property="HorizontalAlignment" Value="Center" />
   </Style>
 
   <!-- Style for add Buttons -->
