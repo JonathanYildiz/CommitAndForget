@@ -142,6 +142,12 @@ namespace CommitAndForget.ViewModel
     {
       try
       {
+        if (string.IsNullOrWhiteSpace(NewUser.Email) || string.IsNullOrWhiteSpace(NewUser.Password))
+        {
+          MessageBoxService.DisplayMessage("Email und Passwort müssen angegeben werden", MessageBoxImage.Error);
+          return;
+        }
+
         UserModel createdUser = UserDataProvider.Register(NewUser);
         if (createdUser is null)
           return;

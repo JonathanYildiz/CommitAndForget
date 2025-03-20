@@ -41,7 +41,11 @@ namespace CommitAndForget.Model
     public int Quantity
     {
       get => Get<int>();
-      set => Set(value);
+      set
+      {
+        Set(value);
+        OnPropertyChanged(nameof(TotalPrice));
+      }
     }
 
     public bool IsChecked
