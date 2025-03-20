@@ -23,6 +23,11 @@ namespace CommitAndForget.ViewModel
       get => Get<UserModel>();
       set => Set(value);
     }
+    public UserModel BackupUser // Um Änderungen am User rückgängig machen zu können
+    {
+      get => Get<UserModel>();
+      set => Set(value);
+    }
     public ObservableCollection<ProductModel> ProductList
     {
       get => Get<ObservableCollection<ProductModel>>();
@@ -123,6 +128,7 @@ namespace CommitAndForget.ViewModel
       RateImageCommand = new RelayCommand<Tuple<ImageModel, decimal>>(RateImage);
       LogoutCommand = new RelayCommand<Window>(LogoutUser);
       EditProfileCommand = new RelayCommand(EditProfile);
+      CancelEditCommand = new RelayCommand<Window>(CancelEdit);
     }
     public ICommand NavigateToUserOrderCommand { get; set; }
     public ICommand NavigateBackCommand { get; set; }
@@ -142,6 +148,7 @@ namespace CommitAndForget.ViewModel
     public ICommand RateImageCommand { get; set; }
     public ICommand LogoutCommand { get; set; }
     public ICommand EditProfileCommand { get; set; }
+    public ICommand CancelEditCommand { get; set; }
     #endregion Commands
 
     #region Methods
@@ -391,9 +398,17 @@ namespace CommitAndForget.ViewModel
 
     private void EditProfile()
     {
+      BackupUser = new UserModel(CurrentUser);
+
       var view = new ProfileEditView();
       view.DataContext = this;
       view.ShowDialog();
+    }
+
+    private void CancelEdit(Window? window)
+    {
+      CurrentUser.RollbackChanges(BackupUser);
+      window?.Close();
     }
     #endregion Methods
   }

@@ -36,7 +36,7 @@
         <TextBox Text="{Binding CurrentUser.City}"/>
       </DockPanel>
       <Button Command="{Binding ConfirmRegistrationCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}">OK</Button>
-      <Button Command="{Binding CancelCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}">Abbrechen</Button>
+      <Button Command="{Binding CancelEditCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}">Abbrechen</Button>
     </StackPanel>
   </Grid>
 </Window>
