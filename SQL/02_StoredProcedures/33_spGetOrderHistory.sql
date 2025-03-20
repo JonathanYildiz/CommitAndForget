@@ -6,18 +6,31 @@ DELIMITER $$
 CREATE PROCEDURE spGetOrderHistory()
 BEGIN
    
-   SELECT u.szEmail AS user_Mail,
-	       o.nKey AS order_nKey,
-	       o.dtOrderDate AS order_CreationDate,
-	       SUM(IFNULL(m.rPrice, 0) * IFNULL(om.nQuantity, 0)) + SUM(IFNULL(p.rPrice, 0) * IFNULL(op.nQuantity, 0)) AS order_TotalPrice
-	FROM tblorder o
-	JOIN tbluser u ON u.nKey = o.nUserLink
-	LEFT JOIN tblordermenu om ON om.nOrderLink = o.nKey
-	LEFT JOIN tblmenu m ON m.nKey = om.nMenuLink
-	LEFT JOIN tblorderproduct op ON op.nOrderLink = o.nKey
-	LEFT JOIN tblproduct p ON p.nKey = op.nProductLink
-	GROUP BY u.szEmail, o.nKey, o.dtOrderDate
-	ORDER BY o.nKey;
+  SELECT combined.szEmail AS user_Mail,
+	       combined.nKey AS order_nKey,
+	       combined.dtOrderDate AS order_CreationDate,
+	       SUM(order_TotalPrice) AS order_TotalPrice
+	FROM (
+	    SELECT o.nKey,
+	           o.dtOrderDate,
+	           u.szEmail,
+	           (p.rPrice * op.nQuantity) AS order_TotalPrice
+	    FROM tblorder o
+	    JOIN tbluser u ON u.nKey = o.nUserLink
+	    LEFT JOIN tblorderproduct op ON op.nOrderLink = o.nKey
+	    LEFT JOIN tblproduct p ON p.nKey = op.nProductLink
+	    UNION ALL
+	    SELECT o.nKey,
+	           o.dtOrderDate,
+	           u.szEmail,
+	           (m.rPrice * om.nQuantity) AS order_TotalPrice
+	    FROM tblorder o
+	    JOIN tbluser u ON u.nKey = o.nUserLink
+	    LEFT JOIN tblordermenu om ON om.nOrderLink = o.nKey
+	    LEFT JOIN tblmenu m ON m.nKey = om.nMenuLink
+	) AS combined
+	GROUP BY combined.szEmail, combined.nKey, combined.dtOrderDate
+	ORDER BY combined.nKey;
       
 END $$
 
