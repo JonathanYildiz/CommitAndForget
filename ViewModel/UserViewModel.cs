@@ -325,13 +325,13 @@ namespace CommitAndForget.ViewModel
 
     private void ShowProductInfo(ProductModel? product)
     {
-      if (product is not null)
+      if (product is not null) 
       {
         string ingredients = "";
         foreach (var ingredient in product.Ingredients)
           ingredients += ingredient.Name + "\n";
 
-        MessageBoxService.DisplayMessage($"Produkt: {product.Name}\n\nZutaten:\n{ingredients}", MessageBoxImage.Information);
+        MessageBoxService.DisplayMessage($"Produkt: {product.Name} ({product.Energy}kcal)\n\nZutaten:\n{ingredients}", MessageBoxImage.Information);
       }
     }
 
@@ -346,7 +346,7 @@ namespace CommitAndForget.ViewModel
           foreach (var ingredient in product.Ingredients)
             if (ingredient.Quantity > 0)
               ingredients += ingredient.Name + "\n";
-          products += $"Produkt: {product.Name}\nZutaten:\n{ingredients}\n\n";
+          products += $"Produkt: {product.Name} ({product.Energy}kcal)\nZutaten:\n{ingredients}\n\n";
         }
         MessageBoxService.DisplayMessage($"Menü: {menu.Name}\n\n{products}", MessageBoxImage.Information);
       }

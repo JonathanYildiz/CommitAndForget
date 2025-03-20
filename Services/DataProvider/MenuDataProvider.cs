@@ -59,6 +59,7 @@ namespace CommitAndForget.Services.DataProvider
               product.Key = productKey;
               product.Name = row["product_szName"] != DBNull.Value ? row["product_szName"].ToString() ?? string.Empty : string.Empty;
               product.Quantity = row["product_nQuantity"] != DBNull.Value ? (int)row["product_nQuantity"] : default;
+              product.Energy = row["product_nEnergy"] != DBNull.Value ? (int)row["product_nEnergy"] : default;
 
               menu.ProductList.Add(product);
             }

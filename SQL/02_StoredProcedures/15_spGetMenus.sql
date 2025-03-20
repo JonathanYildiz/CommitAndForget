@@ -16,6 +16,7 @@ SELECT
    pm.nQuantity AS product_nQuantity,
 	p.nKey AS product_nKey,
    p.szName AS product_szName,
+   p.nEnergy AS product_nEnergy,
    fnGetMenuOrderCount(m.nKey) AS menu_nOrderCount    
     FROM tblmenu m
 	 LEFT JOIN tblimage imgMenu ON m.nImageLink = imgMenu.nKey
