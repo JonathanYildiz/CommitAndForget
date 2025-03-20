@@ -126,9 +126,10 @@ namespace CommitAndForget.ViewModel
       PayCommand = new RelayCommand<string>(Pay);
       AddImageCommand = new RelayCommand(AddImage);
       RateImageCommand = new RelayCommand<Tuple<ImageModel, decimal>>(RateImage);
-      LogoutCommand = new RelayCommand<Window>(LogoutUser);
+      LogoutCommand = new RelayCommand(LogoutUser);
       EditProfileCommand = new RelayCommand(EditProfile);
       CancelEditCommand = new RelayCommand<Window>(CancelEdit);
+      SaveEditCommand = new RelayCommand<Window>(SaveEdit);
     }
     public ICommand NavigateToUserOrderCommand { get; set; }
     public ICommand NavigateBackCommand { get; set; }
@@ -149,6 +150,7 @@ namespace CommitAndForget.ViewModel
     public ICommand LogoutCommand { get; set; }
     public ICommand EditProfileCommand { get; set; }
     public ICommand CancelEditCommand { get; set; }
+    public ICommand SaveEditCommand { get; set; }
     #endregion Commands
 
     #region Methods
@@ -384,15 +386,20 @@ namespace CommitAndForget.ViewModel
       }
     }
 
-    private void LogoutUser(Window? window)
+    private void LogoutUser()
     {
       if (MessageBoxService.LogoutMessage("Möchten Sie sich wirklich abmelden?", MessageBoxImage.Information) == MessageBoxResult.Yes)
       {
-        //TODO: Fenster schließen
+        // Aktuelles Window wegspeichern
+        var currentWindow = Application.Current.Windows.OfType<Window>().FirstOrDefault(w => w.IsActive);
+
         var view = new LoginView();
         view.WindowStartupLocation = WindowStartupLocation.CenterScreen;
         view.DataContext = new LoginViewModel();
         view.Show();
+
+        // Altes Fenster schließen
+        currentWindow?.Close();
       }
     }
 
@@ -409,6 +416,16 @@ namespace CommitAndForget.ViewModel
     {
       CurrentUser.RollbackChanges(BackupUser);
       window?.Close();
+    }
+
+    private void SaveEdit(Window? window)
+    {
+      if (CurrentUser is not null)
+      {
+        UserDataProvider.UpdateUser(CurrentUser);
+        BackupUser = null;
+        window?.Close();
+      }
     }
     #endregion Methods
   }

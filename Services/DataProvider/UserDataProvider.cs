@@ -138,16 +138,16 @@ namespace CommitAndForget.Services.DataProvider
       {
         var parameters = new Dictionary<string, object>
         {
-          { "p_Key", user.Key },
-          { "p_FirstName", user.FirstName },
-          { "p_LastName", user.LastName },
-          { "p_Street", user.Street },
-          { "p_HouseNumber", user.HouseNumber },
-          { "p_PostalCode", user.PostalCode },
-          { "p_City", user.City },
-          { "p_Email", user.Email },
-          { "p_Password", user.Password },
-          { "p_IsAdmin", user.IsAdmin }
+          { "p_Key",         user.Key },
+          { "p_FirstName",   string.IsNullOrWhiteSpace(user.FirstName)   ? DBNull.Value : user.FirstName },
+          { "p_LastName",    string.IsNullOrWhiteSpace(user.LastName)    ? DBNull.Value : user.LastName },
+          { "p_Street",      string.IsNullOrWhiteSpace(user.Street)      ? DBNull.Value : user.Street },
+          { "p_HouseNumber", string.IsNullOrWhiteSpace(user.HouseNumber) ? DBNull.Value : user.HouseNumber },
+          { "p_PostalCode",  string.IsNullOrWhiteSpace(user.PostalCode)  ? DBNull.Value : user.PostalCode },
+          { "p_City",        string.IsNullOrWhiteSpace(user.City)        ? DBNull.Value : user.City },
+          { "p_Email",       string.IsNullOrWhiteSpace(user.Email)       ? DBNull.Value : user.Email },
+          { "p_Password",    string.IsNullOrWhiteSpace(user.Password)    ? DBNull.Value : user.Password },
+          { "p_IsAdmin",     user.IsAdmin }
         };
         DataBaseService.ExecuteSP("spUpdateUser", parameters);
       }
