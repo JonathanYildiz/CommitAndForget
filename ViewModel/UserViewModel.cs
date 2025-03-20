@@ -145,7 +145,7 @@ namespace CommitAndForget.ViewModel
     public ICommand RemoveMenuFromShoppingCartCommand { get; set; }
     public ICommand NavigateToPaymentCommand { get; set; }
     public ICommand PayCommand { get; set; }
-    public ICommand AddImageCommand {  get; set; }
+    public ICommand AddImageCommand { get; set; }
     public ICommand RateImageCommand { get; set; }
     public ICommand LogoutCommand { get; set; }
     public ICommand EditProfileCommand { get; set; }
@@ -175,7 +175,7 @@ namespace CommitAndForget.ViewModel
               IngredientList.Add(ingredient);
 
             product.Ingredients.Add(ingredient);
-          }          
+          }
         }
       }
 
@@ -242,7 +242,8 @@ namespace CommitAndForget.ViewModel
         MenuShoppingCart?.Clear();
         ProductShoppingCart?.Clear();
         OnPropertyChanged(nameof(ShoppingCartQuantity));
-        MainFrame?.Navigate(new PaymentSuccessView(paymentMethod));
+        MessageBoxService.DisplayMessage($"Vielen Dank für Ihre Bestellung\nZahlungsart: {paymentMethod}", MessageBoxImage.Information);
+        MainFrame?.Navigate(new UserSelectionView { DataContext = this });
       }
     }
 
