@@ -1,6 +1,6 @@
-﻿using System.Data;
+﻿using MySql.Data.MySqlClient;
+using System.Data;
 using System.Windows;
-using MySql.Data.MySqlClient;
 
 namespace CommitAndForget.Services
 {

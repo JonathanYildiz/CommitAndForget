@@ -1,8 +1,8 @@
-﻿using System.Collections.ObjectModel;
+﻿using CommitAndForget.Converter;
+using CommitAndForget.Model;
+using System.Collections.ObjectModel;
 using System.Data;
 using System.Windows;
-using CommitAndForget.Converter;
-using CommitAndForget.Model;
 
 namespace CommitAndForget.Services.DataProvider
 {
@@ -160,7 +160,7 @@ namespace CommitAndForget.Services.DataProvider
             var image = new ImageModel();
             image.Key = row["image_nKey"] != DBNull.Value ? (int)row["image_nKey"] : default;
             image.UploadedBy = row["image_szUploadedBy"] != DBNull.Value ? row["image_szUploadedBy"].ToString() ?? string.Empty : string.Empty;
-            
+
             // Sicherheitsüberprüfung: Keine Produktbilder
             if (image.UploadedBy == "admin")
               continue;

@@ -1,17 +1,17 @@
-﻿using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Input;
-using System.Windows.Media.Imaging;
-using CommitAndForget.Essentials;
+﻿using CommitAndForget.Essentials;
 using CommitAndForget.Model;
 using CommitAndForget.Services;
 using CommitAndForget.Services.DataProvider;
 using CommitAndForget.View.UserViews;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Win32;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Data;
+using System.Windows.Input;
+using System.Windows.Media.Imaging;
 
 namespace CommitAndForget.ViewModel
 {
@@ -344,7 +344,7 @@ namespace CommitAndForget.ViewModel
 
     private void ShowProductInfo(ProductModel? product)
     {
-      if (product is not null) 
+      if (product is not null)
       {
         string ingredients = "";
         foreach (var ingredient in product.Ingredients)

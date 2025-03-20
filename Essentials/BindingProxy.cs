@@ -6,7 +6,7 @@ namespace CommitAndForget.Essentials
   {
     protected override Freezable CreateInstanceCore()
     {
-     return new BindingProxy();
+      return new BindingProxy();
     }
 
     public static readonly DependencyProperty DataProperty = DependencyProperty.Register("Data", typeof(object), typeof(BindingProxy), new UIPropertyMetadata(null));

@@ -1,5 +1,5 @@
-﻿using System.Collections.ObjectModel;
-using CommitAndForget.Essentials;
+﻿using CommitAndForget.Essentials;
+using System.Collections.ObjectModel;
 
 namespace CommitAndForget.Model
 {

@@ -1,7 +1,7 @@
-﻿using System.Collections.ObjectModel;
+﻿using CommitAndForget.Model;
+using System.Collections.ObjectModel;
 using System.Data;
 using System.Windows;
-using CommitAndForget.Model;
 
 namespace CommitAndForget.Services.DataProvider
 {
@@ -100,7 +100,7 @@ namespace CommitAndForget.Services.DataProvider
         if (dt is not null && dt.Rows.Count == 1) // Es darf nur ein Benutzer zurückkommmen
         {
           if (dt.Columns.Contains("Nachricht") && dt.Rows[0]["Nachricht"] != DBNull.Value) // Fehlermeldungen aus der Datenbank abfangen
-            return null;          
+            return null;
 
           user.Key = dt.Rows[0]["nKey"] != DBNull.Value ? (int)dt.Rows[0]["nKey"] : default;
           user.FirstName = dt.Rows[0]["szFirstName"] != DBNull.Value ? dt.Rows[0]["szFirstName"].ToString() ?? string.Empty : string.Empty;
