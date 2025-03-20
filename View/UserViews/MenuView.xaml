@@ -29,7 +29,7 @@
                 <StackPanel Orientation="Vertical">
                   <Image Source="{Binding Image.Image}" Height="100" Margin="0,0,0,10"/>
                   <TextBlock Text="{Binding Name}" FontSize="18" FontWeight="Bold"/>
-                  <TextBlock Text="{Binding Price, StringFormat=C}" FontSize="16" Margin="0,5,0,5"/>
+                  <TextBlock Text="{Binding Price, StringFormat={}{0:C}}" FontSize="16" Margin="0,5,0,5"/>
                   <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                     <Button Content="Info" Margin="5" Command="{Binding DataContext.ShowMenuInfoCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}" CommandParameter="{Binding}"/>
                     <Button Content="Bestellen" Margin="5" Command="{Binding DataContext.AddMenuToShoppingCartCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}" CommandParameter="{Binding}"/>
