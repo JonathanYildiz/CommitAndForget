@@ -13,11 +13,12 @@
     <Grid.RowDefinitions>
       <RowDefinition Height="50"/>
       <RowDefinition/>
-      <RowDefinition Height="50"/>
+      <RowDefinition Height="80"/>
     </Grid.RowDefinitions>
     <Label Grid.Row="0" Content="Warenkorb" FontSize="24" HorizontalAlignment="Center" Margin="0,0,0,10"/>
 
-    <StackPanel Grid.Row="1" Orientation="Vertical">
+    <ScrollViewer Grid.Row="1">
+    <StackPanel  Orientation="Vertical">
       <ListBox ItemsSource="{Binding ProductShoppingCart}">
         <ListBox.ItemTemplate>
           <DataTemplate>
@@ -41,6 +42,7 @@
         </ListBox.ItemTemplate>
       </ListBox>
     </StackPanel>
+      </ScrollViewer>
 
     <StackPanel Grid.Row="2" Orientation="Vertical">
       <Button Content="Zurück" Command="{Binding ToggleShowShoppingCartCommand}"/>
