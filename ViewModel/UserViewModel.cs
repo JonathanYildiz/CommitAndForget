@@ -305,6 +305,7 @@ namespace CommitAndForget.ViewModel
           productInList.Quantity++;
 
         OnPropertyChanged(nameof(ShoppingCartQuantity));
+        OnPropertyChanged(nameof(ShoppingCartPrice));
       }
     }
 
@@ -320,6 +321,7 @@ namespace CommitAndForget.ViewModel
           menuInList.Quantity++;
 
         OnPropertyChanged(nameof(ShoppingCartQuantity));
+        OnPropertyChanged(nameof(ShoppingCartPrice));
       }
     }
 
@@ -359,6 +361,7 @@ namespace CommitAndForget.ViewModel
         ProductShoppingCart?.Remove(product);
         product.Quantity = 1;
         OnPropertyChanged(nameof(ShoppingCartQuantity));
+        OnPropertyChanged(nameof(ShoppingCartPrice));
       }
     }
 
@@ -369,6 +372,7 @@ namespace CommitAndForget.ViewModel
         MenuShoppingCart?.Remove(menu);
         menu.Quantity = 1;
         OnPropertyChanged(nameof(ShoppingCartQuantity));
+        OnPropertyChanged(nameof(ShoppingCartPrice));
       }
     }
     private void AddImage()
