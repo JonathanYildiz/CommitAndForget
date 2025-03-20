@@ -24,6 +24,8 @@ namespace CommitAndForget.Model
       set => Set(value);
     }
 
+    public double TotalPrice => Math.Round(Price * Quantity, 2);
+
     public ImageModel Image
     {
       get => Get<ImageModel>();
