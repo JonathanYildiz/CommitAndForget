@@ -29,14 +29,14 @@ BEGIN
         -- Benutzer aktualisieren
         UPDATE tbluser
         SET 
-            szFirstName = p_FirstName,
-            szLastName = p_LastName,
-            szStreet = p_Street,
-            szHouseNumber = p_HouseNumber,
-            szPostalCode = p_PostalCode, 
-            szCity = p_City,
-            szEmail = p_Email,
-            bIsAdmin = p_IsAdmin,
+            szFirstName = coalesce(p_FirstName, szFirstName),
+            szLastName = coalesce(p_LastName, szLastName),
+            szStreet = coalesce(p_Street, szStreet),
+            szHouseNumber = coalesce(p_HouseNumber, szHouseNumber),
+            szPostalCode = coalesce(p_PostalCode, szPostalCode), 
+            szCity = coalesce(p_City, szCity),
+            szEmail = coalesce(p_Email, szEmail),
+            bIsAdmin = coalesce(p_IsAdmin, bIsAdmin),
             szPassword = coalesce(nullif(p_Password, ""), szPassword)
         WHERE nKey = p_Key;
         
