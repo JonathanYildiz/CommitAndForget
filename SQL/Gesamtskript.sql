@@ -341,14 +341,14 @@ BEGIN
         -- Benutzer aktualisieren
         UPDATE tbluser
         SET 
-            szFirstName = p_FirstName,
-            szLastName = p_LastName,
-            szStreet = p_Street,
-            szHouseNumber = p_HouseNumber,
-            szPostalCode = p_PostalCode, 
-            szCity = p_City,
-            szEmail = p_Email,
-            bIsAdmin = p_IsAdmin,
+            szFirstName = coalesce(p_FirstName, szFirstName),
+            szLastName = coalesce(p_LastName, szLastName),
+            szStreet = coalesce(p_Street, szStreet),
+            szHouseNumber = coalesce(p_HouseNumber, szHouseNumber),
+            szPostalCode = coalesce(p_PostalCode, szPostalCode), 
+            szCity = coalesce(p_City, szCity),
+            szEmail = coalesce(p_Email, szEmail),
+            bIsAdmin = coalesce(p_IsAdmin, bIsAdmin),
             szPassword = coalesce(nullif(p_Password, ""), szPassword)
         WHERE nKey = p_Key;
         
@@ -1202,24 +1202,105 @@ DELIMITER $$
 CREATE PROCEDURE spGetOrderHistory()
 BEGIN
    
-   SELECT u.szEmail AS user_Mail,
-	       o.nKey AS order_nKey,
-	       o.dtOrderDate AS order_CreationDate,
-	       SUM(IFNULL(m.rPrice, 0) * IFNULL(om.nQuantity, 0)) + SUM(IFNULL(p.rPrice, 0) * IFNULL(op.nQuantity, 0)) AS order_TotalPrice
-	FROM tblorder o
-	JOIN tbluser u ON u.nKey = o.nUserLink
-	LEFT JOIN tblordermenu om ON om.nOrderLink = o.nKey
-	LEFT JOIN tblmenu m ON m.nKey = om.nMenuLink
-	LEFT JOIN tblorderproduct op ON op.nOrderLink = o.nKey
-	LEFT JOIN tblproduct p ON p.nKey = op.nProductLink
-	GROUP BY u.szEmail, o.nKey, o.dtOrderDate
-	ORDER BY o.nKey;
+  SELECT combined.szEmail AS user_Mail,
+	       combined.nKey AS order_nKey,
+	       combined.dtOrderDate AS order_CreationDate,
+	       SUM(order_TotalPrice) AS order_TotalPrice
+	FROM (
+	    SELECT o.nKey,
+	           o.dtOrderDate,
+	           u.szEmail,
+	           (p.rPrice * op.nQuantity) AS order_TotalPrice
+	    FROM tblorder o
+	    JOIN tbluser u ON u.nKey = o.nUserLink
+	    LEFT JOIN tblorderproduct op ON op.nOrderLink = o.nKey
+	    LEFT JOIN tblproduct p ON p.nKey = op.nProductLink
+	    UNION ALL
+	    SELECT o.nKey,
+	           o.dtOrderDate,
+	           u.szEmail,
+	           (m.rPrice * om.nQuantity) AS order_TotalPrice
+	    FROM tblorder o
+	    JOIN tbluser u ON u.nKey = o.nUserLink
+	    LEFT JOIN tblordermenu om ON om.nOrderLink = o.nKey
+	    LEFT JOIN tblmenu m ON m.nKey = om.nMenuLink
+	) AS combined
+	GROUP BY combined.szEmail, combined.nKey, combined.dtOrderDate
+	ORDER BY combined.nKey;
       
 END $$
 
 DELIMITER ;
 
 -- Fertig: 33_spGetOrderHistory.sql
+
+
+-- HinzufÃ¼gen: 34_spDeleteOrder.sql
+
+USE dbcommitandforget;
+
+DROP PROCEDURE IF EXISTS spDeleteOrder;
+
+DELIMITER $$
+CREATE PROCEDURE spDeleteOrder(
+	IN p_OrderId INT
+)
+BEGIN
+   
+   DELETE 
+	FROM tblorder
+   WHERE nKey = p_OrderId;
+   
+   DELETE
+   FROM tblordermenu
+   WHERE nOrderLink = p_OrderId;
+   
+   DELETE
+   FROM tblorderproduct
+   WHERE nOrderLink = p_OrderId;
+      
+END $$
+
+DELIMITER ;
+
+-- Fertig: 34_spDeleteOrder.sql
+
+
+-- HinzufÃ¼gen: 35_spGetOrderDetails.sql
+
+USE dbcommitandforget;
+
+DROP PROCEDURE IF EXISTS spGetOrderDetails;
+
+DELIMITER $$
+CREATE PROCEDURE spGetOrderDetails(
+	IN p_OrderId INT
+)
+BEGIN
+   
+   SELECT m.szName AS item_Name
+   	  , om.nQuantity AS item_Quantity
+        , m.rPrice AS item_Price      
+	FROM tblorder o
+	JOIN tblordermenu om ON om.nOrderLink = o.nKey
+	JOIN tblmenu m ON m.nKey = om.nMenuLink
+	WHERE o.nKey = p_OrderId
+	
+	UNION ALL
+	
+	SELECT p.szName AS item_Name
+	     , op.nQuantity AS item_Quantity
+		  , p.rPrice AS item_Price
+	FROM tblorder o
+	JOIN tblorderproduct op ON op.nOrderLink = o.nKey
+	JOIN tblproduct p ON p.nKey = op.nProductLink
+	WHERE o.nKey = p_OrderId;
+      
+END $$
+
+DELIMITER ;
+
+-- Fertig: 35_spGetOrderDetails.sql
 
 
 -- HinzufÃ¼gen: 01_fnGetMenuOrderCount.sql
