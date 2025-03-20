@@ -26,6 +26,9 @@ namespace CommitAndForget.ViewModel
       get => Get<UserModel>();
       set
       {
+        if (value != null)
+          UserDataProvider.GetUsersFavorites(value);
+
         Set(value);
         OnPropertyChanged(nameof(IsUserSelected));
       }
@@ -79,6 +82,11 @@ namespace CommitAndForget.ViewModel
       get => Get<ObservableCollection<ImageModel>>();
       set => Set(value);
     }
+    public ObservableCollection<OrderModel> OrderList
+    {
+      get => Get<ObservableCollection<OrderModel>>();
+      set => Set(value);
+    }
     public Frame MainFrame
     {
       get => Get<Frame>();
@@ -107,6 +115,7 @@ namespace CommitAndForget.ViewModel
       NavigateToMenuManagementCommand = new RelayCommand(NavigateToMenuManagement);
       NavigateToContestManagementCommand = new RelayCommand(NavigateToContestManagement);
       NavigateBackCommand = new RelayCommand(NavigateBack);
+      LogoutCommand = new RelayCommand<Window>(LogoutUser);
 
       // Benutzerverwaltung
       EditUserCommand = new RelayCommand<UserModel>(EditUser);
@@ -179,6 +188,7 @@ namespace CommitAndForget.ViewModel
     public ICommand PreviousContestImageCommand { get; set; }
     public ICommand ApproveContestImageCommand { get; set; }
     public ICommand DeleteContestImageCommand { get; set; }
+    public ICommand LogoutCommand { get; set; }
     #endregion Commands
 
     #region Methods
@@ -195,7 +205,11 @@ namespace CommitAndForget.ViewModel
       ProductList = ProductDataProvider.LoadProducts();
       MainFrame?.Navigate(new ProductManagementView() { DataContext = this });
     }
-    private void NavigateToOrderManagement() => MainFrame?.Navigate(new OrderManagementView() { DataContext = this });
+    private void NavigateToOrderManagement()
+    {
+      OrderList = OrderDataProvider.GetOrderHistory();
+      MainFrame?.Navigate(new OrderManagementView() { DataContext = this });
+    }
     private void NavigateToMenuManagement()
     {
       SelectedProduct = null; // Null zuweisen um beim Bild auswählen zwischen Menü und Produkt zu unterscheiden
@@ -216,6 +230,18 @@ namespace CommitAndForget.ViewModel
         MainFrame.NavigationService.GoBack();
     }
     private void CloseCurrentWindow() => Application.Current.Windows.OfType<Window>().FirstOrDefault(w => w.IsActive)?.Close();
+
+    private void LogoutUser(Window? window)
+    {
+      if (MessageBoxService.LogoutMessage("Möchten Sie sich wirklich abmelden?", MessageBoxImage.Information) == MessageBoxResult.Yes)
+      {
+        //TODO: Fenster schließen
+        var view = new LoginView();
+        view.WindowStartupLocation = WindowStartupLocation.CenterScreen;
+        view.DataContext = new LoginViewModel();
+        view.Show();
+      }
+    }
     #endregion Navigation
 
     #region User

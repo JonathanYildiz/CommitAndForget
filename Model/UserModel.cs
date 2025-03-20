@@ -64,6 +64,18 @@ namespace CommitAndForget.Model
       get => Get<bool>();
       set => Set(value);
     }
+
+    public string MostOrderedProduct
+    {
+      get => Get<string>();
+      set => Set(value);
+    }
+
+    public string MostOrderedMenu
+    {
+      get => Get<string>();
+      set => Set(value);
+    }
     #endregion Properties
 
     #region Constructor
@@ -80,6 +92,8 @@ namespace CommitAndForget.Model
       Email = user.Email;
       Password = user.Password;
       IsAdmin = user.IsAdmin;
+      MostOrderedMenu = user.MostOrderedMenu;
+      MostOrderedProduct = user.MostOrderedProduct;
     }
     #endregion Constructor
 
@@ -96,6 +110,8 @@ namespace CommitAndForget.Model
       Email = backupUser.Email;
       Password = backupUser.Password;
       IsAdmin = backupUser.IsAdmin;
+      MostOrderedMenu = backupUser.MostOrderedMenu;
+      MostOrderedProduct = backupUser.MostOrderedProduct;
     }
     #endregion Methods
   }

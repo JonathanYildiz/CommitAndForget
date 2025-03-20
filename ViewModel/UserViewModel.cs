@@ -1,17 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Threading;
 using CommitAndForget.Essentials;
 using CommitAndForget.Model;
 using CommitAndForget.Services;
@@ -127,6 +120,7 @@ namespace CommitAndForget.ViewModel
       PayCommand = new RelayCommand<string>(Pay);
       AddImageCommand = new RelayCommand(AddImage);
       RateImageCommand = new RelayCommand<Tuple<ImageModel, decimal>>(RateImage);
+      LogoutCommand = new RelayCommand<Window>(LogoutUser);
     }
     public ICommand NavigateToUserOrderCommand { get; set; }
     public ICommand NavigateBackCommand { get; set; }
@@ -144,6 +138,7 @@ namespace CommitAndForget.ViewModel
     public ICommand PayCommand { get; set; }
     public ICommand AddImageCommand {  get; set; }
     public ICommand RateImageCommand { get; set; }
+    public ICommand LogoutCommand { get; set; }
     #endregion Commands
 
     #region Methods
@@ -161,11 +156,14 @@ namespace CommitAndForget.ViewModel
       {
         foreach (var product in menu.ProductList)
         {
-          foreach (var ingredient in product.Ingredients)
+          var ingredients = IngredientDataProvider.LoadIngredients(product.Key);
+          foreach (var ingredient in ingredients)
           {
-            if (!IngredientList.Contains(ingredient))
+            if (IngredientList.FirstOrDefault(i => i.Name == ingredient.Name) == null) // Nicht doppelt hinzufügen
               IngredientList.Add(ingredient);
-          }
+
+            product.Ingredients.Add(ingredient);
+          }          
         }
       }
 
@@ -184,7 +182,7 @@ namespace CommitAndForget.ViewModel
       {
         foreach (var ingredient in product.Ingredients)
         {
-          if (!IngredientList.Contains(ingredient))
+          if (IngredientList.FirstOrDefault(i => i.Name == ingredient.Name) == null) // Nicht doppelt hinzufügen
             IngredientList.Add(ingredient);
         }
       }
@@ -197,7 +195,7 @@ namespace CommitAndForget.ViewModel
     private void NavigateToFunnyDinnerContest()
     {
       // Keine Produktbilder laden
-      IEnumerable<ImageModel> images = ImageDataProvider.LoadImages(CurrentUser.Key).Where(img => img.UploadedBy != "admin");
+      IEnumerable<ImageModel> images = ImageDataProvider.LoadImages(CurrentUser.Key).Where(img => img.UploadedBy != "admin" && img.Approved);
       ImageList = new ObservableCollection<ImageModel>(images);
       MainFrame?.Navigate(new FunnyDinnerContestView() { DataContext = this });
     }
@@ -373,6 +371,18 @@ namespace CommitAndForget.ViewModel
       {
         selectedImage.Rating = rating;
         ImageDataProvider.SetRating(selectedImage, CurrentUser.Key);
+      }
+    }
+
+    private void LogoutUser(Window? window)
+    {
+      if (MessageBoxService.LogoutMessage("Möchten Sie sich wirklich abmelden?", MessageBoxImage.Information) == MessageBoxResult.Yes)
+      {
+        //TODO: Fenster schließen
+        var view = new LoginView();
+        view.WindowStartupLocation = WindowStartupLocation.CenterScreen;
+        view.DataContext = new LoginViewModel();
+        view.Show();
       }
     }
     #endregion Methods

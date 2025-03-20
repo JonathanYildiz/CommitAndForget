@@ -23,10 +23,10 @@
 
     <DataGrid ItemsSource="{Binding OrderList}" Grid.Row="2">
       <DataGrid.Columns>
-        <DataGridTextColumn Header="E-Mail" Binding="{Binding Email}" Width="*"/>
-        <DataGridTextColumn Header="BestellNr" Binding="{Binding OrderNr}" Width="*"/>
+        <DataGridTextColumn Header="E-Mail" Binding="{Binding UserMail}" Width="*"/>
+        <DataGridTextColumn Header="BestellNr" Binding="{Binding Key}" Width="*"/>
         <DataGridTextColumn Header="BestellDatum" Binding="{Binding OrderDate}" Width="*"/>
-        <DataGridTextColumn Header="Gesamtkosten" Binding="{Binding TotalCost}" Width="*"/>
+        <DataGridTextColumn Header="Gesamtkosten" Binding="{Binding TotalPrice}" Width="*"/>
         <DataGridTemplateColumn Header="Actions" Width="Auto">
           <DataGridTemplateColumn.CellTemplate>
             <DataTemplate>

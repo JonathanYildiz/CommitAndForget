@@ -17,7 +17,7 @@
       <ColumnDefinition/>
       <ColumnDefinition/>
     </Grid.ColumnDefinitions>
-    <Button Grid.Column="0" Content="Paypal" Command="{Binding PayCommand}" CommandParameter="Paypal" Style="{StaticResource NaviagtionButton}"/>
+    <Button Grid.Column="0" Content="Paypal" Command="{Binding PayCommand}" CommandParameter="Paypal" Style="{StaticResource NavigationButton}"/>
     <Button Grid.Column="1" Content="Bar" Command="{Binding PayCommand}" CommandParameter="Cash" Style="{StaticResource NavigationButton}"/>
   </Grid>
 </Page>

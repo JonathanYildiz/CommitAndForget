@@ -19,17 +19,17 @@
       <RowDefinition Height="*"/>
     </Grid.RowDefinitions>
     <Grid.ColumnDefinitions>
-      <ColumnDefinition Width="2*"/>
+      <ColumnDefinition Width="4*"/>
       <ColumnDefinition Width="8*"/>
     </Grid.ColumnDefinitions>
 
     <StackPanel Visibility="{Binding IsUserSelected, Converter={StaticResource BoolToVisibilityConverter}}"
                 Margin="5">
-      <TextBlock Grid.Column="0" Grid.ColumnSpan="2">
+      <TextBlock Grid.Column="0" Grid.ColumnSpan="2" TextWrapping="Wrap">
         <Run Text="Lieblingsprodukt:"/>
         <Run Text="{Binding SelectedUser.MostOrderedProduct}"/>
       </TextBlock>
-      <TextBlock Grid.Column="0" Grid.RowSpan="2">
+      <TextBlock Grid.Column="0" Grid.RowSpan="2" TextWrapping="Wrap">
         <Run Text="Lieblingsmenü:"/>
         <Run Text="{Binding SelectedUser.MostOrderedMenu}"/>
       </TextBlock>
