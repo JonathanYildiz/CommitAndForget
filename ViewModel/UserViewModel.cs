@@ -87,6 +87,7 @@ namespace CommitAndForget.ViewModel
       get => Get<Frame>();
       set => Set(value);
     }
+    public Visibility IsEditUserVisible => Visibility.Visible;
     #endregion Properties
 
     #region Constructor
@@ -121,6 +122,7 @@ namespace CommitAndForget.ViewModel
       AddImageCommand = new RelayCommand(AddImage);
       RateImageCommand = new RelayCommand<Tuple<ImageModel, decimal>>(RateImage);
       LogoutCommand = new RelayCommand<Window>(LogoutUser);
+      EditProfileCommand = new RelayCommand(EditProfile);
     }
     public ICommand NavigateToUserOrderCommand { get; set; }
     public ICommand NavigateBackCommand { get; set; }
@@ -139,6 +141,7 @@ namespace CommitAndForget.ViewModel
     public ICommand AddImageCommand {  get; set; }
     public ICommand RateImageCommand { get; set; }
     public ICommand LogoutCommand { get; set; }
+    public ICommand EditProfileCommand { get; set; }
     #endregion Commands
 
     #region Methods
@@ -384,6 +387,13 @@ namespace CommitAndForget.ViewModel
         view.DataContext = new LoginViewModel();
         view.Show();
       }
+    }
+
+    private void EditProfile()
+    {
+      var view = new ProfileEditView();
+      view.DataContext = this;
+      view.ShowDialog();
     }
     #endregion Methods
   }
