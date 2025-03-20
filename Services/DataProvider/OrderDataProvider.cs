@@ -1,6 +1,7 @@
 ﻿using System.Collections.ObjectModel;
 using System.Data;
 using System.Windows;
+using System.Windows.Controls;
 using CommitAndForget.Model;
 
 namespace CommitAndForget.Services.DataProvider
@@ -98,6 +99,25 @@ namespace CommitAndForget.Services.DataProvider
         MessageBoxService.DisplayMessage(ex.Message, MessageBoxImage.Error);
         return [];
       }
+    }
+
+    public static bool DeleteOrder(int orderId)
+    {
+      try
+      {
+        var parameters = new Dictionary<string, object>
+        {
+          { "p_OrderId", orderId }
+        };
+        DataTable dt = DataBaseService.ExecuteSP("spDeleteOrder", parameters);
+        if (!dt.ExtendedProperties.ContainsKey("HasErrors"))
+          return true;
+      }
+      catch (Exception ex)
+      {
+        MessageBoxService.DisplayMessage(ex.Message, MessageBoxImage.Error);
+      }
+      return false;
     }
   }
 }
