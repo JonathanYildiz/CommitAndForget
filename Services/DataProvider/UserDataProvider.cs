@@ -83,22 +83,24 @@ namespace CommitAndForget.Services.DataProvider
       {
         var parameters = new Dictionary<string, object>
         {
-          { "p_FirstName", newUser.FirstName },
-          { "p_LastName", newUser.LastName },
-          { "p_Street", newUser.Street },
-          { "p_HouseNumber", newUser.HouseNumber },
-          { "p_PostalCode", newUser.PostalCode },
-          { "p_City", newUser.City },
+          { "p_FirstName", newUser.FirstName ?? "" },
+          { "p_LastName", newUser.LastName ?? "" },
+          { "p_Street", newUser.Street ?? "" },
+          { "p_HouseNumber", newUser.HouseNumber ?? "" },
+          { "p_PostalCode", newUser.PostalCode ?? "" },
+          { "p_City", newUser.City ?? "" },
           { "p_Email", newUser.Email },
           { "p_Password", newUser.Password },
           { "p_IsAdmin", newUser.IsAdmin }
         };
         DataTable dt = DataBaseService.ExecuteSP("spRegisterUser", parameters);
+        if (dt.ExtendedProperties.ContainsKey("HasErrors"))
+          return null;
 
         if (dt is not null && dt.Rows.Count == 1) // Es darf nur ein Benutzer zurückkommmen
         {
           if (dt.Columns.Contains("Nachricht") && dt.Rows[0]["Nachricht"] != DBNull.Value) // Fehlermeldungen aus der Datenbank abfangen
-            return null;
+            return null;          
 
           user.Key = dt.Rows[0]["nKey"] != DBNull.Value ? (int)dt.Rows[0]["nKey"] : default;
           user.FirstName = dt.Rows[0]["szFirstName"] != DBNull.Value ? dt.Rows[0]["szFirstName"].ToString() ?? string.Empty : string.Empty;
