@@ -7,7 +7,7 @@
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
       Title="PaymentSuccessView">
-
+  
   <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center">
     <Label Content="Vielen Dank für Ihre Bestellung!" FontSize="24" />
     <Label x:Name="PaymentLabel" FontSize="24"/>

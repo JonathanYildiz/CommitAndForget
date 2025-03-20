@@ -6,7 +6,7 @@
         xmlns:converter="clr-namespace:CommitAndForget.Converter"
         mc:Ignorable="d"
         Title="ShowImagesView" Height="450" Width="800">
-
+  
   <Grid>
     <ScrollViewer VerticalScrollBarVisibility="Auto">
       <ItemsControl ItemsSource="{Binding ImageList}">

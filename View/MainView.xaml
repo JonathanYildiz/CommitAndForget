@@ -10,11 +10,7 @@
         Title="NutzerMainView" Height="450" Width="800"
         Loaded="Window_Loaded">
 
-  <Window.Resources>
-    <ResourceDictionary Source="../Resources/ResourceDictionary.xaml"/>
-  </Window.Resources>
-  
-  <Grid Background="Pink">
+  <Grid>
     <Grid.RowDefinitions>
       <RowDefinition Height="*"/>
       <RowDefinition Height="9*"/>

@@ -9,9 +9,7 @@
       d:DesignHeight="450" d:DesignWidth="800"
       Title="FunnyDinnerContestView"
       FontSize="24">
-  <Page.Resources>
-    <ResourceDictionary Source="../../Resources/ResourceDictionary.xaml" />
-  </Page.Resources>
+
   <Grid>
     <ScrollViewer>
       <ItemsControl ItemsSource="{Binding ImageList}">
