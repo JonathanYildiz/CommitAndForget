@@ -341,14 +341,14 @@ BEGIN
         -- Benutzer aktualisieren
         UPDATE tbluser
         SET 
-            szFirstName = p_FirstName,
-            szLastName = p_LastName,
-            szStreet = p_Street,
-            szHouseNumber = p_HouseNumber,
-            szPostalCode = p_PostalCode, 
-            szCity = p_City,
-            szEmail = p_Email,
-            bIsAdmin = p_IsAdmin,
+            szFirstName = coalesce(p_FirstName, szFirstName),
+            szLastName = coalesce(p_LastName, szLastName),
+            szStreet = coalesce(p_Street, szStreet),
+            szHouseNumber = coalesce(p_HouseNumber, szHouseNumber),
+            szPostalCode = coalesce(p_PostalCode, szPostalCode), 
+            szCity = coalesce(p_City, szCity),
+            szEmail = coalesce(p_Email, szEmail),
+            bIsAdmin = coalesce(p_IsAdmin, bIsAdmin),
             szPassword = coalesce(nullif(p_Password, ""), szPassword)
         WHERE nKey = p_Key;
         
@@ -656,6 +656,7 @@ SELECT
    pm.nQuantity AS product_nQuantity,
 	p.nKey AS product_nKey,
    p.szName AS product_szName,
+   p.nEnergy AS product_nEnergy,
    fnGetMenuOrderCount(m.nKey) AS menu_nOrderCount    
     FROM tblmenu m
 	 LEFT JOIN tblimage imgMenu ON m.nImageLink = imgMenu.nKey
@@ -1202,24 +1203,185 @@ DELIMITER $$
 CREATE PROCEDURE spGetOrderHistory()
 BEGIN
    
-   SELECT u.szEmail AS user_Mail,
-	       o.nKey AS order_nKey,
-	       o.dtOrderDate AS order_CreationDate,
-	       SUM(IFNULL(m.rPrice, 0) * IFNULL(om.nQuantity, 0)) + SUM(IFNULL(p.rPrice, 0) * IFNULL(op.nQuantity, 0)) AS order_TotalPrice
-	FROM tblorder o
-	JOIN tbluser u ON u.nKey = o.nUserLink
-	LEFT JOIN tblordermenu om ON om.nOrderLink = o.nKey
-	LEFT JOIN tblmenu m ON m.nKey = om.nMenuLink
-	LEFT JOIN tblorderproduct op ON op.nOrderLink = o.nKey
-	LEFT JOIN tblproduct p ON p.nKey = op.nProductLink
-	GROUP BY u.szEmail, o.nKey, o.dtOrderDate
-	ORDER BY o.nKey;
+  SELECT combined.szEmail AS user_Mail,
+	       combined.nKey AS order_nKey,
+	       combined.dtOrderDate AS order_CreationDate,
+	       SUM(order_TotalPrice) AS order_TotalPrice
+	FROM (
+	    SELECT o.nKey,
+	           o.dtOrderDate,
+	           u.szEmail,
+	           (p.rPrice * op.nQuantity) AS order_TotalPrice
+	    FROM tblorder o
+	    JOIN tbluser u ON u.nKey = o.nUserLink
+	    LEFT JOIN tblorderproduct op ON op.nOrderLink = o.nKey
+	    LEFT JOIN tblproduct p ON p.nKey = op.nProductLink
+	    UNION ALL
+	    SELECT o.nKey,
+	           o.dtOrderDate,
+	           u.szEmail,
+	           (m.rPrice * om.nQuantity) AS order_TotalPrice
+	    FROM tblorder o
+	    JOIN tbluser u ON u.nKey = o.nUserLink
+	    LEFT JOIN tblordermenu om ON om.nOrderLink = o.nKey
+	    LEFT JOIN tblmenu m ON m.nKey = om.nMenuLink
+	) AS combined
+	GROUP BY combined.szEmail, combined.nKey, combined.dtOrderDate
+	ORDER BY combined.nKey;
       
 END $$
 
 DELIMITER ;
 
 -- Fertig: 33_spGetOrderHistory.sql
+
+
+-- HinzufÃ¼gen: 34_spDeleteOrder.sql
+
+USE dbcommitandforget;
+
+DROP PROCEDURE IF EXISTS spDeleteOrder;
+
+DELIMITER $$
+CREATE PROCEDURE spDeleteOrder(
+	IN p_OrderId INT
+)
+BEGIN
+   
+   DELETE 
+	FROM tblorder
+   WHERE nKey = p_OrderId;
+   
+   DELETE
+   FROM tblordermenu
+   WHERE nOrderLink = p_OrderId;
+   
+   DELETE
+   FROM tblorderproduct
+   WHERE nOrderLink = p_OrderId;
+      
+END $$
+
+DELIMITER ;
+
+-- Fertig: 34_spDeleteOrder.sql
+
+
+-- HinzufÃ¼gen: 35_spGetOrderDetails.sql
+
+USE dbcommitandforget;
+
+DROP PROCEDURE IF EXISTS spGetOrderDetails;
+
+DELIMITER $$
+CREATE PROCEDURE spGetOrderDetails(
+	IN p_OrderId INT
+)
+BEGIN
+   
+   SELECT m.szName AS item_Name
+   	  , om.nQuantity AS item_Quantity
+        , m.rPrice AS item_Price      
+	FROM tblorder o
+	JOIN tblordermenu om ON om.nOrderLink = o.nKey
+	JOIN tblmenu m ON m.nKey = om.nMenuLink
+	WHERE o.nKey = p_OrderId
+	
+	UNION ALL
+	
+	SELECT p.szName AS item_Name
+	     , op.nQuantity AS item_Quantity
+		  , p.rPrice AS item_Price
+	FROM tblorder o
+	JOIN tblorderproduct op ON op.nOrderLink = o.nKey
+	JOIN tblproduct p ON p.nKey = op.nProductLink
+	WHERE o.nKey = p_OrderId;
+      
+END $$
+
+DELIMITER ;
+
+-- Fertig: 35_spGetOrderDetails.sql
+
+
+-- HinzufÃ¼gen: 36_spGetContestWinner.sql
+
+USE dbcommitandforget;
+
+DROP PROCEDURE IF EXISTS spGetContestWinner;
+
+DELIMITER $$
+
+CREATE PROCEDURE spGetContestWinner()
+BEGIN
+    -- DEBUG: Alle genehmigten Bilder auf den ersten Tag des letzten Monats setzen
+    UPDATE tblImage
+    SET dtCreationDate = LAST_DAY(CURRENT_DATE - INTERVAL 2 MONTH) + INTERVAL 1 DAY
+    WHERE bApproved = 1;
+   
+    -- ÃœberprÃ¼fen, ob es bereits Gewinner gibt
+    IF EXISTS (
+        SELECT 1 FROM tblImage 
+        WHERE YEAR(dtCreationDate) = YEAR(CURRENT_DATE - INTERVAL 1 MONTH)
+          AND MONTH(dtCreationDate) = MONTH(CURRENT_DATE - INTERVAL 1 MONTH)
+          AND bApproved = 1
+          AND bContestWon = 1
+    ) THEN
+        -- Falls ja, diese direkt zurÃ¼ckgeben
+        SELECT img.nKey AS image_nKey
+        		 , usr.szFirstName AS image_szUploadedBy
+        		 , img.vbImage AS image_vbImage
+		  FROM tblImage img
+		  JOIN tbluser usr ON usr.nKey = img.nUserLink
+        WHERE YEAR(dtCreationDate) = YEAR(CURRENT_DATE - INTERVAL 1 MONTH)
+          AND MONTH(dtCreationDate) = MONTH(CURRENT_DATE - INTERVAL 1 MONTH)
+          AND bApproved = 1
+          AND bContestWon = 1;
+    ELSE
+        -- Falls noch kein Gewinner existiert, bestbewertete Bilder ermitteln
+        DROP TEMPORARY TABLE IF EXISTS TempTopImages;
+        CREATE TEMPORARY TABLE TempTopImages AS 
+        SELECT mi.nKey
+        FROM tblImage mi
+        JOIN (
+            SELECT r.nImageLink, AVG(r.nRating) AS avgRating
+            FROM tblRating r
+            JOIN tblImage i ON r.nImageLink = i.nKey
+            WHERE YEAR(i.dtCreationDate) = YEAR(CURRENT_DATE - INTERVAL 1 MONTH)
+              AND MONTH(i.dtCreationDate) = MONTH(CURRENT_DATE - INTERVAL 1 MONTH)
+              AND i.bApproved = 1
+            GROUP BY r.nImageLink
+        ) ir ON mi.nKey = ir.nImageLink
+        WHERE ir.avgRating = (
+            SELECT MAX(avgRating) FROM (
+                SELECT AVG(r.nRating) AS avgRating
+                FROM tblRating r
+                JOIN tblImage i ON r.nImageLink = i.nKey
+                WHERE YEAR(i.dtCreationDate) = YEAR(CURRENT_DATE - INTERVAL 1 MONTH)
+                  AND MONTH(i.dtCreationDate) = MONTH(CURRENT_DATE - INTERVAL 1 MONTH)
+                  AND i.bApproved = 1
+                GROUP BY r.nImageLink
+            ) AS MaxRating
+        );
+
+        -- Die Gewinner als bContestWon markieren
+        UPDATE tblImage 
+        SET bContestWon = 1
+        WHERE nKey IN (SELECT nKey FROM TempTopImages);
+
+        -- Gewinner zurÃ¼ckgeben
+        SELECT img.nKey AS image_nKey
+        		 , usr.szFirstName AS image_szUploadedBy
+        		 , img.vbImage AS image_vbImage
+		  FROM tblimage img
+		  JOIN tbluser usr ON usr.nKey = img.nUserLink
+        WHERE img.nKey IN (SELECT nKey FROM TempTopImages);
+    END IF;
+END $$
+
+DELIMITER ;
+
+-- Fertig: 36_spGetContestWinner.sql
 
 
 -- HinzufÃ¼gen: 01_fnGetMenuOrderCount.sql

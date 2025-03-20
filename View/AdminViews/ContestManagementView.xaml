@@ -22,8 +22,7 @@
 
 
       <StackPanel Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center">
-      <TextBlock HorizontalAlignment="Left" Margin="5" TextWrapping="Wrap"
-                 Style="{StaticResource SimpleTextBlock}">
+      <TextBlock HorizontalAlignment="Left" Margin="5" TextWrapping="Wrap">
         <Run Text="Hochgeladen von:" />
         <Run Text="{Binding CurrentContestImage.UploadedBy}" />
       </TextBlock>

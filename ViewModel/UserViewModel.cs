@@ -68,6 +68,11 @@ namespace CommitAndForget.ViewModel
       get => Get<ObservableCollection<ImageModel>>();
       set => Set(value);
     }
+    public ObservableCollection<ImageModel> ContestWinner
+    {
+      get => Get<ObservableCollection<ImageModel>>();
+      set => Set(value);
+    }
     public IngredientModel SelectedIngredient
     {
       get => Get<IngredientModel>();
@@ -117,11 +122,14 @@ namespace CommitAndForget.ViewModel
     #region Commands
     private void CreateCommands()
     {
+      // Navigation
       NavigateToUserOrderCommand = new RelayCommand(NavigateToUserOrder);
       NavigateBackCommand = new RelayCommand(NavigateBack);
       NavigateToMenuCommand = new RelayCommand(NavigateToMenu);
       NavigateToProductCommand = new RelayCommand(NavigateToProduct);
       NavigateToFunnyDinnerContestCommand = new RelayCommand(NavigateToFunnyDinnerContest);
+
+      // Bestellung
       ToggleShowShoppingCartCommand = new RelayCommand(ToggleShowShoppingCart);
       AddProductToShoppingCartCommand = new RelayCommand<ProductModel>(AddProductToShoppingCart);
       AddMenuToShoppingCartCommand = new RelayCommand<MenuModel>(AddMenuToShoppingCart);
@@ -131,12 +139,17 @@ namespace CommitAndForget.ViewModel
       RemoveMenuFromShoppingCartCommand = new RelayCommand<MenuModel>(RemoveMenuFromShoppingCart);
       NavigateToPaymentCommand = new RelayCommand(NavigateToPayment);
       PayCommand = new RelayCommand<string>(Pay);
+
+      // FunnyDinnerContest
       AddImageCommand = new RelayCommand(AddImage);
       RateImageCommand = new RelayCommand<Tuple<ImageModel, decimal>>(RateImage);
-      LogoutCommand = new RelayCommand(LogoutUser);
+      ViewWinnerCommand = new RelayCommand(ViewWinner);
+
+      // Benutzer
       EditProfileCommand = new RelayCommand(EditProfile);
       CancelEditCommand = new RelayCommand<Window>(CancelEdit);
       SaveEditCommand = new RelayCommand<Window>(SaveEdit);
+      LogoutCommand = new RelayCommand(LogoutUser);
     }
     public ICommand NavigateToUserOrderCommand { get; set; }
     public ICommand NavigateBackCommand { get; set; }
@@ -154,6 +167,7 @@ namespace CommitAndForget.ViewModel
     public ICommand PayCommand { get; set; }
     public ICommand AddImageCommand { get; set; }
     public ICommand RateImageCommand { get; set; }
+    public ICommand ViewWinnerCommand { get; set; }
     public ICommand LogoutCommand { get; set; }
     public ICommand EditProfileCommand { get; set; }
     public ICommand CancelEditCommand { get; set; }
@@ -262,6 +276,7 @@ namespace CommitAndForget.ViewModel
 
     #endregion Navigation
 
+    #region IngredientFilter
     private bool FilterProducts(object obj)
     {
       if (obj is ProductModel product)
@@ -292,7 +307,9 @@ namespace CommitAndForget.ViewModel
       }
       return false;
     }
+    #endregion IngredientFilter
 
+    #region Order
     private void AddProductToShoppingCart(ProductModel? product)
     {
       if (product is not null)
@@ -375,6 +392,9 @@ namespace CommitAndForget.ViewModel
         OnPropertyChanged(nameof(ShoppingCartPrice));
       }
     }
+    #endregion Order
+
+    #region FunnyDinnerContest
     private void AddImage()
     {
       var image = new ImageModel();
@@ -401,23 +421,25 @@ namespace CommitAndForget.ViewModel
       }
     }
 
-    private void LogoutUser()
+    private void ViewWinner()
     {
-      if (MessageBoxService.LogoutMessage("Möchten Sie sich wirklich abmelden?", MessageBoxImage.Information) == MessageBoxResult.Yes)
+      ContestWinner = ImageDataProvider.GetLastWinners();
+
+      // Prüfen, ob Gewinner ermittelt werden konnte
+      if (ContestWinner is null)
       {
-        // Aktuelles Window wegspeichern
-        var currentWindow = Application.Current.Windows.OfType<Window>().FirstOrDefault(w => w.IsActive);
-
-        var view = new LoginView();
-        view.WindowStartupLocation = WindowStartupLocation.CenterScreen;
-        view.DataContext = new LoginViewModel();
-        view.Show();
-
-        // Altes Fenster schließen
-        currentWindow?.Close();
+        MessageBoxService.DisplayMessage("Gewinner des letzten Monats konnte nicht ermittelt werden", MessageBoxImage.Error);
+        return;
       }
-    }
 
+      var winnerWindow = new ContestWinnerView { DataContext = this };
+      winnerWindow.Owner = Application.Current.Windows.OfType<Window>().FirstOrDefault(w => w.IsActive);
+      winnerWindow.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+      winnerWindow?.Show();
+    }
+    #endregion FunnyDinnerContest
+
+    #region User
     private void EditProfile()
     {
       BackupUser = new UserModel(CurrentUser);
@@ -444,6 +466,24 @@ namespace CommitAndForget.ViewModel
         window?.Close();
       }
     }
+    private void LogoutUser()
+    {
+      if (MessageBoxService.LogoutMessage("Möchten Sie sich wirklich abmelden?", MessageBoxImage.Information) == MessageBoxResult.Yes)
+      {
+        // Aktuelles Window wegspeichern
+        var currentWindow = Application.Current.Windows.OfType<Window>().FirstOrDefault(w => w.IsActive);
+
+        var view = new LoginView();
+        view.WindowStartupLocation = WindowStartupLocation.CenterScreen;
+        view.DataContext = new LoginViewModel();
+        view.Show();
+
+        // Altes Fenster schließen
+        currentWindow?.Close();
+      }
+    }
+    #endregion User
+
     #endregion Methods
   }
 }
