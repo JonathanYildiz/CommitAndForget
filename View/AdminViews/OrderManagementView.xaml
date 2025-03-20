@@ -23,7 +23,7 @@
         <DataGridTextColumn Header="E-Mail" Binding="{Binding UserMail}" Width="*"/>
         <DataGridTextColumn Header="BestellNr" Binding="{Binding Key}" Width="*"/>
         <DataGridTextColumn Header="BestellDatum" Binding="{Binding OrderDate, StringFormat={}{0:dd/MM/yyyy}}" Width="*"/>
-        <DataGridTextColumn Header="Gesamtkosten" Binding="{Binding TotalPrice}" Width="*"/>
+        <DataGridTextColumn Header="Gesamtkosten" Binding="{Binding TotalPrice, StringFormat={}{0:C}}" Width="*"/>
         <DataGridTemplateColumn Header="Actions" Width="Auto">
           <DataGridTemplateColumn.CellTemplate>
             <DataTemplate>

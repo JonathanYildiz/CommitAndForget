@@ -24,8 +24,9 @@
           <DataTemplate>
             <StackPanel Orientation="Horizontal" Margin="5">
               <TextBlock Text="{Binding Name}" Width="120" TextWrapping="Wrap" VerticalAlignment="Center"/>
-              <TextBlock Text="{Binding Quantity}" Width="50" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-              <Button Content="X" Command="{Binding DataContext.RemoveProductFromShoppingCartCommand, RelativeSource={RelativeSource AncestorType=ListBox}}" CommandParameter="{Binding}" Width="25" Height="25" VerticalAlignment="Center"/>
+                <TextBlock Text="{Binding Quantity}" Width="50" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                <TextBlock Text="{Binding ShoppingCartPrice, StringFormat={}{0:C}}" Width="50" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                <Button Content="X" Command="{Binding DataContext.RemoveProductFromShoppingCartCommand, RelativeSource={RelativeSource AncestorType=ListBox}}" CommandParameter="{Binding}" Width="25" Height="25" VerticalAlignment="Center"/>
             </StackPanel>
           </DataTemplate>
         </ListBox.ItemTemplate>
@@ -34,9 +35,10 @@
         <ListBox.ItemTemplate>
           <DataTemplate>
             <StackPanel Orientation="Horizontal" Margin="5">
-              <TextBlock Text="{Binding Name}" Width="120" TextWrapping="Wrap" VerticalAlignment="Center"/>
-              <TextBlock Text="{Binding Quantity}" Width="50" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-              <Button Content="X" Command="{Binding DataContext.RemoveMenuFromShoppingCartCommand, RelativeSource={RelativeSource AncestorType=ListBox}}" CommandParameter="{Binding}" Width="25" Height="25" VerticalAlignment="Center"/>
+                <TextBlock Text="{Binding Name}" Width="120" TextWrapping="Wrap" VerticalAlignment="Center"/>
+                <TextBlock Text="{Binding Quantity}" Width="50" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                <TextBlock Text="{Binding ShoppingCartPrice, StringFormat={}{0:C}}" Width="50" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                <Button Content="X" Command="{Binding DataContext.RemoveMenuFromShoppingCartCommand, RelativeSource={RelativeSource AncestorType=ListBox}}" CommandParameter="{Binding}" Width="25" Height="25" VerticalAlignment="Center"/>
             </StackPanel>
           </DataTemplate>
         </ListBox.ItemTemplate>
