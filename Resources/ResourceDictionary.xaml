@@ -8,35 +8,41 @@
   <conv:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
   <conv:RatingToVisibilityConverter x:Key="RatingToVisibilityConverter"/>
   <conv:MultiParameterConverter x:Key="MultiParameterConverter" />
-  <essentials:BindingProxy x:Key="BindingProxy" Data="{Binding}" />
   <res:DropDownButton x:Key="DropDownButton" />
 
+  <!-- Window, Page & UserControl Styles-->
+  <Style TargetType="Window" x:Key="WindowStyle">
+    <Setter Property="Background" Value="Pink"/>
+  </Style>
+  
+  <Style TargetType="Page" x:Key="PageStyle">
+    <Setter Property="Background" Value="Pink"/>
+  </Style>
+  
+  <Style TargetType="UserControl" x:Key="UserControlStyle">
+    <Setter Property="Background" Value="Pink"/>
+  </Style>
+  
   <!-- Standard Styles -->
-  <Style TargetType="{x:Type Window}">
-    <Setter Property="Background" Value="Pink"/>
-  </Style>
-  
-  <Style TargetType="{x:Type Page}">
-    <Setter Property="Background" Value="Pink"/>
-  </Style>
-  
-  <Style TargetType="{x:Type UserControl}">
-    <Setter Property="Background" Value="Pink"/>
-  </Style>
-  
   <Style TargetType="TextBlock">
     <Setter Property="FontSize" Value="14"/>
     <Setter Property="VerticalAlignment" Value="Center"/>
     <Setter Property="HorizontalAlignment" Value="Center"/>
     <Setter Property="Margin" Value="5"/>
   </Style>
-  
+
   <Style TargetType="TextBox">
     <Setter Property="FontSize" Value="14"/>
     <Setter Property="Margin" Value="5"/>
     <Setter Property="Padding" Value="5"/>
   </Style>
   
+  <Style TargetType="PasswordBox">
+    <Setter Property="FontSize" Value="14"/>
+    <Setter Property="Margin" Value="5"/>
+    <Setter Property="Padding" Value="5"/>
+  </Style>
+
   <Style TargetType="CheckBox">
     <Setter Property="FontSize" Value="14"/>
     <Setter Property="Margin" Value="5"/>
@@ -123,16 +129,16 @@
       <Setter.Value>
         <ControlTemplate TargetType="Button">
           <Border x:Name="border" 
-                              Background="{TemplateBinding Background}"
-                              BorderBrush="{TemplateBinding BorderBrush}"
-                              CornerRadius="5">
+                  Background="{TemplateBinding Background}"
+                  BorderBrush="{TemplateBinding BorderBrush}"
+                  CornerRadius="5">
             <ContentPresenter VerticalAlignment="Center" HorizontalAlignment="Center">
               <ContentPresenter.Effect>
                 <DropShadowEffect Color="Black"
-                                           Direction="320"
-                                           ShadowDepth="2"
-                                           Opacity="0.5"
-                                           BlurRadius="1"/>
+                                  Direction="320"
+                                  ShadowDepth="2"
+                                  Opacity="0.5"
+                                  BlurRadius="1"/>
               </ContentPresenter.Effect>
             </ContentPresenter>
           </Border>
@@ -208,6 +214,8 @@
 
   <Style TargetType="DataGridCell">
     <Setter Property="TextBlock.TextAlignment" Value="Center" />
+    <Setter Property="VerticalAlignment" Value="Center" />
+    <Setter Property="HorizontalAlignment" Value="Center" />
   </Style>
 
   <!-- Style for add Buttons -->

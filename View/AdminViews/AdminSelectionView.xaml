@@ -6,7 +6,8 @@
       xmlns:local="clr-namespace:CommitAndForget.View.AdminViews"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
-      Title="AdminSelectionView">
+      Title="AdminSelectionView"
+      Style="{StaticResource PageStyle}">
 
   <StackPanel Orientation="Vertical" VerticalAlignment="Stretch">
     <Button Content="Benutzerverwaltung" Command="{Binding NavigateToUserManagementCommand}"/>
