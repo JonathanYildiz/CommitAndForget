@@ -873,7 +873,7 @@ CREATE PROCEDURE spGetImages(
 
 BEGIN 
 
--- Wenn GÃ¼ltiger Benutzer, dann Ratings des Benutzers dazu laden
+-- Wenn GÃƒÂ¼ltiger Benutzer, dann Ratings des Benutzers dazu laden
 IF EXISTS (
         SELECT 1
         FROM tbluser u
