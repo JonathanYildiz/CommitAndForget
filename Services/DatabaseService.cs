@@ -42,6 +42,7 @@ namespace CommitAndForget.Services
       catch (Exception ex)
       {
         MessageBoxService.DisplayMessage(ex.Message, MessageBoxImage.Error);
+        tbl.ExtendedProperties["HasErrors"] = true;
       }
       return tbl;
     }
@@ -75,63 +76,9 @@ namespace CommitAndForget.Services
       catch (Exception ex)
       {
         MessageBoxService.DisplayMessage(ex.Message, MessageBoxImage.Error);
+        tbl.ExtendedProperties["HasErrors"] = true;
       }
       return tbl;
-    }
-
-    public static DataSet ExecuteSPDataSet(string sp, Dictionary<string, object> parameters)
-    {
-      DataSet dataSet = new DataSet();
-      try
-      {
-        using (MySqlConnection connection = new MySqlConnection(ConnectionString))
-        {
-          MySqlCommand command = new MySqlCommand(sp, connection)
-          {
-            CommandType = CommandType.StoredProcedure
-          };
-
-          foreach (KeyValuePair<string, object> item in parameters)
-          {
-            command.Parameters.AddWithValue(item.Key, item.Value ?? DBNull.Value);
-          }
-
-          using (MySqlDataAdapter adapter = new MySqlDataAdapter(command))
-          {
-            adapter.Fill(dataSet);
-          }
-        }
-      }
-      catch (Exception ex)
-      {
-        MessageBoxService.DisplayMessage(ex.Message, MessageBoxImage.Error);
-      }
-      return dataSet;
-    }
-
-    public static DataSet ExecuteSPDataSet(string sp)
-    {
-      DataSet dataSet = new DataSet();
-      try
-      {
-        using (MySqlConnection connection = new MySqlConnection(ConnectionString))
-        {
-          MySqlCommand command = new MySqlCommand(sp, connection)
-          {
-            CommandType = CommandType.StoredProcedure
-          };
-
-          using (MySqlDataAdapter adapter = new MySqlDataAdapter(command))
-          {
-            adapter.Fill(dataSet);
-          }
-        }
-      }
-      catch (Exception ex)
-      {
-        MessageBoxService.DisplayMessage(ex.Message, MessageBoxImage.Error);
-      }
-      return dataSet;
     }
   }
 }

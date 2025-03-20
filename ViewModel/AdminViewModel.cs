@@ -148,13 +148,16 @@ namespace CommitAndForget.ViewModel
       SelectImageCommand = new RelayCommand(SelectImage);
       AddImageCommand = new RelayCommand(AddImage);
       RemoveImageFromProductCommand = new RelayCommand(RemoveImageFromProduct);
-      RemoveImageFromMenuCommand = new RelayCommand(RemoveImageFromMenu); 
+      RemoveImageFromMenuCommand = new RelayCommand(RemoveImageFromMenu);
 
       // Contestverwaltung
       NextContestImageCommand = new RelayCommand(NextContestImage);
       PreviousContestImageCommand = new RelayCommand(PreviousContestImage);
       ApproveContestImageCommand = new RelayCommand(ApproveContestImage);
       DeleteContestImageCommand = new RelayCommand(DeleteContestImage);
+
+      // Bestellverwaltung
+      DeleteOrderCommand = new RelayCommand<OrderModel>(DeleteOrder);
     }
     public ICommand NavigateToUserManagementCommand { get; set; }
     public ICommand NavigateToProductManagementCommand { get; set; }
@@ -190,6 +193,7 @@ namespace CommitAndForget.ViewModel
     public ICommand ApproveContestImageCommand { get; set; }
     public ICommand DeleteContestImageCommand { get; set; }
     public ICommand LogoutCommand { get; set; }
+    public ICommand DeleteOrderCommand { get; set; }
     #endregion Commands
 
     #region Methods
@@ -241,7 +245,7 @@ namespace CommitAndForget.ViewModel
 
         var view = new LoginView();
         view.WindowStartupLocation = WindowStartupLocation.CenterScreen;
-        view.DataContext = new LoginViewModel();        
+        view.DataContext = new LoginViewModel();
         view.Show();
 
         // Altes Fenster schließen
@@ -704,6 +708,24 @@ namespace CommitAndForget.ViewModel
     }
 
     #endregion Contest
+
+    #region Order
+
+    private void DeleteOrder(OrderModel? order)
+    {
+      if (order is not null)
+      {
+        var msgBox = MessageBox.Show("Möchten Sie die Bestellung wirklich löschen?", "Bestellung löschen", MessageBoxButton.YesNo, MessageBoxImage.Question);
+        if (msgBox == MessageBoxResult.Yes)
+        {
+          if (OrderDataProvider.DeleteOrder(order.Key))
+            OrderList.Remove(order);
+        }
+      }
+
+    }
+
+    #endregion Order
 
     #endregion Methods
   }

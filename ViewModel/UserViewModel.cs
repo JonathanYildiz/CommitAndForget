@@ -409,6 +409,8 @@ namespace CommitAndForget.ViewModel
 
       var view = new ProfileEditView();
       view.DataContext = this;
+      view.Owner = Application.Current.Windows.OfType<Window>().FirstOrDefault(w => w.IsActive);
+      view.WindowStartupLocation = WindowStartupLocation.CenterOwner;
       view.ShowDialog();
     }
 
