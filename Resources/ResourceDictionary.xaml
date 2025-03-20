@@ -11,6 +11,68 @@
   <essentials:BindingProxy x:Key="BindingProxy" Data="{Binding}" />
   <res:DropDownButton x:Key="DropDownButton" />
 
+  <!-- Standard Styles -->
+  <Style TargetType="{x:Type Window}">
+    <Setter Property="Background" Value="Pink"/>
+  </Style>
+  
+  <Style TargetType="{x:Type Page}">
+    <Setter Property="Background" Value="Pink"/>
+  </Style>
+  
+  <Style TargetType="{x:Type UserControl}">
+    <Setter Property="Background" Value="Pink"/>
+  </Style>
+  
+  <Style TargetType="TextBlock">
+    <Setter Property="FontSize" Value="14"/>
+    <Setter Property="VerticalAlignment" Value="Center"/>
+    <Setter Property="HorizontalAlignment" Value="Center"/>
+    <Setter Property="Margin" Value="5"/>
+  </Style>
+  
+  <Style TargetType="TextBox">
+    <Setter Property="FontSize" Value="14"/>
+    <Setter Property="Margin" Value="5"/>
+    <Setter Property="Padding" Value="5"/>
+  </Style>
+  
+  <Style TargetType="CheckBox">
+    <Setter Property="FontSize" Value="14"/>
+    <Setter Property="Margin" Value="5"/>
+  </Style>
+
+  <Style TargetType="Button">
+    <Setter Property="HorizontalContentAlignment" Value="Center"/>
+    <Setter Property="VerticalContentAlignment" Value="Center"/>
+    <Setter Property="MaxWidth" Value="200" />
+    <Setter Property="FontSize" Value="14"/>
+    <Setter Property="Margin" Value="5"/>
+    <Setter Property="Padding" Value="10,5"/>
+    <Setter Property="Background" Value="#007ACC"/>
+    <Setter Property="Foreground" Value="White"/>
+    <Setter Property="BorderBrush" Value="#007ACC"/>
+    <Setter Property="BorderThickness" Value="1"/>
+    <Setter Property="Template">
+      <Setter.Value>
+        <ControlTemplate TargetType="Button">
+          <Border  Background="{TemplateBinding Background}"
+                   BorderBrush="{TemplateBinding BorderBrush}"
+                   CornerRadius="5">
+            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+          </Border>
+          <ControlTemplate.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+              <Setter Property="Background" Value="AliceBlue"/>
+              <Setter Property="Foreground" Value="Black"/>
+            </Trigger>
+          </ControlTemplate.Triggers>
+        </ControlTemplate>
+      </Setter.Value>
+    </Setter>
+    <Setter Property="Cursor" Value="Hand"/>
+  </Style>
+
   <!-- Style for borderless Buttons -->
   <Style TargetType="Button" x:Key="BorderlessButton">
     <Setter Property="HorizontalAlignment" Value="Center" />
@@ -49,6 +111,8 @@
   <!-- Style for navigation Buttons -->
   <Style TargetType="Button" x:Key="NavigationButton">
     <Setter Property="FontSize" Value="48" />
+    <Setter Property="Margin" Value="0"/>
+    <Setter Property="Padding" Value="0"/>
     <Setter Property="HorizontalContentAlignment" Value="Center" />
     <Setter Property="VerticalContentAlignment" Value="Center" />
     <Setter Property="Background" Value="Transparent" />
@@ -166,11 +230,5 @@
         </ControlTemplate>
       </Setter.Value>
     </Setter>
-  </Style>
-
-  <Style TargetType="TextBox">
-    <Setter Property="MaxWidth" Value="300" />
-    <Setter Property="Height" Value="30" />
-    <Setter Property="FontSize" Value="20" />
   </Style>
 </ResourceDictionary>

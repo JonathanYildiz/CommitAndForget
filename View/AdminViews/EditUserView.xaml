@@ -7,33 +7,6 @@
         mc:Ignorable="d"
         Title="EditUserView" Height="500" Width="400">
 
-  <Window.Resources>
-    <Style TargetType="TextBlock">
-      <Setter Property="FontSize" Value="14"/>
-      <Setter Property="VerticalAlignment" Value="Center"/>
-      <Setter Property="Margin" Value="5"/>
-    </Style>
-    <Style TargetType="TextBox">
-      <Setter Property="FontSize" Value="14"/>
-      <Setter Property="Margin" Value="5"/>
-      <Setter Property="Padding" Value="5"/>
-    </Style>
-    <Style TargetType="CheckBox">
-      <Setter Property="FontSize" Value="14"/>
-      <Setter Property="Margin" Value="5"/>
-    </Style>
-    <Style TargetType="Button">
-      <Setter Property="FontSize" Value="14"/>
-      <Setter Property="Margin" Value="5"/>
-      <Setter Property="Padding" Value="10,5"/>
-      <Setter Property="Background" Value="#007ACC"/>
-      <Setter Property="Foreground" Value="White"/>
-      <Setter Property="BorderBrush" Value="#007ACC"/>
-      <Setter Property="BorderThickness" Value="1"/>
-      <Setter Property="Cursor" Value="Hand"/>
-    </Style>
-  </Window.Resources>
-
   <Grid Margin="20">
     <Grid.RowDefinitions>
       <RowDefinition Height="Auto"/>
