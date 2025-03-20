@@ -92,6 +92,7 @@ namespace CommitAndForget.ViewModel
       get => Get<Frame>();
       set => Set(value);
     }
+    public Visibility IsEditUserVisible => Visibility.Collapsed;
     #endregion Properties
 
     #region Constructor
