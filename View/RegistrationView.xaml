@@ -5,44 +5,69 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:CommitAndForget.View"
         mc:Ignorable="d"
-        Title="Registrieren" Height="450" Width="800"
+        Title="Registrieren"
+        Height="450" Width="400"
         Style="{StaticResource WindowStyle}">
-  
+
   <Grid>
-    <StackPanel>
-      <DockPanel>
-        <Label>Vorname</Label>
-      <TextBox Text="{Binding NewUser.FirstName}"/>
-      </DockPanel>
-      <DockPanel>
-        <Label>Nachname</Label>
-    <TextBox Text="{Binding NewUser.LastName}"/>
-      </DockPanel>
-      <DockPanel>
-        <Label>Straße</Label>
-    <TextBox Text="{Binding NewUser.Street}"/>
-      </DockPanel>
-      <DockPanel>
-        <Label>Hausnummer</Label>
-    <TextBox Text="{Binding NewUser.HouseNumber}"/>
-      </DockPanel>
-      <DockPanel>
-        <Label>PLZ</Label>
-    <TextBox Text="{Binding NewUser.PostalCode}"/>
-      </DockPanel>
-      <DockPanel>
-        <Label>Ort</Label>
-    <TextBox Text="{Binding NewUser.City}"/>
-      </DockPanel>
-      <DockPanel>
-        <Label>E-Mail</Label>
-    <TextBox Text="{Binding NewUser.Email}"/>
-      </DockPanel>
-      <DockPanel>
-        <Label>Passwort</Label>
-    <TextBox Text="{Binding NewUser.Password}"/>
-      </DockPanel>
-      <Button Command="{Binding ConfirmRegistrationCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}">OK</Button>
+    <Grid.RowDefinitions>
+      <RowDefinition Height="auto"/>
+      <RowDefinition Height="auto"/>
+      <RowDefinition Height="auto"/>
+      <RowDefinition Height="auto"/>
+      <RowDefinition Height="auto"/>
+      <RowDefinition Height="auto"/>
+      <RowDefinition Height="auto"/>
+      <RowDefinition Height="auto"/>
+      <RowDefinition Height="auto"/>
+    </Grid.RowDefinitions>
+    <Grid.ColumnDefinitions>
+      <ColumnDefinition Width="Auto"/>
+      <ColumnDefinition Width="*"/>
+    </Grid.ColumnDefinitions>
+
+    <TextBlock Grid.Row="0" Grid.Column="0"
+               Text="Vorname:"/>
+    <TextBox Grid.Row="0" Grid.Column="1"
+             Text="{Binding NewUser.FirstName}"/>
+
+    <TextBlock Grid.Row="1" Grid.Column="0"
+               Text="Nachname:"/>
+    <TextBox Grid.Row="1" Grid.Column="1"
+             Text="{Binding NewUser.LastName}"/>
+
+    <TextBlock Grid.Row="2" Grid.Column="0"
+               Text="Straße:"/>
+    <TextBox Grid.Row="2" Grid.Column="1"
+             Text="{Binding NewUser.Street}"/>
+
+    <TextBlock Grid.Row="3" Grid.Column="0"
+               Text="Hausnummer:"/>
+    <TextBox Grid.Row="3" Grid.Column="1"
+             Text="{Binding NewUser.HouseNumber}"/>
+
+    <TextBlock Grid.Row="4" Grid.Column="0"
+               Text="PLZ:"/>
+    <TextBox Grid.Row="4" Grid.Column="1"
+             Text="{Binding NewUser.PostalCode}"/>
+
+    <TextBlock Grid.Row="5" Grid.Column="0"
+               Text="Ort:"/>
+    <TextBox Grid.Row="5" Grid.Column="1"
+             Text="{Binding NewUser.City}"/>
+
+    <TextBlock Grid.Row="6" Grid.Column="0"
+               Text="E-Mail:"/>
+    <TextBox Grid.Row="6" Grid.Column="1"
+             Text="{Binding NewUser.Email}"/>
+
+    <TextBlock Grid.Row="7" Grid.Column="0"
+               Text="Passwort:"/>
+    <TextBox Grid.Row="7" Grid.Column="1"
+              Text="{Binding NewUser.Password}"/>
+    <StackPanel Grid.Row="8" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Center" Margin="10">
+      <Button Command="{Binding ConfirmRegistrationCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}">OK
+      </Button>
       <Button Command="{Binding CancelCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}">Abbrechen</Button>
     </StackPanel>
   </Grid>

@@ -6,7 +6,7 @@
         xmlns:converter="clr-namespace:CommitAndForget.Converter"
         xmlns:local="clr-namespace:CommitAndForget.View.AdminViews"
         mc:Ignorable="d" 
-        Height="600" Width="400"
+        Height="auto" Width="400"
         Style="{StaticResource WindowStyle}"
         Title="EditProductView">
 

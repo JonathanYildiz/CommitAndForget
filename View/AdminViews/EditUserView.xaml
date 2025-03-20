@@ -5,7 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:CommitAndForget.View.AdminViews"
         mc:Ignorable="d"
-        Title="EditUserView" Height="500" Width="400"
+        Title="EditUserView"
+        Height="500" Width="400"
         Style="{StaticResource WindowStyle}">
 
   <Grid Margin="20">
