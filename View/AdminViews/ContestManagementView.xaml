@@ -18,16 +18,18 @@
       <ColumnDefinition/>
       <ColumnDefinition/>
     </Grid.ColumnDefinitions>
-    <DockPanel Grid.Row="0" Grid.Column="0">
-      <Image Source="{Binding CurrentContestImage.Image}" Width="200" Height="200" Margin="5"/>
-      <TextBlock Text="{Binding CurrentContestImage.UploadedBy}"/>
-    </DockPanel>
+    <Image Source="{Binding CurrentContestImage.Image}" Margin="5"/>
 
 
-    <WrapPanel Grid.Row="0" Grid.Column="1" VerticalAlignment="Stretch">
+      <StackPanel Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center">
+      <TextBlock HorizontalAlignment="Left" Margin="5" TextWrapping="Wrap"
+                 Style="{StaticResource SimpleTextBlock}">
+        <Run Text="Hochgeladen von:" />
+        <Run Text="{Binding CurrentContestImage.UploadedBy}" />
+      </TextBlock>
       <Button Content="Freischalten" Command="{Binding ApproveContestImageCommand}"/>
       <Button Content="Löschen" Command="{Binding DeleteContestImageCommand}"/>
-    </WrapPanel>
+    </StackPanel>
 
     <Button Grid.Row="1" Grid.Column="0" Content="Vorheriges Bild" Command="{Binding PreviousContestImageCommand}"/>
     <Button Grid.Row="1" Grid.Column="1" Content="Nächstes Bild" Command="{Binding NextContestImageCommand}"/>
