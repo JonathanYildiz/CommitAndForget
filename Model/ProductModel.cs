@@ -30,6 +30,8 @@ namespace CommitAndForget.Model
       set => Set(value);
     }
 
+    public double TotalPrice => Math.Round(Price * Quantity, 2);
+
     public ImageModel Image
     {
       get => Get<ImageModel>();
@@ -39,7 +41,11 @@ namespace CommitAndForget.Model
     public int Quantity
     {
       get => Get<int>();
-      set => Set(value);
+      set
+      {
+        Set(value);
+        OnPropertyChanged(nameof(TotalPrice));
+      }
     }
 
     public bool IsChecked

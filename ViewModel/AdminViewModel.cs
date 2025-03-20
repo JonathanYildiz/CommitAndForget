@@ -287,13 +287,20 @@ namespace CommitAndForget.ViewModel
     {
       if (SelectedUser is not null)
       {
-        if (UserList.Any(UserList => UserList.Key == SelectedUser.Key)) // Wenn User vorhanden -> Updaten
+        if (UserList.Any(UserList => UserList.Key == SelectedUser.Key)) 
         {
+          // Wenn User vorhanden -> Updaten
           UserDataProvider.UpdateUser(SelectedUser);
         }
         else
         {
-          var addedUser = UserDataProvider.Register(SelectedUser); // Wenn nicht vorhanden -> Erstellen
+          // Wenn nicht vorhanden -> Erstellen
+          if (string.IsNullOrWhiteSpace(SelectedUser.Email) || string.IsNullOrWhiteSpace(SelectedUser.Password))
+          {
+            MessageBoxService.DisplayMessage("Email und Passwort müssen angegeben werden", MessageBoxImage.Information);
+            return;
+          }
+          var addedUser = UserDataProvider.Register(SelectedUser); 
           if (addedUser is not null)
             UserList.Add(addedUser);
           else

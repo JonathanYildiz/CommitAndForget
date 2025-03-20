@@ -84,8 +84,15 @@ namespace CommitAndForget.ViewModel
     public bool ShowShoppingCart
     {
       get => Get<bool>();
-      set => Set(value);
+      set
+      {
+        OnPropertyChanged(nameof(ShoppingCartPrice));
+        Set(value);
+      }
     }
+
+    // Gesamtpreis der Warenkörbe ermitteln
+    public double ShoppingCartPrice => Math.Round((ProductShoppingCart?.Sum(item => item.Quantity * item.Price) ?? 0) + (MenuShoppingCart?.Sum(item => item.Quantity * item.Price) ?? 0), 2);
 
     public Frame MainFrame
     {
@@ -145,7 +152,7 @@ namespace CommitAndForget.ViewModel
     public ICommand RemoveMenuFromShoppingCartCommand { get; set; }
     public ICommand NavigateToPaymentCommand { get; set; }
     public ICommand PayCommand { get; set; }
-    public ICommand AddImageCommand {  get; set; }
+    public ICommand AddImageCommand { get; set; }
     public ICommand RateImageCommand { get; set; }
     public ICommand LogoutCommand { get; set; }
     public ICommand EditProfileCommand { get; set; }
@@ -175,7 +182,7 @@ namespace CommitAndForget.ViewModel
               IngredientList.Add(ingredient);
 
             product.Ingredients.Add(ingredient);
-          }          
+          }
         }
       }
 
@@ -242,7 +249,8 @@ namespace CommitAndForget.ViewModel
         MenuShoppingCart?.Clear();
         ProductShoppingCart?.Clear();
         OnPropertyChanged(nameof(ShoppingCartQuantity));
-        MainFrame?.Navigate(new PaymentSuccessView(paymentMethod));
+        MessageBoxService.DisplayMessage($"Vielen Dank für Ihre Bestellung\nZahlungsart: {paymentMethod}", MessageBoxImage.Information);
+        MainFrame?.Navigate(new UserSelectionView { DataContext = this });
       }
     }
 
@@ -261,7 +269,7 @@ namespace CommitAndForget.ViewModel
         if (SelectedIngredient is null)
           return true;
         else
-          return product.Ingredients.FirstOrDefault(x => x.Key == SelectedIngredient.Key) != null;
+          return product.Ingredients.FirstOrDefault(x => x.Key == SelectedIngredient.Key && x.Quantity > 0) != null;
       }
 
       return false;
@@ -277,7 +285,7 @@ namespace CommitAndForget.ViewModel
         {
           foreach (var product in menu.ProductList)
           {
-            if (product.Ingredients.FirstOrDefault(x => x.Key == SelectedIngredient.Key) != null)
+            if (product.Ingredients.FirstOrDefault(x => x.Key == SelectedIngredient.Key && x.Quantity > 0) != null)
               return true;
           }
         }
@@ -297,6 +305,7 @@ namespace CommitAndForget.ViewModel
           productInList.Quantity++;
 
         OnPropertyChanged(nameof(ShoppingCartQuantity));
+        OnPropertyChanged(nameof(ShoppingCartPrice));
       }
     }
 
@@ -312,18 +321,19 @@ namespace CommitAndForget.ViewModel
           menuInList.Quantity++;
 
         OnPropertyChanged(nameof(ShoppingCartQuantity));
+        OnPropertyChanged(nameof(ShoppingCartPrice));
       }
     }
 
     private void ShowProductInfo(ProductModel? product)
     {
-      if (product is not null)
+      if (product is not null) 
       {
         string ingredients = "";
         foreach (var ingredient in product.Ingredients)
           ingredients += ingredient.Name + "\n";
 
-        MessageBoxService.DisplayMessage($"Produkt: {product.Name}\n\nZutaten:\n{ingredients}", MessageBoxImage.Information);
+        MessageBoxService.DisplayMessage($"Produkt: {product.Name} ({product.Energy}kcal)\n\nZutaten:\n{ingredients}", MessageBoxImage.Information);
       }
     }
 
@@ -336,8 +346,9 @@ namespace CommitAndForget.ViewModel
         {
           string ingredients = "";
           foreach (var ingredient in product.Ingredients)
-            ingredients += ingredient.Name + "\n";
-          products += $"Produkt: {product.Name}\nZutaten:\n{ingredients}\n\n";
+            if (ingredient.Quantity > 0)
+              ingredients += ingredient.Name + "\n";
+          products += $"Produkt: {product.Name} ({product.Energy}kcal)\nZutaten:\n{ingredients}\n\n";
         }
         MessageBoxService.DisplayMessage($"Menü: {menu.Name}\n\n{products}", MessageBoxImage.Information);
       }
@@ -348,7 +359,9 @@ namespace CommitAndForget.ViewModel
       if (product is not null)
       {
         ProductShoppingCart?.Remove(product);
+        product.Quantity = 1;
         OnPropertyChanged(nameof(ShoppingCartQuantity));
+        OnPropertyChanged(nameof(ShoppingCartPrice));
       }
     }
 
@@ -357,7 +370,9 @@ namespace CommitAndForget.ViewModel
       if (menu is not null)
       {
         MenuShoppingCart?.Remove(menu);
+        menu.Quantity = 1;
         OnPropertyChanged(nameof(ShoppingCartQuantity));
+        OnPropertyChanged(nameof(ShoppingCartPrice));
       }
     }
     private void AddImage()
