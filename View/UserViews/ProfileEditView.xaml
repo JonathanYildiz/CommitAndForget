@@ -5,7 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:CommitAndForget.View.UserViews"
         mc:Ignorable="d"
-        Title="ProfileEditView" Height="450" Width="800">
+        Title="ProfileEditView" Height="450" Width="800"
+        Style="{StaticResource WindowStyle}">
   
   <Grid>
     <StackPanel>
@@ -32,6 +33,10 @@
       <DockPanel>
         <Label>Ort</Label>
         <TextBox Text="{Binding CurrentUser.City}"/>
+      </DockPanel>
+      <DockPanel>
+        <Label>Ort</Label>
+        <TextBox Text="{Binding CurrentUser.Password}"/>
       </DockPanel>
       <Button Command="{Binding ConfirmRegistrationCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}">OK</Button>
       <Button Command="{Binding CancelCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}">Abbrechen</Button>

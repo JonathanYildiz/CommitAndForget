@@ -5,7 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:converter="clr-namespace:CommitAndForget.Converter"
         mc:Ignorable="d"
-        Title="ShowImagesView" Height="450" Width="800">
+        Title="ShowImagesView" Height="450" Width="800"
+        Style="{StaticResource WindowStyle}">
   
   <Grid>
     <ScrollViewer VerticalScrollBarVisibility="Auto">

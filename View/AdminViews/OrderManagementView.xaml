@@ -6,7 +6,8 @@
       xmlns:local="clr-namespace:CommitAndForget.View.AdminViews"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
-      Title="OderManagementView">
+      Title="OderManagementView"
+      Style="{StaticResource PageStyle}">
 
   <Grid>
     <Grid.RowDefinitions>
@@ -21,7 +22,7 @@
       <DataGrid.Columns>
         <DataGridTextColumn Header="E-Mail" Binding="{Binding UserMail}" Width="*"/>
         <DataGridTextColumn Header="BestellNr" Binding="{Binding Key}" Width="*"/>
-        <DataGridTextColumn Header="BestellDatum" Binding="{Binding OrderDate}" Width="*"/>
+        <DataGridTextColumn Header="BestellDatum" Binding="{Binding OrderDate, StringFormat={}{0:dd/mm/yyyy}}" Width="*"/>
         <DataGridTextColumn Header="Gesamtkosten" Binding="{Binding TotalPrice}" Width="*"/>
         <DataGridTemplateColumn Header="Actions" Width="Auto">
           <DataGridTemplateColumn.CellTemplate>

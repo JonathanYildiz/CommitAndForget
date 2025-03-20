@@ -8,6 +8,7 @@
         xmlns:res="clr-namespace:CommitAndForget.Resources"
         mc:Ignorable="d"
         Title="NutzerMainView" Height="450" Width="800"
+        Style="{StaticResource WindowStyle}"
         Loaded="Window_Loaded">
 
   <Grid>
@@ -32,8 +33,8 @@
         </ContextMenu>
       </res:DropDownButton.DropDown>
     </res:DropDownButton>
-    
+
     <Frame Grid.Row="1" Grid.ColumnSpan="4" x:Name="MainFrame" NavigationUIVisibility="Hidden" />
   </Grid>
-  
+
 </Window>
