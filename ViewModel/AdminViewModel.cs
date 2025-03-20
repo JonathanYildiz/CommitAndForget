@@ -115,7 +115,7 @@ namespace CommitAndForget.ViewModel
       NavigateToMenuManagementCommand = new RelayCommand(NavigateToMenuManagement);
       NavigateToContestManagementCommand = new RelayCommand(NavigateToContestManagement);
       NavigateBackCommand = new RelayCommand(NavigateBack);
-      LogoutCommand = new RelayCommand<Window>(LogoutUser);
+      LogoutCommand = new RelayCommand(Logout);
 
       // Benutzerverwaltung
       EditUserCommand = new RelayCommand<UserModel>(EditUser);
@@ -218,8 +218,8 @@ namespace CommitAndForget.ViewModel
     }
     private void NavigateToContestManagement()
     {
-      // Nur Bilder für den Contest laden, die von Usern hochgeladen wurden (Admins laden nur Produktbilder hoch)
-      IEnumerable<ImageModel> images = ImageDataProvider.LoadImages().Where(img => img.UploadedBy != "admin");
+      // Nur unbestätigte Bilder für den Contest laden, die von Usern hochgeladen wurden (Admins laden nur Produktbilder hoch)
+      IEnumerable<ImageModel> images = ImageDataProvider.LoadImages().Where(img => img.UploadedBy != "admin" && !img.Approved);
       ImageList = new ObservableCollection<ImageModel>(images);
       CurrentContestImage = ImageList.FirstOrDefault();
       MainFrame?.Navigate(new ContestManagementView() { DataContext = this });
@@ -231,15 +231,20 @@ namespace CommitAndForget.ViewModel
     }
     private void CloseCurrentWindow() => Application.Current.Windows.OfType<Window>().FirstOrDefault(w => w.IsActive)?.Close();
 
-    private void LogoutUser(Window? window)
+    private void Logout()
     {
       if (MessageBoxService.LogoutMessage("Möchten Sie sich wirklich abmelden?", MessageBoxImage.Information) == MessageBoxResult.Yes)
       {
-        //TODO: Fenster schließen
+        // Aktuelles Window wegspeichern
+        var currentWindow = Application.Current.Windows.OfType<Window>().FirstOrDefault(w => w.IsActive);
+
         var view = new LoginView();
         view.WindowStartupLocation = WindowStartupLocation.CenterScreen;
-        view.DataContext = new LoginViewModel();
+        view.DataContext = new LoginViewModel();        
         view.Show();
+
+        // Altes Fenster schließen
+        currentWindow?.Close();
       }
     }
     #endregion Navigation
@@ -667,7 +672,22 @@ namespace CommitAndForget.ViewModel
           CurrentContestImage = ImageList[ImageList.Count - 1];
       }
     }
-    private void ApproveContestImage() => ImageDataProvider.ApproveImage(CurrentContestImage);
+    private void ApproveContestImage()
+    {
+      if (CurrentContestImage is not null)
+      {
+        var msgBox = MessageBox.Show("Möchten Sie das Bild freigeben?", "Bild freigeben", MessageBoxButton.YesNo, MessageBoxImage.Question);
+        if (msgBox == MessageBoxResult.Yes)
+        {
+          ImageDataProvider.ApproveImage(CurrentContestImage);
+          ImageList.Remove(CurrentContestImage);
+          if (ImageList.Count > 0)
+            NextContestImage();
+          else
+            CurrentContestImage = null;
+        }
+      }
+    }
     private void DeleteContestImage()
     {
       if (CurrentContestImage is not null)
@@ -677,7 +697,7 @@ namespace CommitAndForget.ViewModel
         {
           ImageDataProvider.DeleteImage(CurrentContestImage.Key);
           ImageList.Remove(CurrentContestImage);
-          CurrentContestImage = ImageList.FirstOrDefault();
+          CurrentContestImage = ImageList?.FirstOrDefault();
         }
       }
     }

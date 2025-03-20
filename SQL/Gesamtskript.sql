@@ -897,17 +897,28 @@ IF EXISTS (
 		ELSE
         -- Ansonsten alle Bilder laden
         SELECT 
-				 img.nKey AS image_nKey,
-			    vbImage AS image_vbImage,
-			    bApproved AS image_bApproved,
-				 dtCreationDate AS image_dtCreationDate,
-			    bContestWon AS image_bContestWon,
-			    case when usr.bIsAdmin = 1 then 'admin' ELSE usr.szEmail end AS image_szUploadedBy,
-			    avg(rat.nRating) AS image_rRating
-			    FROM tblimage img
-			    JOIN tbluser usr ON usr.nKey = img.nUserLink
-			    left JOIN tblrating rat ON rat.nImageLink = img.nKey
-			    ORDER BY img.nKey;
+			    img.nKey AS image_nKey,
+			    img.vbImage AS image_vbImage,
+			    img.bApproved AS image_bApproved,
+			    img.dtCreationDate AS image_dtCreationDate,
+			    img.bContestWon AS image_bContestWon,
+			    CASE 
+			        WHEN usr.bIsAdmin = 1 THEN 'admin' 
+			        ELSE usr.szEmail 
+			    END AS image_szUploadedBy,
+			    AVG(rat.nRating) AS image_rRating
+			FROM tblimage img
+			JOIN tbluser usr ON usr.nKey = img.nUserLink
+			LEFT JOIN tblrating rat ON rat.nImageLink = img.nKey
+			GROUP BY 
+			    img.nKey,
+			    img.vbImage,
+			    img.bApproved,
+			    img.dtCreationDate,
+			    img.bContestWon,
+			    usr.bIsAdmin,
+			    usr.szEmail
+			ORDER BY img.nKey;
     END IF;
 END $$
 
@@ -1117,6 +1128,98 @@ END $$
 DELIMITER ;
 
 -- Fertig: 30_spRateImage.sql
+
+
+-- HinzufÃ¼gen: 31_spGetUsersFavoriteProduct.sql
+
+USE dbcommitandforget;
+
+DROP PROCEDURE IF EXISTS spGetUsersFavoriteProduct;
+
+DELIMITER $$
+CREATE PROCEDURE spGetUsersFavoriteProduct(
+
+    p_UserLink INT
+    )
+
+BEGIN
+   
+   SELECT p.szName AS product_Name,
+   		 SUM(op.nQuantity) AS product_Count
+	FROM tblproduct p
+	JOIN tblorderproduct op ON op.nProductLink = p.nKey
+	JOIN tblorder o ON o.nKey = op.nOrderLink
+	WHERE o.nUserLink = p_UserLink
+	GROUP BY p.szName
+	ORDER BY SUM(op.nQuantity) DESC
+	LIMIT 1;
+   
+END $$
+
+DELIMITER ;
+
+-- Fertig: 31_spGetUsersFavoriteProduct.sql
+
+
+-- HinzufÃ¼gen: 32_spGetUsersFavoriteMenu.sql
+
+USE dbcommitandforget;
+
+DROP PROCEDURE IF EXISTS spGetUsersFavoriteMenu;
+
+DELIMITER $$
+CREATE PROCEDURE spGetUsersFavoriteMenu(
+
+    p_UserLink INT
+    )
+
+BEGIN
+   
+   SELECT m.szName AS menu_Name,
+   		 SUM(om.nQuantity) AS menu_Count
+	FROM tblmenu m
+	JOIN tblordermenu om ON om.nMenuLink = m.nKey
+	JOIN tblorder o ON o.nKey = om.nOrderLink
+	WHERE o.nUserLink = p_UserLink
+	GROUP BY m.szName
+	ORDER BY SUM(om.nQuantity) DESC
+	LIMIT 1;
+   
+END $$
+
+DELIMITER ;
+
+-- Fertig: 32_spGetUsersFavoriteMenu.sql
+
+
+-- HinzufÃ¼gen: 33_spGetOrderHistory.sql
+
+USE dbcommitandforget;
+
+DROP PROCEDURE IF EXISTS spGetOrderHistory;
+
+DELIMITER $$
+CREATE PROCEDURE spGetOrderHistory()
+BEGIN
+   
+   SELECT u.szEmail AS user_Mail,
+	       o.nKey AS order_nKey,
+	       o.dtOrderDate AS order_CreationDate,
+	       SUM(IFNULL(m.rPrice, 0) * IFNULL(om.nQuantity, 0)) + SUM(IFNULL(p.rPrice, 0) * IFNULL(op.nQuantity, 0)) AS order_TotalPrice
+	FROM tblorder o
+	JOIN tbluser u ON u.nKey = o.nUserLink
+	LEFT JOIN tblordermenu om ON om.nOrderLink = o.nKey
+	LEFT JOIN tblmenu m ON m.nKey = om.nMenuLink
+	LEFT JOIN tblorderproduct op ON op.nOrderLink = o.nKey
+	LEFT JOIN tblproduct p ON p.nKey = op.nProductLink
+	GROUP BY u.szEmail, o.nKey, o.dtOrderDate
+	ORDER BY o.nKey;
+      
+END $$
+
+DELIMITER ;
+
+-- Fertig: 33_spGetOrderHistory.sql
 
 
 -- HinzufÃ¼gen: 01_fnGetMenuOrderCount.sql
