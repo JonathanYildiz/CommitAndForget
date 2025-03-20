@@ -84,8 +84,15 @@ namespace CommitAndForget.ViewModel
     public bool ShowShoppingCart
     {
       get => Get<bool>();
-      set => Set(value);
+      set
+      {
+        OnPropertyChanged(nameof(ShoppingCartPrice));
+        Set(value);
+      }
     }
+
+    // Gesamtpreis der Warenkörbe ermitteln
+    public double ShoppingCartPrice => Math.Round((ProductShoppingCart?.Sum(item => item.Quantity * item.Price) ?? 0) + (MenuShoppingCart?.Sum(item => item.Quantity * item.Price) ?? 0), 2);
 
     public Frame MainFrame
     {
