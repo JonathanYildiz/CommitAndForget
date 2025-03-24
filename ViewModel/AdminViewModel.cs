@@ -33,10 +33,8 @@ namespace CommitAndForget.ViewModel
         OnPropertyChanged(nameof(IsUserSelected));
       }
     }
-    public bool IsUserSelected
-    {
-      get => SelectedUser != null;
-    }
+    public bool IsUserSelected => SelectedUser != null;
+
     public ProductModel SelectedProduct
     {
       get => Get<ProductModel>();
@@ -225,25 +223,32 @@ namespace CommitAndForget.ViewModel
     }
     private void NavigateToContestManagement()
     {
-      // Nur unbestätigte Bilder für den Contest laden, die von Usern hochgeladen wurden (Admins laden nur Produktbilder hoch)
-      IEnumerable<ImageModel> images = ImageDataProvider.LoadImages().Where(img => img.UploadedBy != "admin" && !img.Approved);
-      ImageList = new ObservableCollection<ImageModel>(images);
-      CurrentContestImage = ImageList.FirstOrDefault();
-      MainFrame?.Navigate(new ContestManagementView() { DataContext = this });
+      try
+      {
+        // Nur unbestätigte Bilder für den Contest laden, die von Usern hochgeladen wurden (Admins laden nur Produktbilder hoch)
+        IEnumerable<ImageModel> images = ImageDataProvider.LoadImages().Where(img => img.UploadedBy != "admin" && !img.Approved);
+        ImageList = new ObservableCollection<ImageModel>(images);
+        CurrentContestImage = ImageList.FirstOrDefault();
+        MainFrame?.Navigate(new ContestManagementView() { DataContext = this });
+      }
+      catch (Exception ex)
+      {
+        MessageBoxService.DisplayMessage(ex.Message, MessageBoxImage.Error);
+      }
     }
     private void NavigateBack()
     {
       if (MainFrame.NavigationService.CanGoBack)
-        MainFrame.NavigationService.GoBack();
+        MainFrame?.NavigationService?.GoBack();
     }
-    private void CloseCurrentWindow() => Application.Current.Windows.OfType<Window>().FirstOrDefault(w => w.IsActive)?.Close();
+    private void CloseCurrentWindow() => Application.Current?.Windows?.OfType<Window>()?.FirstOrDefault(w => w.IsActive)?.Close();
 
     private void Logout()
     {
       if (MessageBoxService.LogoutMessage("Möchten Sie sich wirklich abmelden?", MessageBoxImage.Information) == MessageBoxResult.Yes)
       {
         // Aktuelles Window wegspeichern
-        var currentWindow = Application.Current.Windows.OfType<Window>().FirstOrDefault(w => w.IsActive);
+        var currentWindow = Application.Current?.Windows?.OfType<Window>()?.FirstOrDefault(w => w.IsActive);
 
         var view = new LoginView();
         view.WindowStartupLocation = WindowStartupLocation.CenterScreen;
@@ -272,21 +277,28 @@ namespace CommitAndForget.ViewModel
     }
     private void DeleteUser(UserModel? user)
     {
-      if (user is not null)
+      try
       {
-        var msgBox = MessageBox.Show("Möchten Sie den Benutzer wirklich löschen?", "Benutzer löschen", MessageBoxButton.YesNo, MessageBoxImage.Question);
-        if (msgBox == MessageBoxResult.Yes)
+        if (user is not null)
         {
-          UserDataProvider.DeleteUser(user.Key);
-          UserList.Remove(user);
+          var msgBox = MessageBox.Show("Möchten Sie den Benutzer wirklich löschen?", "Benutzer löschen", MessageBoxButton.YesNo, MessageBoxImage.Question);
+          if (msgBox == MessageBoxResult.Yes)
+          {
+            UserDataProvider.DeleteUser(user.Key);
+            UserList.Remove(user);
+          }
         }
+      }
+      catch (Exception ex)
+      {
+        MessageBoxService.DisplayMessage(ex.Message, MessageBoxImage.Error);
       }
     }
     private void SaveUser(Window? editWindow)
     {
       if (SelectedUser is not null)
       {
-        if (UserList.Any(UserList => UserList.Key == SelectedUser.Key))
+        if (UserList?.Any(UserList => UserList.Key == SelectedUser?.Key) ?? false)
         {
           // Wenn User vorhanden -> Updaten
           UserDataProvider.UpdateUser(SelectedUser);
@@ -301,7 +313,7 @@ namespace CommitAndForget.ViewModel
           }
           var addedUser = UserDataProvider.Register(SelectedUser);
           if (addedUser is not null)
-            UserList.Add(addedUser);
+            UserList?.Add(addedUser);
           else
             return;
         }
@@ -311,12 +323,19 @@ namespace CommitAndForget.ViewModel
     }
     private void CancelUser(Window? editWindow)
     {
-      if (BackupModel is not null && BackupModel is UserModel userBackup)
-        SelectedUser.RollbackChanges(userBackup);
+      try
+      {
+        if (BackupModel is not null && BackupModel is UserModel userBackup)
+          SelectedUser.RollbackChanges(userBackup);
 
-      SelectedUser = null;
-      BackupModel = null;
-      editWindow?.Close();
+        SelectedUser = null;
+        BackupModel = null;
+        editWindow?.Close();
+      }
+      catch (Exception ex)
+      {
+        MessageBoxService.DisplayMessage(ex.Message, MessageBoxImage.Error);
+      }
     }
 
     private void CreateUser()
@@ -338,110 +357,150 @@ namespace CommitAndForget.ViewModel
     #region Product
     private void EditProduct(ProductModel? product)
     {
-      if (product is not null)
+      try
       {
-        // Produkut wegspeichern falls abgebrochen wird
-        BackupModel = new ProductModel(product);
-
-        IngredientList = IngredientDataProvider.LoadIngredients(product.Key);
-        SelectedProduct = product;
-
-        foreach (var ingredient in IngredientList) //Checkboxes initialisieren
+        if (product is not null)
         {
-          if (product.Ingredients.FirstOrDefault(i => i.Key == ingredient.Key) != null)
-            ingredient.IsChecked = true;
-        }
+          // Produkut wegspeichern falls abgebrochen wird
+          BackupModel = new ProductModel(product);
 
-        var editWindow = new EditProductView() { DataContext = this };
-        editWindow.WindowStartupLocation = WindowStartupLocation.CenterScreen;
-        editWindow.ShowDialog();
+          IngredientList = IngredientDataProvider.LoadIngredients(product.Key);
+          SelectedProduct = product;
+
+          foreach (var ingredient in IngredientList) //Checkboxes initialisieren
+          {
+            if (product.Ingredients.FirstOrDefault(i => i.Key == ingredient.Key) != null)
+              ingredient.IsChecked = true;
+          }
+
+          var editWindow = new EditProductView() { DataContext = this };
+          editWindow.WindowStartupLocation = WindowStartupLocation.CenterScreen;
+          editWindow.ShowDialog();
+        }
+      }
+      catch (Exception ex)
+      {
+        MessageBoxService.DisplayMessage(ex.Message, MessageBoxImage.Error);
       }
     }
+
     private void ToggleIngredient(IngredientModel? ingredient)
     {
-      if (ingredient is not null)
+      try
       {
-        var foundIngredient = SelectedProduct.Ingredients.FirstOrDefault(i => i.Key == ingredient.Key);
+        if (ingredient is not null)
+        {
+          var foundIngredient = SelectedProduct.Ingredients.FirstOrDefault(i => i.Key == ingredient.Key);
 
-        if (foundIngredient != null)
-          SelectedProduct.Ingredients.Remove(foundIngredient); // Entfernen
-        else
-          SelectedProduct.Ingredients.Add(ingredient); // Hinzufügen
+          if (foundIngredient != null)
+            SelectedProduct.Ingredients.Remove(foundIngredient); // Entfernen
+          else
+            SelectedProduct.Ingredients.Add(ingredient); // Hinzufügen
+        }
+      }
+      catch (Exception ex)
+      {
+        MessageBoxService.DisplayMessage(ex.Message, MessageBoxImage.Error);
       }
     }
+
     private void SaveProduct()
     {
-      if (SelectedProduct is not null)
+      try
       {
-        // Eingaben überprüfen
-        if (string.IsNullOrEmpty(SelectedProduct.Name))
+        if (SelectedProduct is not null)
         {
-          MessageBoxService.DisplayMessage("Name darf nicht leer sein", MessageBoxImage.Information);
-          return;
-        }
-        else if (SelectedProduct.Price == 0)
-        {
-          MessageBoxService.DisplayMessage("Preis darf nicht 0 sein", MessageBoxImage.Information);
-          return;
-        }
-        else if (SelectedProduct.Ingredients?.Count == 0)
-        {
-          MessageBoxService.DisplayMessage("Es muss mindestens eine Zutat zugewiesen werden", MessageBoxImage.Information);
-          return;
-        }
-
-        if (ProductList.Any(p => p.Key == SelectedProduct.Key)) // Wenn Produkt vorhanden -> Updaten
-        {
-          ProductDataProvider.UpdateProduct(SelectedProduct);
-          ProductDataProvider.DeleteProductsIngredients(SelectedProduct.Key); // Alle Zutaten löschen
-          foreach (var ingredient in SelectedProduct.Ingredients)
+          // Eingaben überprüfen
+          if (string.IsNullOrEmpty(SelectedProduct.Name))
           {
-            var foundIngredient = IngredientList.FirstOrDefault(i => i.Key == ingredient.Key);
-            if (foundIngredient is null)
-              continue;
-
-            ProductDataProvider.AddProductIngredient(SelectedProduct.Key, ingredient.Key, foundIngredient.Quantity); // Zutaten hinzufügen
+            MessageBoxService.DisplayMessage("Name darf nicht leer sein", MessageBoxImage.Information);
+            return;
           }
-        }
-        else
-        {
-          SelectedProduct.Key = ProductDataProvider.CreateProduct(SelectedProduct); // Wenn nicht vorhanden -> Erstellen
-          if (SelectedProduct.Key > 0)
+          else if (SelectedProduct.Price == 0)
           {
-            foreach (var ingredient in SelectedProduct.Ingredients)
-              ProductDataProvider.AddProductIngredient(SelectedProduct.Key, ingredient.Key, ingredient.Quantity);
+            MessageBoxService.DisplayMessage("Preis darf nicht 0 sein", MessageBoxImage.Information);
+            return;
+          }
+          else if (SelectedProduct.Ingredients?.Count == 0)
+          {
+            MessageBoxService.DisplayMessage("Es muss mindestens eine Zutat zugewiesen werden", MessageBoxImage.Information);
+            return;
+          }
 
-            ProductList.Add(new ProductModel(SelectedProduct));
+          if (ProductList.Any(p => p.Key == SelectedProduct.Key)) // Wenn Produkt vorhanden -> Updaten
+          {
+            ProductDataProvider.UpdateProduct(SelectedProduct);
+            ProductDataProvider.DeleteProductsIngredients(SelectedProduct.Key); // Alle Zutaten löschen
+            foreach (var ingredient in SelectedProduct.Ingredients)
+            {
+              var foundIngredient = IngredientList.FirstOrDefault(i => i.Key == ingredient.Key);
+              if (foundIngredient is null)
+                continue;
+
+              ProductDataProvider.AddProductIngredient(SelectedProduct.Key, ingredient.Key, foundIngredient.Quantity); // Zutaten hinzufügen
+            }
           }
           else
-            return;
+          {
+            SelectedProduct.Key = ProductDataProvider.CreateProduct(SelectedProduct); // Wenn nicht vorhanden -> Erstellen
+            if (SelectedProduct.Key > 0)
+            {
+              foreach (var ingredient in SelectedProduct.Ingredients)
+                ProductDataProvider.AddProductIngredient(SelectedProduct.Key, ingredient.Key, ingredient.Quantity);
+
+              ProductList.Add(new ProductModel(SelectedProduct));
+            }
+            else
+              return;
+          }
         }
+        SelectedProduct = null;
+        BackupModel = null;
+        CloseCurrentWindow();
       }
-      SelectedProduct = null;
-      BackupModel = null;
-      CloseCurrentWindow();
+      catch (Exception ex)
+      {
+        MessageBoxService.DisplayMessage(ex.Message, MessageBoxImage.Error);
+      }
     }
+
     private void CancelProduct()
     {
-      if (BackupModel is not null && BackupModel is ProductModel productBackup)
-        SelectedProduct.RollbackChanges(productBackup);
-
-      SelectedProduct = null;
-      BackupModel = null;
-      CloseCurrentWindow();
-    }
-    private void DeleteProduct(ProductModel? prodct)
-    {
-      if (prodct is not null)
+      try
       {
-        var msgBox = MessageBox.Show("Möchten Sie das Produkt wirklich löschen?", "Produkt löschen", MessageBoxButton.YesNo, MessageBoxImage.Question);
-        if (msgBox == MessageBoxResult.Yes)
-        {
-          ProductDataProvider.DeleteProduct(prodct.Key);
-          ProductList.Remove(prodct);
-        }
+        if (BackupModel is not null && BackupModel is ProductModel productBackup)
+          SelectedProduct.RollbackChanges(productBackup);
+
+        SelectedProduct = null;
+        BackupModel = null;
+        CloseCurrentWindow();
+      }
+      catch (Exception ex)
+      {
+        MessageBoxService.DisplayMessage(ex.Message, MessageBoxImage.Error);
       }
     }
+
+    private void DeleteProduct(ProductModel? prodct)
+    {
+      try
+      {
+        if (prodct is not null)
+        {
+          var msgBox = MessageBox.Show("Möchten Sie das Produkt wirklich löschen?", "Produkt löschen", MessageBoxButton.YesNo, MessageBoxImage.Question);
+          if (msgBox == MessageBoxResult.Yes)
+          {
+            ProductDataProvider.DeleteProduct(prodct.Key);
+            ProductList?.Remove(prodct);
+          }
+        }
+      }
+      catch (Exception ex)
+      {
+        MessageBoxService.DisplayMessage(ex.Message, MessageBoxImage.Error);
+      }
+    }
+
     public void CreateProduct()
     {
       try
@@ -475,124 +534,160 @@ namespace CommitAndForget.ViewModel
         MessageBoxService.DisplayMessage(ex.Message, MessageBoxImage.Error);
       }
     }
+
     private void SaveMenu()
     {
-      if (SelectedMenu is not null)
+      try
       {
-        // Eingaben überprüfen
-        if (string.IsNullOrEmpty(SelectedMenu.Name))
+        if (SelectedMenu is not null)
         {
-          MessageBoxService.DisplayMessage("Name darf nicht leer sein", MessageBoxImage.Information);
-          return;
-        }
-        else if (SelectedMenu.Price == 0)
-        {
-          MessageBoxService.DisplayMessage("Preis darf nicht 0 sein", MessageBoxImage.Information);
-          return;
-        }
-        else if (SelectedMenu.ProductList?.Count == 0)
-        {
-          MessageBoxService.DisplayMessage("Es muss mindestens ein Produkt zugewiesen werden", MessageBoxImage.Information);
-          return;
-        }
-
-        if (MenuList.Any(p => p.Key == SelectedMenu.Key)) // Wenn Produkt vorhanden -> Updaten
-        {
-          MenuDataProvider.UpdateMenu(SelectedMenu);
-          MenuDataProvider.DeleteMenuProduct(SelectedMenu.Key); // Alle Produkte zum Menü löschen
-          foreach (var product in SelectedMenu.ProductList)
+          // Eingaben überprüfen
+          if (string.IsNullOrEmpty(SelectedMenu.Name))
           {
-            var foundProduct = ProductList.FirstOrDefault(p => p.Key == product.Key);
-            if (foundProduct is null)
-              continue;
-
-            MenuDataProvider.AddMenuProduct(SelectedMenu.Key, product.Key, foundProduct.Quantity); // Produkt hinzufügen
+            MessageBoxService.DisplayMessage("Name darf nicht leer sein", MessageBoxImage.Information);
+            return;
           }
-        }
-        else
-        {
-          SelectedMenu.Key = MenuDataProvider.CreateMenu(SelectedMenu); // Wenn nicht vorhanden -> Erstellen
-          if (SelectedMenu.Key > 0)
+          else if (SelectedMenu.Price == 0)
           {
-            foreach (var product in SelectedMenu.ProductList)
-              MenuDataProvider.AddMenuProduct(SelectedMenu.Key, product.Key, product.Quantity);
+            MessageBoxService.DisplayMessage("Preis darf nicht 0 sein", MessageBoxImage.Information);
+            return;
+          }
+          else if (SelectedMenu.ProductList?.Count == 0)
+          {
+            MessageBoxService.DisplayMessage("Es muss mindestens ein Produkt zugewiesen werden", MessageBoxImage.Information);
+            return;
+          }
 
-            MenuList.Add(new MenuModel(SelectedMenu));
+          if (MenuList.Any(p => p.Key == SelectedMenu.Key)) // Wenn Produkt vorhanden -> Updaten
+          {
+            MenuDataProvider.UpdateMenu(SelectedMenu);
+            MenuDataProvider.DeleteMenuProduct(SelectedMenu.Key); // Alle Produkte zum Menü löschen
+            foreach (var product in SelectedMenu.ProductList)
+            {
+              var foundProduct = ProductList.FirstOrDefault(p => p.Key == product.Key);
+              if (foundProduct is null)
+                continue;
+
+              MenuDataProvider.AddMenuProduct(SelectedMenu.Key, product.Key, foundProduct.Quantity); // Produkt hinzufügen
+            }
           }
           else
-            return;
+          {
+            SelectedMenu.Key = MenuDataProvider.CreateMenu(SelectedMenu); // Wenn nicht vorhanden -> Erstellen
+            if (SelectedMenu.Key > 0)
+            {
+              foreach (var product in SelectedMenu.ProductList)
+                MenuDataProvider.AddMenuProduct(SelectedMenu.Key, product.Key, product.Quantity);
+
+              MenuList.Add(new MenuModel(SelectedMenu));
+            }
+            else
+              return;
+          }
         }
+        SelectedMenu = null;
+        BackupModel = null;
+        CloseCurrentWindow();
       }
-      SelectedMenu = null;
-      BackupModel = null;
-      CloseCurrentWindow();
+      catch (Exception ex)
+      {
+        MessageBoxService.DisplayMessage(ex.Message, MessageBoxImage.Error);
+      }
     }
 
     private void ToggleProduct(ProductModel? product)
     {
-      if (product is not null)
+      try
       {
-        var foundProduct = SelectedMenu?.ProductList?.FirstOrDefault(i => i.Key == product.Key);
+        if (product is not null)
+        {
+          var foundProduct = SelectedMenu?.ProductList?.FirstOrDefault(i => i.Key == product.Key);
 
-        if (foundProduct != null)
-          SelectedMenu?.ProductList?.Remove(foundProduct); // Entfernen
-        else
-          SelectedMenu?.ProductList?.Add(product); // Hinzufügen
+          if (foundProduct != null)
+            SelectedMenu?.ProductList?.Remove(foundProduct); // Entfernen
+          else
+            SelectedMenu?.ProductList?.Add(product); // Hinzufügen
+        }
+      }
+      catch (Exception ex)
+      {
+        MessageBoxService.DisplayMessage(ex.Message, MessageBoxImage.Error);
       }
     }
 
     private void DeleteMenu(MenuModel? menu)
     {
-      if (menu is not null)
+      try
       {
-        var msgBox = MessageBox.Show("Möchten Sie das Menü wirklich löschen?", "Produkt löschen", MessageBoxButton.YesNo, MessageBoxImage.Question);
-        if (msgBox == MessageBoxResult.Yes)
+        if (menu is not null)
         {
-          MenuDataProvider.DeleteMenu(menu.Key);
-          MenuList.Remove(menu);
+          var msgBox = MessageBox.Show("Möchten Sie das Menü wirklich löschen?", "Produkt löschen", MessageBoxButton.YesNo, MessageBoxImage.Question);
+          if (msgBox == MessageBoxResult.Yes)
+          {
+            MenuDataProvider.DeleteMenu(menu.Key);
+            MenuList?.Remove(menu);
+          }
         }
+      }
+      catch (Exception ex)
+      {
+        MessageBoxService.DisplayMessage(ex.Message, MessageBoxImage.Error);
       }
     }
 
     private void EditMenu(MenuModel? menu)
     {
-      if (menu is not null)
+      try
       {
-        // Menü wegspeichern falls abgebrochen wird
-        BackupModel = new MenuModel(menu);
-
-        ProductList = ProductDataProvider.LoadProducts();
-        SelectedMenu = menu;
-
-        foreach (var product in ProductList) //Checkboxes initialisieren
+        if (menu is not null)
         {
-          var foundProduct = menu.ProductList.FirstOrDefault(p => p.Key == product.Key);
-          if (foundProduct != null)
-          {
-            product.IsChecked = true;
-            product.Quantity = foundProduct.Quantity;
-          }
-          else
-          {
-            product.IsChecked = false;
-            product.Quantity = 0;
-          }
-        }
+          // Menü wegspeichern falls abgebrochen wird
+          BackupModel = new MenuModel(menu);
 
-        var editWindow = new EditMenuView() { DataContext = this };
-        editWindow.WindowStartupLocation = WindowStartupLocation.CenterScreen;
-        editWindow.ShowDialog();
+          ProductList = ProductDataProvider.LoadProducts();
+          SelectedMenu = menu;
+
+          foreach (var product in ProductList) //Checkboxes initialisieren
+          {
+            var foundProduct = menu.ProductList.FirstOrDefault(p => p.Key == product.Key);
+            if (foundProduct != null)
+            {
+              product.IsChecked = true;
+              product.Quantity = foundProduct.Quantity;
+            }
+            else
+            {
+              product.IsChecked = false;
+              product.Quantity = 0;
+            }
+          }
+
+          var editWindow = new EditMenuView() { DataContext = this };
+          editWindow.WindowStartupLocation = WindowStartupLocation.CenterScreen;
+          editWindow.ShowDialog();
+        }
+      }
+      catch (Exception ex)
+      {
+        MessageBoxService.DisplayMessage(ex.Message, MessageBoxImage.Error);
       }
     }
 
     private void CancelMenu()
     {
-      if (BackupModel is not null && BackupModel is MenuModel menuBackup)
-        SelectedMenu.RollbackChanges(menuBackup);
+      try
+      {
+        if (BackupModel is not null && BackupModel is MenuModel menuBackup)
+          SelectedMenu.RollbackChanges(menuBackup);
 
-      SelectedMenu = null;
-      BackupModel = null;
-      CloseCurrentWindow();
+        SelectedMenu = null;
+        BackupModel = null;
+        CloseCurrentWindow();
+      }
+      catch (Exception ex)
+      {
+        MessageBoxService.DisplayMessage(ex.Message, MessageBoxImage.Error);
+      }
     }
     #endregion Menu
 
@@ -604,6 +699,7 @@ namespace CommitAndForget.ViewModel
       window.WindowStartupLocation = WindowStartupLocation.CenterScreen;
       window.ShowDialog();
     }
+
     private void AddImage()
     {
       var image = new ImageModel();
@@ -614,37 +710,53 @@ namespace CommitAndForget.ViewModel
         image.Image = new BitmapImage(new Uri(dialog.FileName));
         image = ImageDataProvider.UploadImage(image, CurrentUser.Key);
         if (image is not null)
-          ImageList.Add(image);
+          ImageList?.Add(image);
       }
     }
     private void DeleteImage(ImageModel? image)
     {
-      if (image is not null)
+      try
       {
-        var msgBox = MessageBox.Show("Möchten Sie das Bild wirklich löschen?", "Bild löschen", MessageBoxButton.YesNo, MessageBoxImage.Question);
-        if (msgBox == MessageBoxResult.Yes)
+        if (image is not null)
         {
-          ImageDataProvider.DeleteImage(image.Key);
-          ImageList.Remove(image);
+          var msgBox = MessageBox.Show("Möchten Sie das Bild wirklich löschen?", "Bild löschen", MessageBoxButton.YesNo, MessageBoxImage.Question);
+          if (msgBox == MessageBoxResult.Yes)
+          {
+            ImageDataProvider.DeleteImage(image.Key);
+            ImageList.Remove(image);
+          }
         }
       }
+      catch (Exception ex)
+      {
+        MessageBoxService.DisplayMessage(ex.Message, MessageBoxImage.Error);
+      }
     }
+
     private void ChooseImage(ImageModel? image)
     {
-      if (image is null)
-        return;
+      try
+      {
+        if (image is null)
+          return;
 
-      if (SelectedProduct is not null)
-      {
-        SelectedProduct.Image = image;
-        CloseCurrentWindow();
+        if (SelectedProduct is not null)
+        {
+          SelectedProduct.Image = image;
+          CloseCurrentWindow();
+        }
+        else if (SelectedMenu is not null)
+        {
+          SelectedMenu.Image = image;
+          CloseCurrentWindow();
+        }
       }
-      else if (SelectedMenu is not null)
+      catch (Exception ex)
       {
-        SelectedMenu.Image = image;
-        CloseCurrentWindow();
+        MessageBoxService.DisplayMessage(ex.Message, MessageBoxImage.Error);
       }
     }
+
     private void RemoveImageFromProduct()
     {
       if (SelectedProduct != null && SelectedProduct.Image != null)
@@ -653,6 +765,7 @@ namespace CommitAndForget.ViewModel
         SelectedProduct.Image.Key = 0;
       }
     }
+
     private void RemoveImageFromMenu()
     {
       if (SelectedMenu != null && SelectedMenu.Image != null)
@@ -666,53 +779,84 @@ namespace CommitAndForget.ViewModel
     #region Contest
     private void NextContestImage()
     {
-      if (CurrentContestImage is not null && ImageList is not null)
+      try
       {
-        var index = ImageList.IndexOf(CurrentContestImage);
-        if (index < ImageList.Count - 1) // Nächstes Bild
-          CurrentContestImage = ImageList[index + 1];
-        else if (index == ImageList.Count - 1) // Am Ende -> Erstes Bild
-          CurrentContestImage = ImageList[0];
+        if (CurrentContestImage is not null && ImageList is not null)
+        {
+          var index = ImageList.IndexOf(CurrentContestImage);
+          if (index < ImageList.Count - 1) // Nächstes Bild
+            CurrentContestImage = ImageList[index + 1];
+          else if (index == ImageList.Count - 1) // Am Ende -> Erstes Bild
+            CurrentContestImage = ImageList[0];
+        }
+      }
+      catch (Exception ex)
+      {
+        MessageBoxService.DisplayMessage(ex.Message, MessageBoxImage.Error);
       }
     }
+
     private void PreviousContestImage()
     {
-      if (CurrentContestImage is not null && ImageList is not null)
+      try
       {
-        var index = ImageList.IndexOf(CurrentContestImage);
-        if (index > 0) // Vorheriges Bild
-          CurrentContestImage = ImageList[index - 1];
-        else if (index == 0) // Am Anfang -> Letztes Bild
-          CurrentContestImage = ImageList[ImageList.Count - 1];
+        if (CurrentContestImage is not null && ImageList is not null)
+        {
+          var index = ImageList.IndexOf(CurrentContestImage);
+          if (index > 0) // Vorheriges Bild
+            CurrentContestImage = ImageList[index - 1];
+          else if (index == 0) // Am Anfang -> Letztes Bild
+            CurrentContestImage = ImageList[ImageList.Count - 1];
+        }
+      }
+      catch (Exception ex)
+      {
+        MessageBoxService.DisplayMessage(ex.Message, MessageBoxImage.Error);
       }
     }
+
     private void ApproveContestImage()
     {
-      if (CurrentContestImage is not null)
+      try
       {
-        var msgBox = MessageBox.Show("Möchten Sie das Bild freigeben?", "Bild freigeben", MessageBoxButton.YesNo, MessageBoxImage.Question);
-        if (msgBox == MessageBoxResult.Yes)
+        if (CurrentContestImage is not null)
         {
-          ImageDataProvider.ApproveImage(CurrentContestImage);
-          ImageList.Remove(CurrentContestImage);
-          if (ImageList.Count > 0)
-            NextContestImage();
-          else
-            CurrentContestImage = null;
+          var msgBox = MessageBox.Show("Möchten Sie das Bild freigeben?", "Bild freigeben", MessageBoxButton.YesNo, MessageBoxImage.Question);
+          if (msgBox == MessageBoxResult.Yes)
+          {
+            ImageDataProvider.ApproveImage(CurrentContestImage);
+            ImageList.Remove(CurrentContestImage);
+            if (ImageList.Count > 0)
+              NextContestImage();
+            else
+              CurrentContestImage = null;
+          }
         }
       }
+      catch (Exception ex)
+      {
+        MessageBoxService.DisplayMessage(ex.Message, MessageBoxImage.Error);
+      }
     }
+
     private void DeleteContestImage()
     {
-      if (CurrentContestImage is not null)
+      try
       {
-        var msgBox = MessageBox.Show("Möchten Sie das Bild wirklich löschen?", "Bild löschen", MessageBoxButton.YesNo, MessageBoxImage.Question);
-        if (msgBox == MessageBoxResult.Yes)
+        if (CurrentContestImage is not null)
         {
-          ImageDataProvider.DeleteImage(CurrentContestImage.Key);
-          ImageList.Remove(CurrentContestImage);
-          CurrentContestImage = ImageList?.FirstOrDefault();
+          var msgBox = MessageBox.Show("Möchten Sie das Bild wirklich löschen?", "Bild löschen", MessageBoxButton.YesNo, MessageBoxImage.Question);
+          if (msgBox == MessageBoxResult.Yes)
+          {
+            ImageDataProvider.DeleteImage(CurrentContestImage.Key);
+            ImageList.Remove(CurrentContestImage);
+            CurrentContestImage = ImageList?.FirstOrDefault();
+          }
         }
+      }
+      catch (Exception ex)
+      {
+        MessageBoxService.DisplayMessage(ex.Message, MessageBoxImage.Error);
       }
     }
 
@@ -722,27 +866,41 @@ namespace CommitAndForget.ViewModel
 
     private void DeleteOrder(OrderModel? order)
     {
-      if (order is not null)
+      try
       {
-        var msgBox = MessageBox.Show("Möchten Sie die Bestellung wirklich löschen?", "Bestellung löschen", MessageBoxButton.YesNo, MessageBoxImage.Question);
-        if (msgBox == MessageBoxResult.Yes)
+        if (order is not null)
         {
-          if (OrderDataProvider.DeleteOrder(order.Key))
-            OrderList.Remove(order);
+          var msgBox = MessageBox.Show("Möchten Sie die Bestellung wirklich löschen?", "Bestellung löschen", MessageBoxButton.YesNo, MessageBoxImage.Question);
+          if (msgBox == MessageBoxResult.Yes)
+          {
+            if (OrderDataProvider.DeleteOrder(order.Key))
+              OrderList?.Remove(order);
+          }
         }
+      }
+      catch (Exception ex)
+      {
+        MessageBoxService.DisplayMessage(ex.Message, MessageBoxImage.Error);
       }
     }
 
     private void ShowOrderDetails(OrderModel? order)
     {
-      if (order is not null)
+      try
       {
-        string orderDetails = OrderDataProvider.GetOrderDetails(order.Key);
-        if (!string.IsNullOrEmpty(orderDetails))
+        if (order is not null)
         {
-          orderDetails += $"\nGesamtpreis: {order.TotalPrice}";
-          MessageBoxService.DisplayMessage(orderDetails, MessageBoxImage.Information);
+          string orderDetails = OrderDataProvider.GetOrderDetails(order.Key);
+          if (!string.IsNullOrEmpty(orderDetails))
+          {
+            orderDetails += $"\nGesamtpreis: {order.TotalPrice}";
+            MessageBoxService.DisplayMessage(orderDetails, MessageBoxImage.Information);
+          }
         }
+      }
+      catch (Exception ex)
+      {
+        MessageBoxService.DisplayMessage(ex.Message, MessageBoxImage.Error);
       }
     }
 

@@ -7,43 +7,28 @@ namespace CommitAndForget.Resources
 {
   public class DropDownButton : ToggleButton
   {
-    // *** Dependency Properties ***
-
-
     public static readonly DependencyProperty DropDownProperty = DependencyProperty.Register("DropDown", typeof(ContextMenu), typeof(DropDownButton), new UIPropertyMetadata(null));
-
-    // *** Constructors ***
 
     public DropDownButton()
     {
-      // Bind the ToogleButton.IsChecked property to the drop-down's IsOpen property
+      // Binding der ToogleButton.IsChecked-Eigenschaft an die IsOpen-Eigenschaft des Dropdowns
 
       Binding binding = new Binding("DropDown.IsOpen");
       binding.Source = this;
       this.SetBinding(IsCheckedProperty, binding);
     }
 
-    // *** Properties ***
-
     public ContextMenu DropDown
     {
-      get
-      {
-        return (ContextMenu)GetValue(DropDownProperty);
-      }
-      set
-      {
-        SetValue(DropDownProperty, value);
-      }
+      get => (ContextMenu)GetValue(DropDownProperty);
+      set => SetValue(DropDownProperty, value);
     }
-
-    // *** Overridden Methods ***
 
     protected override void OnClick()
     {
       if (DropDown != null)
       {
-        // If there is a drop-down assigned to this button, then position and display it
+        // Wenn ein Dropdown-Menü zugewiesen ist, dann positioniere und zeige es an
 
         DropDown.PlacementTarget = this;
         DropDown.Placement = PlacementMode.Bottom;
