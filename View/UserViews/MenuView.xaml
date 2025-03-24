@@ -27,12 +27,21 @@
             <DataTemplate>
               <Border BorderBrush="Gray" BorderThickness="1" Margin="2" Padding="10">
                 <StackPanel Orientation="Vertical">
-                  <Image Source="{Binding Image.Image}" Height="100" Margin="0,0,0,10"/>
-                  <TextBlock Text="{Binding Name}" FontSize="18" FontWeight="Bold"/>
-                  <TextBlock Text="{Binding Price, StringFormat={}{0:C}}" FontSize="16" Margin="0,5,0,5"/>
+                  <Image Height="100" Margin="0,0,0,10"
+                         Source="{Binding Image.Image}"/>
+                  <TextBlock FontSize="18" FontWeight="Bold"
+                             Text="{Binding Name}"/>
+                  <TextBlock FontSize="16" Margin="0,5,0,5"
+                             Text="{Binding Price, StringFormat={}{0:C}}"/>
                   <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                    <Button Content="Info" Margin="5" Command="{Binding DataContext.ShowMenuInfoCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}" CommandParameter="{Binding}"/>
-                    <Button Content="Bestellen" Margin="5" Command="{Binding DataContext.AddMenuToShoppingCartCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}" CommandParameter="{Binding}"/>
+                    <Button Margin="5"
+                            Content="Info" 
+                            Command="{Binding DataContext.ShowMenuInfoCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}" 
+                            CommandParameter="{Binding}"/>
+                    <Button Margin="5"
+                            Content="Bestellen" 
+                            Command="{Binding DataContext.AddMenuToShoppingCartCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}" 
+                            CommandParameter="{Binding}"/>
                   </StackPanel>
                 </StackPanel>
               </Border>
@@ -43,7 +52,8 @@
     </Grid>
 
     <!-- Entweder Zutatenliste...-->
-    <Grid Grid.Column="1" Margin="10" Visibility="{Binding ShowShoppingCart, Converter={StaticResource BoolToVisibilityConverter}, ConverterParameter=true}">
+    <Grid Grid.Column="1" Margin="10" 
+          Visibility="{Binding ShowShoppingCart, Converter={StaticResource BoolToVisibilityConverter}, ConverterParameter=true}">
       <Grid.RowDefinitions>
         <RowDefinition Height="80"/>
         <RowDefinition/>
@@ -51,13 +61,19 @@
       </Grid.RowDefinitions>
       <StackPanel Grid.Row="0" Orientation="Vertical">
         <Label  Content="Zutatenliste" HorizontalAlignment="Center" FontSize="24" Margin="0,0,0,10"/>
-        <Button Content="Alle" Click="DeselectIngredients"/>
+        <Button Content="Alle" 
+                Click="DeselectIngredients"/>
       </StackPanel>
-      <ListBox Grid.Row="1" x:Name="IngredientList" ItemsSource="{Binding IngredientList}" DisplayMemberPath="Name" SelectedItem="{Binding SelectedIngredient}"/>
-      <Button Grid.Row="2" Content="{Binding ShoppingCartQuantity}" Command="{Binding ToggleShowShoppingCartCommand}" Height="30"/>
+      <ListBox Grid.Row="1" x:Name="IngredientList" 
+               ItemsSource="{Binding IngredientList}" DisplayMemberPath="Name" 
+               SelectedItem="{Binding SelectedIngredient}"/>
+      <Button Grid.Row="2" Height="30"
+              Content="{Binding ShoppingCartQuantity}" 
+              Command="{Binding ToggleShowShoppingCartCommand}"/>
     </Grid>
     <!--..ODER Warenkorb anzeigen-->
-    <view:ShoppingCartView Grid.Column="1" Visibility="{Binding ShowShoppingCart, Converter={StaticResource BoolToVisibilityConverter}, ConverterParameter=false}"/>
+    <view:ShoppingCartView Grid.Column="1" 
+                           Visibility="{Binding ShowShoppingCart, Converter={StaticResource BoolToVisibilityConverter}, ConverterParameter=false}"/>
 
     <Button Grid.Column="2" Content=">" FontSize="24" FontWeight="Bold" Command="{Binding NavigateToProductCommand}"/>
     

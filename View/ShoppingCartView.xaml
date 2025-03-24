@@ -15,7 +15,8 @@
       <RowDefinition/>
       <RowDefinition Height="120"/>
     </Grid.RowDefinitions>
-    <Label Grid.Row="0" Content="Warenkorb" FontSize="24" HorizontalAlignment="Center"/>
+    <Label Grid.Row="0" FontSize="24" HorizontalAlignment="Center"
+           Content="Warenkorb"/>
 
     <ScrollViewer Grid.Row="1">
     <StackPanel  Orientation="Vertical">
@@ -23,10 +24,16 @@
         <ListBox.ItemTemplate>
           <DataTemplate>
             <StackPanel Orientation="Horizontal" Margin="5">
-              <TextBlock Text="{Binding Name}" Width="120" TextWrapping="Wrap" VerticalAlignment="Center"/>
-                <TextBlock Text="{Binding Quantity}" Width="50" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                <TextBlock Text="{Binding TotalPrice, StringFormat={}{0:C}}" Width="50" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                <Button Content="X" Command="{Binding DataContext.RemoveProductFromShoppingCartCommand, RelativeSource={RelativeSource AncestorType=ListBox}}" CommandParameter="{Binding}" Width="25" Height="25" VerticalAlignment="Center"/>
+                <TextBlock Width="120" TextWrapping="Wrap" VerticalAlignment="Center"
+                           Text="{Binding Name}"/>
+                <TextBlock Width="50" HorizontalAlignment="Center" VerticalAlignment="Center"
+                           Text="{Binding Quantity}"/>
+                <TextBlock Width="50" HorizontalAlignment="Center" VerticalAlignment="Center"
+                           Text="{Binding TotalPrice, StringFormat={}{0:C}}"/>
+                <Button Width="25" Height="25" VerticalAlignment="Center"
+                        Content="X" 
+                        Command="{Binding DataContext.RemoveProductFromShoppingCartCommand, RelativeSource={RelativeSource AncestorType=ListBox}}" 
+                        CommandParameter="{Binding}"/>
             </StackPanel>
           </DataTemplate>
         </ListBox.ItemTemplate>
@@ -35,10 +42,16 @@
         <ListBox.ItemTemplate>
           <DataTemplate>
             <StackPanel Orientation="Horizontal" Margin="5">
-                <TextBlock Text="{Binding Name}" Width="120" TextWrapping="Wrap" VerticalAlignment="Center"/>
-                <TextBlock Text="{Binding Quantity}" Width="50" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                <TextBlock Text="{Binding TotalPrice, StringFormat={}{0:C}}" Width="50" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                <Button Content="X" Command="{Binding DataContext.RemoveMenuFromShoppingCartCommand, RelativeSource={RelativeSource AncestorType=ListBox}}" CommandParameter="{Binding}" Width="25" Height="25" VerticalAlignment="Center"/>
+                <TextBlock Width="120" TextWrapping="Wrap" VerticalAlignment="Center"
+                           Text="{Binding Name}"/>
+                <TextBlock Width="50" HorizontalAlignment="Center" VerticalAlignment="Center"
+                           Text="{Binding Quantity}"/>
+                <TextBlock Width="50" HorizontalAlignment="Center" VerticalAlignment="Center"
+                           Text="{Binding TotalPrice, StringFormat={}{0:C}}"/>
+                <Button Width="25" Height="25" VerticalAlignment="Center"
+                        Content="X"
+                        Command="{Binding DataContext.RemoveMenuFromShoppingCartCommand, RelativeSource={RelativeSource AncestorType=ListBox}}" 
+                        CommandParameter="{Binding}"/>
             </StackPanel>
           </DataTemplate>
         </ListBox.ItemTemplate>
@@ -47,9 +60,12 @@
       </ScrollViewer>
 
     <StackPanel Grid.Row="2" Orientation="Vertical">
-      <TextBlock Text="{Binding ShoppingCartPrice, StringFormat={}{0:C}}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-      <Button Content="Zurück" Command="{Binding ToggleShowShoppingCartCommand}"/>
-      <Button Content="Jetzt bezahlen?" Command="{Binding NavigateToPaymentCommand}"/>
+      <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center"
+                 Text="{Binding ShoppingCartPrice, StringFormat={}{0:C}}"/>
+      <Button Content="Zurück" 
+              Command="{Binding ToggleShowShoppingCartCommand}"/>
+      <Button Content="Jetzt bezahlen?" 
+              Command="{Binding NavigateToPaymentCommand}"/>
     </StackPanel>
   </Grid>
 

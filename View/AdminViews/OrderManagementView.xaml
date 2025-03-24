@@ -26,10 +26,10 @@
                             Header="E-Mail" 
                             Binding="{Binding UserMail}"/>
         <DataGridTextColumn Width="*" 
-                            Header="BestellNr" 
+                            Header="Bestell Nr" 
                             Binding="{Binding Key}"/>
         <DataGridTextColumn Width="*" 
-                            Header="BestellDatum" 
+                            Header="Bestelldatum" 
                             Binding="{Binding OrderDate, StringFormat={}{0:dd/MM/yyyy}}"/>
         <DataGridTextColumn Width="*" 
                             Header="Gesamtkosten" 
@@ -42,7 +42,7 @@
                 <Button Content="Details" Style="{StaticResource AddButton}"
                         Command="{Binding DataContext.ShowOrderDetailsCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}" 
                         CommandParameter="{Binding}"/>
-                <Button Content="Delete" Style="{StaticResource AddButton}"
+                <Button Content="Löschen" Style="{StaticResource AddButton}"
                         Command="{Binding DataContext.DeleteOrderCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}" 
                         CommandParameter="{Binding}"/>
               </StackPanel>

@@ -18,19 +18,17 @@
         <ColumnDefinition/>
         <ColumnDefinition/>
       </Grid.ColumnDefinitions>
-      <Button Grid.Column="0" Command="{Binding NavigateToMenuCommand}" Style="{StaticResource NavigationButton}">
-        <TextBlock Text="Menü"
-                   TextWrapping="Wrap"
-                   TextAlignment="Center"
-                   VerticalAlignment="Center"
-                   HorizontalAlignment="Center"/>
+      <Button Grid.Column="0" 
+              Style="{StaticResource NavigationButton}"
+              Command="{Binding NavigateToMenuCommand}">
+        <TextBlock FontSize="42" TextWrapping="Wrap" TextAlignment="Center" VerticalAlignment="Center" HorizontalAlignment="Center"
+                   Text="Menü"/>
       </Button>
-      <Button Grid.Column="1" Command="{Binding NavigateToProductCommand}" Style="{StaticResource NavigationButton}">
-        <TextBlock Text="Einzelne Produkte"
-                   TextWrapping="Wrap"
-                   TextAlignment="Center"
-                   VerticalAlignment="Center"
-                   HorizontalAlignment="Center"/>
+      <Button Grid.Column="1" 
+              Style="{StaticResource NavigationButton}"
+              Command="{Binding NavigateToProductCommand}">
+        <TextBlock FontSize="42" TextWrapping="Wrap" TextAlignment="Center" VerticalAlignment="Center" HorizontalAlignment="Center"
+                   Text="Einzelne Produkte"/>
       </Button>
     </Grid>
   </Grid>

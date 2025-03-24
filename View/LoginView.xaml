@@ -11,8 +11,7 @@
         WindowStartupLocation="CenterScreen">
 
   <Grid>
-    <Image Grid.Column="0"
-           Width="auto" Stretch="Fill"
+    <Image Grid.Column="0" Width="auto" Stretch="Fill"
            Source="\Pizza.png"/>
     <Grid>
       <Grid.ColumnDefinitions>
@@ -38,16 +37,22 @@
           </TextBox>
         </Grid>
 
-        <PasswordBox Grid.Row="2" PasswordChanged="PasswordBox_PasswordChanged">
+        <PasswordBox Grid.Row="2" 
+                     PasswordChanged="PasswordBox_PasswordChanged">
           <PasswordBox.InputBindings>
             <KeyBinding Key="Enter" Command="{Binding LoginCommand}" CommandParameter="{Binding ElementName=loginWindow}"/>
           </PasswordBox.InputBindings>
         </PasswordBox>
 
-        <Button Grid.Row="3" Content="Anmelden" Style="{StaticResource BorderlessButton}"
-                Command="{Binding LoginCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}"/>
+        <Button Grid.Row="3" 
+                Content="Anmelden" 
+                Style="{StaticResource BorderlessButton}"
+                Command="{Binding LoginCommand}" 
+                CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}"/>
 
-        <Button Grid.Row="4" Content="Registrieren" Style="{StaticResource BorderlessButton}"
+        <Button Grid.Row="4" 
+                Content="Registrieren" 
+                Style="{StaticResource BorderlessButton}"
                 Command="{Binding ShowRegistrationWindowCommand}" />
 
       </Grid>

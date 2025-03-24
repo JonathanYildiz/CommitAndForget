@@ -20,9 +20,10 @@
         <ItemsControl.ItemTemplate>
           <DataTemplate>
             <Grid Height="256" Width="256">
-              <Image Source="{Binding Image}" Height="auto" Width="auto" MaxHeight="256" MaxWidth="256" Margin="3"
-               HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Stretch="Fill"/>
-              <TextBlock Text="{Binding UploadedBy}" FontSize="30" FontWeight="Bold"/>
+              <Image Height="auto" Width="auto" MaxHeight="256" MaxWidth="256" Margin="3" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Stretch="Fill"
+                     Source="{Binding Image}"/>
+              <TextBlock FontSize="30" FontWeight="Bold"
+                         Text="{Binding UploadedBy}" />
             </Grid>
           </DataTemplate>
         </ItemsControl.ItemTemplate>

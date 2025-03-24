@@ -66,9 +66,10 @@
     <TextBox Grid.Row="7" Grid.Column="1"
               Text="{Binding NewUser.Password}"/>
     <StackPanel Grid.Row="8" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Center" Margin="10">
-      <Button Command="{Binding ConfirmRegistrationCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}">OK
-      </Button>
-      <Button Command="{Binding CancelCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}">Abbrechen</Button>
+      <Button Content="OK" 
+              Command="{Binding ConfirmRegistrationCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}"/>
+      <Button Content="Abbrechen"
+              Command="{Binding CancelCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}"/>
     </StackPanel>
   </Grid>
 </Window>

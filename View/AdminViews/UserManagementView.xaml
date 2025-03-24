@@ -45,14 +45,14 @@
         <DataGridTextColumn Width="*" 
                             Header="Vorname" 
                             Binding="{Binding FirstName}"/>
-        <DataGridTextColumn Width="*" 
+        <DataGridTextColumn Width="Auto" 
                             Header="Nachname" 
                             Binding="{Binding LastName}"/>
         <DataGridTextColumn Width="*" 
                             Header="Straße" 
                             Binding="{Binding Street}"/>
         <DataGridTextColumn Width="*" 
-                            Header="Hausnummer" 
+                            Header="Haus Nr." 
                             Binding="{Binding HouseNumber}"/>
         <DataGridTextColumn Width="*" 
                             Header="PLZ" 
@@ -69,7 +69,9 @@
             <DataTemplate>
               <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                 <Button Content="Bearbeiten" Style="{StaticResource AddButton}"
-                        Command="{Binding DataContext.EditUserCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}" CommandParameter="{Binding}"/>
+                        Command="{Binding DataContext.EditUserCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}" 
+                        
+                        CommandParameter="{Binding}"/>
                 <Button Content="Löschen" Style="{StaticResource AddButton}"
                         Command="{Binding DataContext.DeleteUserCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}" CommandParameter="{Binding}"/>
               </StackPanel>

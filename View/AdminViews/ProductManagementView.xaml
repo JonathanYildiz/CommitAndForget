@@ -26,7 +26,7 @@
               ItemsSource="{Binding ProductList}" 
               SelectedItem="{Binding SelectedProduct}">
       <DataGrid.Columns>
-        <DataGridTemplateColumn Header="Image" Width="Auto">
+        <DataGridTemplateColumn Header="Bild" Width="Auto">
           <DataGridTemplateColumn.CellTemplate>
             <DataTemplate>
               <Image Width="30" Height="30"
@@ -46,9 +46,9 @@
           <DataGridTemplateColumn.CellTemplate>
             <DataTemplate>
               <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                <Button Content="Edit" Style="{StaticResource AddButton}"
+                <Button Content="Bearbeiten" Style="{StaticResource AddButton}"
                         Command="{Binding DataContext.EditProductCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}" CommandParameter="{Binding}"/>
-                <Button Content="Delete"  Style="{StaticResource AddButton}"
+                <Button Content="Löschen"  Style="{StaticResource AddButton}"
                         Command="{Binding DataContext.DeleteProductCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}" CommandParameter="{Binding}"/>
               </StackPanel>
             </DataTemplate>

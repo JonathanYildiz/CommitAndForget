@@ -25,8 +25,8 @@
         <ItemsControl.ItemTemplate>
           <DataTemplate>
             <Grid Height="256" Width="256">
-              <Image Source="{Binding Image}" Height="auto" Width="auto" MaxHeight="256" MaxWidth="256" Margin="3"
-                   HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Stretch="Fill"/>
+              <Image Height="auto" Width="auto" MaxHeight="256" MaxWidth="256" Margin="3" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Stretch="Fill"
+                     Source="{Binding Image}" />
               <DockPanel HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="3">
                 <Button Height="32" Width="32"
                         Command="{Binding Data.RateImageCommand, Source={StaticResource BindingProxy}}">
@@ -40,10 +40,11 @@
                       </Binding>
                     </MultiBinding>
                   </Button.CommandParameter>
-                  <Image Source="\Pizza.png" Visibility="{Binding Rating, Converter={StaticResource RatingToVisibilityConverter}, ConverterParameter=1}"/>
+                  <Image Source="\Pizza.png" 
+                         Visibility="{Binding Rating, Converter={StaticResource RatingToVisibilityConverter}, ConverterParameter=1}"/>
                 </Button>
                 <Button Height="32" Width="32"
-                              Command="{Binding Data.RateImageCommand, Source={StaticResource BindingProxy}}">
+                        Command="{Binding Data.RateImageCommand, Source={StaticResource BindingProxy}}">
                   <Button.CommandParameter>
                     <MultiBinding Converter="{StaticResource MultiParameterConverter}">
                       <Binding />
@@ -54,10 +55,11 @@
                       </Binding>
                     </MultiBinding>
                   </Button.CommandParameter>
-                  <Image Source="\Pizza.png" Visibility="{Binding Rating, Converter={StaticResource RatingToVisibilityConverter}, ConverterParameter=2}"/>
+                  <Image Source="\Pizza.png"
+                         Visibility="{Binding Rating, Converter={StaticResource RatingToVisibilityConverter}, ConverterParameter=2}"/>
                 </Button>
                 <Button Height="32" Width="32"
-                             Command="{Binding Data.RateImageCommand, Source={StaticResource BindingProxy}}">
+                        Command="{Binding Data.RateImageCommand, Source={StaticResource BindingProxy}}">
                   <Button.CommandParameter>
                     <MultiBinding Converter="{StaticResource MultiParameterConverter}">
                       <Binding />
@@ -68,10 +70,11 @@
                       </Binding>
                     </MultiBinding>
                   </Button.CommandParameter>
-                  <Image Source="\Pizza.png" Visibility="{Binding Rating, Converter={StaticResource RatingToVisibilityConverter}, ConverterParameter=3}"/>
+                  <Image Source="\Pizza.png" 
+                         Visibility="{Binding Rating, Converter={StaticResource RatingToVisibilityConverter}, ConverterParameter=3}"/>
                 </Button>
                 <Button Height="32" Width="32"
-                              Command="{Binding Data.RateImageCommand, Source={StaticResource BindingProxy}}">
+                        Command="{Binding Data.RateImageCommand, Source={StaticResource BindingProxy}}">
                   <Button.CommandParameter>
                     <MultiBinding Converter="{StaticResource MultiParameterConverter}">
                       <Binding />
@@ -82,10 +85,11 @@
                       </Binding>
                     </MultiBinding>
                   </Button.CommandParameter>
-                  <Image Source="\Pizza.png" Visibility="{Binding Rating, Converter={StaticResource RatingToVisibilityConverter}, ConverterParameter=4}"/>
+                  <Image Source="\Pizza.png"
+                         Visibility="{Binding Rating, Converter={StaticResource RatingToVisibilityConverter}, ConverterParameter=4}"/>
                 </Button>
                 <Button Height="32" Width="32"
-                             Command="{Binding Data.RateImageCommand, Source={StaticResource BindingProxy}}">
+                        Command="{Binding Data.RateImageCommand, Source={StaticResource BindingProxy}}">
                   <Button.CommandParameter>
                     <MultiBinding Converter="{StaticResource MultiParameterConverter}">
                       <Binding />
@@ -96,7 +100,8 @@
                       </Binding>
                     </MultiBinding>
                   </Button.CommandParameter>
-                  <Image Source="\Pizza.png" Visibility="{Binding Rating, Converter={StaticResource RatingToVisibilityConverter}, ConverterParameter=5}"/>
+                  <Image Source="\Pizza.png"
+                         Visibility="{Binding Rating, Converter={StaticResource RatingToVisibilityConverter}, ConverterParameter=5}"/>
                 </Button>
               </DockPanel>
             </Grid>
@@ -105,12 +110,12 @@
       </ItemsControl>
     </ScrollViewer>
     <StackPanel VerticalAlignment="Bottom" HorizontalAlignment="Left" Background="#007ACC" Margin="10">
-      <Button Content="¥" Style="{StaticResource AddButton}" 
-              Command="{Binding ViewWinnerCommand}"
-              Margin="0" Padding="0" Width="30"/>
-      <Button Content="+"  Style="{StaticResource AddButton}" 
-              Command="{Binding AddImageCommand}"
-              Margin="0" Padding="0" Width="30"/>
+      <Button Margin="0" Padding="0" Width="30"
+              Content="¥" Style="{StaticResource AddButton}" 
+              Command="{Binding ViewWinnerCommand}"/>
+      <Button Margin="0" Padding="0" Width="30"
+              Content="+"  Style="{StaticResource AddButton}" 
+              Command="{Binding AddImageCommand}"/>
     </StackPanel>
 
   </Grid>

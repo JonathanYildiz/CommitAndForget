@@ -19,19 +19,19 @@
         <ColumnDefinition/>
         <ColumnDefinition/>
       </Grid.ColumnDefinitions>
-      <Button Grid.Column="0" Command="{Binding NavigateToUserOrderCommand}" Style="{StaticResource NavigationButton}">
-        <TextBlock Text="Bestellen"
-                   TextWrapping="Wrap"
-                   TextAlignment="Center"
-                   VerticalAlignment="Center"
-                   HorizontalAlignment="Center"/>
+      
+      <Button Grid.Column="0" 
+              Style="{StaticResource NavigationButton}"
+              Command="{Binding NavigateToUserOrderCommand}">
+        <TextBlock FontSize="42" TextWrapping="Wrap" TextAlignment="Center" VerticalAlignment="Center" HorizontalAlignment="Center"
+                   Text="Bestellen"/>
       </Button>
-      <Button Grid.Column="1" Command="{Binding NavigateToFunnyDinnerContestCommand}" Style="{StaticResource NavigationButton}">
-        <TextBlock Text="Funny Dinner Contest"
-                   TextWrapping="Wrap"
-                   TextAlignment="Center"
-                   VerticalAlignment="Center"
-                   HorizontalAlignment="Center"/>
+      
+      <Button Grid.Column="1" 
+              Style="{StaticResource NavigationButton}"
+              Command="{Binding NavigateToFunnyDinnerContestCommand}">
+        <TextBlock FontSize="42" TextWrapping="Wrap" TextAlignment="Center" VerticalAlignment="Center" HorizontalAlignment="Center"
+                   Text="Funny Dinner Contest"/>
       </Button>
     </Grid>
   </Grid>
