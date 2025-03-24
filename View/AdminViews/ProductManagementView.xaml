@@ -26,7 +26,8 @@
               ItemsSource="{Binding ProductList}" 
               SelectedItem="{Binding SelectedProduct}">
       <DataGrid.Columns>
-        <DataGridTemplateColumn Header="Bild" Width="Auto">
+        <DataGridTemplateColumn Width="Auto"
+                                Header="Bild">
           <DataGridTemplateColumn.CellTemplate>
             <DataTemplate>
               <Image Width="30" Height="30"

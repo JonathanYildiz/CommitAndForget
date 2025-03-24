@@ -26,7 +26,8 @@
               ItemsSource="{Binding MenuList}" 
               SelectedItem="{Binding SelectedMenu}">
       <DataGrid.Columns>
-        <DataGridTemplateColumn Width="Auto" Header="Image">
+        <DataGridTemplateColumn Width="Auto" 
+                                Header="Bild">
           <DataGridTemplateColumn.CellTemplate>
             <DataTemplate>
               <Image Width="30" Height="30"
