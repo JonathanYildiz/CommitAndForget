@@ -37,7 +37,8 @@
           </Grid.ColumnDefinitions>
           <TextBlock Grid.Column="0" Margin="0" Foreground="Cyan" FontWeight="Bold"
                  Text="Email:"/>
-          <TextBox Grid.Column="1" Text="{Binding Email, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+          <TextBox Grid.Column="1" MaxHeight="30"
+                   Text="{Binding Email, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
             <TextBox.InputBindings>
               <KeyBinding Key="Enter" Command="{Binding LoginCommand}" CommandParameter="{Binding ElementName=loginWindow}"/>
             </TextBox.InputBindings>
@@ -50,7 +51,8 @@
           </Grid.ColumnDefinitions>
           <TextBlock Grid.Column="0" Margin="0" Foreground="Cyan"
                  Text="Passwort:"/>
-          <PasswordBox Grid.Column="1" PasswordChanged="PasswordBox_PasswordChanged">
+          <PasswordBox Grid.Column="1" MaxHeight="30"
+                       PasswordChanged="PasswordBox_PasswordChanged">
             <PasswordBox.InputBindings>
               <KeyBinding Key="Enter" Command="{Binding LoginCommand}" CommandParameter="{Binding ElementName=loginWindow}"/>
             </PasswordBox.InputBindings>
