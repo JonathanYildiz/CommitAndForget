@@ -49,7 +49,7 @@
             <ColumnDefinition Width="65"/>
             <ColumnDefinition/>
           </Grid.ColumnDefinitions>
-          <TextBlock Grid.Column="0" Margin="0" Foreground="Cyan"
+          <TextBlock Grid.Column="0" Margin="0" Foreground="Cyan" FontWeight="Bold"
                  Text="Passwort:"/>
           <PasswordBox Grid.Column="1" MaxHeight="30"
                        PasswordChanged="PasswordBox_PasswordChanged">
