@@ -29,42 +29,42 @@
     <TextBlock Grid.Row="0" Grid.Column="0"
              Text="Vorname:"/>
     <TextBox Grid.Row="0" Grid.Column="1"
-           Text="{Binding NewUser.FirstName}"/>
+           Text="{Binding CurrentUser.FirstName}"/>
 
     <TextBlock Grid.Row="1" Grid.Column="0"
              Text="Nachname:"/>
     <TextBox Grid.Row="1" Grid.Column="1"
-           Text="{Binding NewUser.LastName}"/>
+           Text="{Binding CurrentUser.LastName}"/>
 
     <TextBlock Grid.Row="2" Grid.Column="0"
              Text="Straße:"/>
     <TextBox Grid.Row="2" Grid.Column="1"
-           Text="{Binding NewUser.Street}"/>
+           Text="{Binding CurrentUser.Street}"/>
 
     <TextBlock Grid.Row="3" Grid.Column="0"
              Text="Hausnummer:"/>
     <TextBox Grid.Row="3" Grid.Column="1"
-           Text="{Binding NewUser.HouseNumber}"/>
+           Text="{Binding CurrentUser.HouseNumber}"/>
 
     <TextBlock Grid.Row="4" Grid.Column="0"
              Text="PLZ:"/>
     <TextBox Grid.Row="4" Grid.Column="1"
-           Text="{Binding NewUser.PostalCode}"/>
+           Text="{Binding CurrentUser.PostalCode}"/>
 
     <TextBlock Grid.Row="5" Grid.Column="0"
              Text="Ort:"/>
     <TextBox Grid.Row="5" Grid.Column="1"
-           Text="{Binding NewUser.City}"/>
+           Text="{Binding CurrentUser.City}"/>
 
     <TextBlock Grid.Row="6" Grid.Column="0"
              Text="E-Mail:"/>
     <TextBox Grid.Row="6" Grid.Column="1"
-           Text="{Binding NewUser.Email}"/>
+           Text="{Binding CurrentUser.Email}"/>
 
     <TextBlock Grid.Row="7" Grid.Column="0"
              Text="Passwort:"/>
     <TextBox Grid.Row="7" Grid.Column="1"
-            Text="{Binding NewUser.Password}"/>
+            Text="{Binding CurrentUser.Password}"/>
     <StackPanel Grid.Row="8" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Center" Margin="10">
       <Button Command="{Binding SaveEditCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}">OK</Button>
       <Button Command="{Binding CancelEditCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}">Abbrechen</Button>

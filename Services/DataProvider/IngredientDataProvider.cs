@@ -1,7 +1,7 @@
-﻿using System.Collections.ObjectModel;
+﻿using CommitAndForget.Model;
+using System.Collections.ObjectModel;
 using System.Data;
 using System.Windows;
-using CommitAndForget.Model;
 
 namespace CommitAndForget.Services.DataProvider
 {

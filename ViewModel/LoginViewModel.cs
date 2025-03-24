@@ -1,12 +1,12 @@
-﻿using System.Collections.ObjectModel;
-using System.Windows;
-using System.Windows.Input;
-using CommitAndForget.Essentials;
+﻿using CommitAndForget.Essentials;
 using CommitAndForget.Model;
 using CommitAndForget.Services;
 using CommitAndForget.Services.DataProvider;
 using CommitAndForget.View;
 using CommunityToolkit.Mvvm.Input;
+using System.Collections.ObjectModel;
+using System.Windows;
+using System.Windows.Input;
 
 namespace CommitAndForget.ViewModel
 {

@@ -1,7 +1,7 @@
-﻿using System.Windows;
-using CommitAndForget.View.AdminViews;
+﻿using CommitAndForget.View.AdminViews;
 using CommitAndForget.View.UserViews;
 using CommitAndForget.ViewModel;
+using System.Windows;
 
 namespace CommitAndForget.View
 {

@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using CommitAndForget.Converter;
+using CommitAndForget.Model;
 using System.Collections.ObjectModel;
 using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using CommitAndForget.Converter;
-using CommitAndForget.Model;
 
 namespace CommitAndForget.Services.DataProvider
 {
@@ -63,7 +58,7 @@ namespace CommitAndForget.Services.DataProvider
 
               menu.ProductList.Add(product);
             }
-            
+
           }
         }
         return menuList;
