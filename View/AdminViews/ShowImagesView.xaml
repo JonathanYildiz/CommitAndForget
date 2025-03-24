@@ -14,10 +14,18 @@
         <ItemsControl.ItemTemplate>
           <DataTemplate>
             <StackPanel Orientation="Vertical" Margin="10">
-              <Image Source="{Binding Image}" Width="200" Height="200" Margin="5"/>
-              <TextBlock Text="{Binding Name}" HorizontalAlignment="Center" Margin="5"/>
-              <Button Content="Auswählen" Command="{Binding DataContext.ChooseImageCommand, RelativeSource={RelativeSource AncestorType=Window}}" CommandParameter="{Binding}" Margin="5"/>
-              <Button Content="Löschen" Command="{Binding DataContext.DeleteImageCommand, RelativeSource={RelativeSource AncestorType=Window}}" CommandParameter="{Binding}" Margin="5"/>
+              <Image Width="200" Height="200" Margin="5"
+                     Source="{Binding Image}"/>
+              <TextBlock HorizontalAlignment="Center" Margin="5"
+                         Text="{Binding Name}"/>
+              <Button Margin="5"
+                      Content="Auswählen" 
+                      Command="{Binding DataContext.ChooseImageCommand, RelativeSource={RelativeSource AncestorType=Window}}" 
+                      CommandParameter="{Binding}"/>
+              <Button Margin="5"
+                      Content="Löschen" 
+                      Command="{Binding DataContext.DeleteImageCommand, RelativeSource={RelativeSource AncestorType=Window}}" 
+                      CommandParameter="{Binding}"/>
             </StackPanel>
           </DataTemplate>
         </ItemsControl.ItemTemplate>
@@ -28,7 +36,9 @@
         </ItemsControl.ItemsPanel>
       </ItemsControl>
     </ScrollViewer>
-    <Button Content="Add Image" Command="{Binding AddImageCommand}" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="10"/>
+    <Button HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="10"
+            Content="Bild hinzufügen" 
+            Command="{Binding AddImageCommand}"/>
   </Grid>
   
 </Window>

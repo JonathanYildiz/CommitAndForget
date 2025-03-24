@@ -16,22 +16,33 @@
       <RowDefinition Height="*"/>
     </Grid.RowDefinitions>
 
-    <TextBlock Text="Product Management" FontSize="24" FontWeight="Bold" Foreground="#007ACC" HorizontalAlignment="Center" Margin="10"/>
-    <Button Grid.Row="1" Content="+" Width="30" Command="{Binding CreateProductCommand}" Style="{StaticResource AddButton}"/>
+    <TextBlock FontSize="24" FontWeight="Bold" Foreground="#007ACC" HorizontalAlignment="Center" Margin="10"
+               Text="Produktverwaltung"/>
+    <Button Grid.Row="1" Width="30" 
+            Content="+" Style="{StaticResource AddButton}"
+            Command="{Binding CreateProductCommand}"/>
 
-    <DataGrid ItemsSource="{Binding ProductList}" Grid.Row="2" SelectedItem="{Binding SelectedProduct}">
+    <DataGrid Grid.Row="2" 
+              ItemsSource="{Binding ProductList}" 
+              SelectedItem="{Binding SelectedProduct}">
       <DataGrid.Columns>
         <DataGridTemplateColumn Header="Image" Width="Auto">
           <DataGridTemplateColumn.CellTemplate>
             <DataTemplate>
-              <Image Source="{Binding Image.Image}" Width="30" Height="30"/>
+              <Image Width="30" Height="30"
+                     Source="{Binding Image.Image}"/>
             </DataTemplate>
           </DataGridTemplateColumn.CellTemplate>
         </DataGridTemplateColumn>
-        <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="*"/>
-        <DataGridTextColumn Header="Price" Binding="{Binding Price, StringFormat={}{0:C}}" Width="*"/>
-        <DataGridTextColumn Header="No." Binding="{Binding OrderCount}"/>
-        <DataGridTemplateColumn Header="Actions" Width="Auto">
+        <DataGridTextColumn  Width="*"
+                             Header="Name" 
+                             Binding="{Binding Name}"/>
+        <DataGridTextColumn Width="*"
+                            Header="Preis" 
+                            Binding="{Binding Price, StringFormat={}{0:C}}"/>
+        <DataGridTextColumn Header="Anzahl" 
+                            Binding="{Binding OrderCount}"/>
+        <DataGridTemplateColumn Header="Aktionen" Width="Auto">
           <DataGridTemplateColumn.CellTemplate>
             <DataTemplate>
               <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">

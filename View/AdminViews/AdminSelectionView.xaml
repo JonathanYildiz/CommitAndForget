@@ -10,10 +10,15 @@
       Style="{StaticResource PageStyle}">
 
   <StackPanel Orientation="Vertical" VerticalAlignment="Stretch">
-    <Button Content="Benutzerverwaltung" Command="{Binding NavigateToUserManagementCommand}"/>
-    <Button Content="Produktverwaltung" Command="{Binding NavigateToProductManagementCommand}"/>
-    <Button Content="Menüverwaltung" Command="{Binding NavigateToMenuManagementCommand}"/>
-    <Button Content="Contestverwaltung" Command="{Binding NavigateToContestManagementCommand}"/>
-    <Button Content="Bestellungsverwaltung" Command="{Binding NavigateToOrderManagementCommand}"/>
+    <Button Content="Benutzerverwaltung" 
+            Command="{Binding NavigateToUserManagementCommand}"/>
+    <Button Content="Produktverwaltung" 
+            Command="{Binding NavigateToProductManagementCommand}"/>
+    <Button Content="Menüverwaltung" 
+            Command="{Binding NavigateToMenuManagementCommand}"/>
+    <Button Content="Contestverwaltung" 
+            Command="{Binding NavigateToContestManagementCommand}"/>
+    <Button Content="Bestellungsverwaltung" 
+            Command="{Binding NavigateToOrderManagementCommand}"/>
   </StackPanel>
 </Page>

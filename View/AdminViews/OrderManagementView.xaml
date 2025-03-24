@@ -16,22 +16,35 @@
       <RowDefinition Height="*"/>
     </Grid.RowDefinitions>
 
-    <TextBlock Text="Order Management" FontSize="24" FontWeight="Bold" Foreground="#007ACC" HorizontalAlignment="Center" Margin="10"/>
+    <TextBlock FontSize="24" FontWeight="Bold" Foreground="#007ACC" HorizontalAlignment="Center" Margin="10"
+               Text="Bestellungsverwaltung"/>
 
-    <DataGrid ItemsSource="{Binding OrderList}" Grid.Row="2">
+    <DataGrid Grid.Row="2"
+              ItemsSource="{Binding OrderList}">
       <DataGrid.Columns>
-        <DataGridTextColumn Header="E-Mail" Binding="{Binding UserMail}" Width="*"/>
-        <DataGridTextColumn Header="BestellNr" Binding="{Binding Key}" Width="*"/>
-        <DataGridTextColumn Header="BestellDatum" Binding="{Binding OrderDate, StringFormat={}{0:dd/MM/yyyy}}" Width="*"/>
-        <DataGridTextColumn Header="Gesamtkosten" Binding="{Binding TotalPrice, StringFormat={}{0:C}}" Width="*"/>
-        <DataGridTemplateColumn Header="Actions" Width="Auto">
+        <DataGridTextColumn Width="*" 
+                            Header="E-Mail" 
+                            Binding="{Binding UserMail}"/>
+        <DataGridTextColumn Width="*" 
+                            Header="BestellNr" 
+                            Binding="{Binding Key}"/>
+        <DataGridTextColumn Width="*" 
+                            Header="BestellDatum" 
+                            Binding="{Binding OrderDate, StringFormat={}{0:dd/MM/yyyy}}"/>
+        <DataGridTextColumn Width="*" 
+                            Header="Gesamtkosten" 
+                            Binding="{Binding TotalPrice, StringFormat={}{0:C}}"/>
+        <DataGridTemplateColumn  Width="Auto"
+                                 Header="Aktionen">
           <DataGridTemplateColumn.CellTemplate>
             <DataTemplate>
               <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                 <Button Content="Details" Style="{StaticResource AddButton}"
-                        Command="{Binding DataContext.ShowOrderDetailsCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}" CommandParameter="{Binding}"/>
+                        Command="{Binding DataContext.ShowOrderDetailsCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}" 
+                        CommandParameter="{Binding}"/>
                 <Button Content="Delete" Style="{StaticResource AddButton}"
-                        Command="{Binding DataContext.DeleteOrderCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}" CommandParameter="{Binding}"/>
+                        Command="{Binding DataContext.DeleteOrderCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}" 
+                        CommandParameter="{Binding}"/>
               </StackPanel>
             </DataTemplate>
           </DataGridTemplateColumn.CellTemplate>

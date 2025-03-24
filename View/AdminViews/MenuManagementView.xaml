@@ -16,29 +16,44 @@
       <RowDefinition Height="*"/>
     </Grid.RowDefinitions>
 
-    <TextBlock Text="Menu Management" FontSize="24" FontWeight="Bold" Foreground="#007ACC" HorizontalAlignment="Center" Margin="10"/>
-    <Button Grid.Row="1" Content="+" Width="30" Command="{Binding CreateMenuCommand}" Style="{StaticResource AddButton}"/>
+    <TextBlock HorizontalAlignment="Center" Margin="10" FontSize="24" FontWeight="Bold" Foreground="#007ACC"
+               Text="Menümanagement"/>
+    <Button Grid.Row="1" Content="+" Width="30" 
+            Style="{StaticResource AddButton}"
+            Command="{Binding CreateMenuCommand}"/>
 
-    <DataGrid ItemsSource="{Binding MenuList}" Grid.Row="2" SelectedItem="{Binding SelectedMenu}">
+    <DataGrid Grid.Row="2" 
+              ItemsSource="{Binding MenuList}" 
+              SelectedItem="{Binding SelectedMenu}">
       <DataGrid.Columns>
-        <DataGridTemplateColumn Header="Image" Width="Auto">
+        <DataGridTemplateColumn Width="Auto" Header="Image">
           <DataGridTemplateColumn.CellTemplate>
             <DataTemplate>
-              <Image Source="{Binding Image.Image}" Width="30" Height="30"/>
+              <Image Width="30" Height="30"
+                     Source="{Binding Image.Image}"/>
             </DataTemplate>
           </DataGridTemplateColumn.CellTemplate>
         </DataGridTemplateColumn>
-        <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="*"/>
-        <DataGridTextColumn Header="Price" Binding="{Binding Price, StringFormat={}{0:C}}" Width="*"/>
-        <DataGridTextColumn Header="No." Binding="{Binding OrderCount}"/>
-        <DataGridTemplateColumn Header="Actions" Width="Auto">
+        <DataGridTextColumn Width="*"
+                            Header="Name" 
+                            Binding="{Binding Name}"/>
+        <DataGridTextColumn Width="*" 
+                            Header="Preis" 
+                            Binding="{Binding Price, StringFormat={}{0:C}}"/>
+        <DataGridTextColumn Width="*" 
+                            Header="Anzahl" 
+                            Binding="{Binding OrderCount}"/>
+        <DataGridTemplateColumn Width="Auto" 
+                                Header="Aktionen">
           <DataGridTemplateColumn.CellTemplate>
             <DataTemplate>
               <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                 <Button Content="Edit" Style="{StaticResource AddButton}"
-                        Command="{Binding DataContext.EditMenuCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}" CommandParameter="{Binding}"/>
+                        Command="{Binding DataContext.EditMenuCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}" 
+                        CommandParameter="{Binding}"/>
                 <Button Content="Delete" Style="{StaticResource AddButton}"
-                        Command="{Binding DataContext.DeleteMenuCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}" CommandParameter="{Binding}"/>
+                        Command="{Binding DataContext.DeleteMenuCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}" 
+                        CommandParameter="{Binding}"/>
               </StackPanel>
             </DataTemplate>
           </DataGridTemplateColumn.CellTemplate>

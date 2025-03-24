@@ -25,36 +25,51 @@
     </Grid.ColumnDefinitions>
 
     <!-- Labels and TextBoxes for Product Properties -->
-    <TextBlock Text="Name:" Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" Margin="5"/>
-    <TextBox Text="{Binding SelectedProduct.Name}" Grid.Row="0" Grid.Column="1" Margin="5"/>
+    <TextBlock Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" Margin="5"
+               Text="Name:"/>
+    <TextBox Grid.Row="0" Grid.Column="1" Margin="5"
+             Text="{Binding SelectedProduct.Name}"/>
 
-    <TextBlock Text="Price:" Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" Margin="5"/>
-    <TextBox Text="{Binding SelectedProduct.Price}" Grid.Row="1" Grid.Column="1" Margin="5"/>
+    <TextBlock Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" Margin="5"
+               Text="Preis:"/>
+    <TextBox Grid.Row="1" Grid.Column="1" Margin="5"
+             Text="{Binding SelectedProduct.Price}"/>
 
-    <TextBlock Text="Energy:" Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" Margin="5"/>
-    <TextBox Text="{Binding SelectedProduct.Energy}" Grid.Row="2" Grid.Column="1" Margin="5"/>
+    <TextBlock Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" Margin="5"
+               Text="Energie:"/>
+    <TextBox Grid.Row="2" Grid.Column="1" Margin="5"
+             Text="{Binding SelectedProduct.Energy}"/>
 
     <!-- Image Section -->
-    <TextBlock Text="Image:" Grid.Row="3" Grid.Column="0" VerticalAlignment="Center" Margin="5"/>
+    <TextBlock Grid.Row="3" Grid.Column="0" VerticalAlignment="Center" Margin="5"
+               Text="Bild:" />
     <StackPanel Grid.Row="3" Grid.Column="1" Orientation="Horizontal" Margin="5">
-      <Image Source="{Binding SelectedProduct.Image.Image}" Width="100" Height="100" Margin="5"/>
+      <Image Width="100" Height="100" Margin="5"
+             Source="{Binding SelectedProduct.Image.Image}"/>
       <StackPanel Orientation="Vertical">
-        <Button Content="Remove" Command="{Binding RemoveImageFromProductCommand}" Width="75" Margin="5"/>
-        <Button Content="Select" Command="{Binding SelectImageCommand}" Width="75" Margin="5"/>
+        <Button Width="75" Margin="5"
+                Content="Entfernen" 
+                Command="{Binding RemoveImageFromProductCommand}"/>
+        <Button Width="75" Margin="5" 
+                Content="Auswählen" 
+                Command="{Binding SelectImageCommand}"/>
       </StackPanel>
     </StackPanel>
 
     <!-- Ingredients Section -->
-    <TextBlock Text="Ingredients:" Grid.Row="4" Grid.Column="0" VerticalAlignment="Top" Margin="5"/>
-    <ListBox Grid.Row="4" Grid.Column="1" ItemsSource="{Binding IngredientList}" SelectionMode="Multiple" Margin="5">
+    <TextBlock Grid.Row="4" Grid.Column="0" VerticalAlignment="Top" Margin="5"
+               Text="Zutaten:" />
+    <ListBox Grid.Row="4" Grid.Column="1" Margin="5" SelectionMode="Multiple"
+             ItemsSource="{Binding IngredientList}">
       <ListBox.ItemTemplate>
         <DataTemplate>
           <StackPanel Orientation="Horizontal">
             <CheckBox Content="{Binding Name}"
-            IsChecked="{Binding IsChecked}"
-            Command="{Binding DataContext.ToggleIngredientCommand, RelativeSource={RelativeSource AncestorType=Window}}"
-            CommandParameter="{Binding}" />
-            <TextBox Text="{Binding Quantity}" Width="50" Margin="5,0,0,0" VerticalAlignment="Center"/>
+                      IsChecked="{Binding IsChecked}"
+                      Command="{Binding DataContext.ToggleIngredientCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                      CommandParameter="{Binding}" />
+            <TextBox Width="50" Margin="5,0,0,0" VerticalAlignment="Center"
+                     Text="{Binding Quantity}"/>
           </StackPanel>
         </DataTemplate>
       </ListBox.ItemTemplate>
@@ -63,8 +78,12 @@
 
     <!-- Buttons -->
     <StackPanel Grid.Row="5" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Center" Margin="10">
-      <Button Content="Save" Command="{Binding SaveProductCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}" Width="100" Margin="5"/>
-      <Button Content="Cancel" Command="{Binding CancelProductCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}" Width="100" Margin="5"/>
+      <Button Width="100" Margin="5" 
+              Content="Speichern" 
+              Command="{Binding SaveProductCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}"/>
+      <Button Width="100" Margin="5" 
+              Content="Abbrechen" 
+              Command="{Binding CancelProductCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}"/>
     </StackPanel>
   </Grid>
 </Window>

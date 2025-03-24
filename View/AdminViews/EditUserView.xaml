@@ -28,37 +28,62 @@
     </Grid.ColumnDefinitions>
 
     <!-- Labels and TextBoxes for User Properties -->
-    <TextBlock Text="Vorname:" Grid.Row="0" Grid.Column="0"/>
-    <TextBox Text="{Binding SelectedUser.FirstName}" Grid.Row="0" Grid.Column="1"/>
+    <TextBlock Grid.Row="0" Grid.Column="0"
+               Text="Vorname:" />
+    <TextBox  Grid.Row="0" Grid.Column="1"
+              Text="{Binding SelectedUser.FirstName}"/>
 
-    <TextBlock Text="Nachname:" Grid.Row="1" Grid.Column="0"/>
-    <TextBox Text="{Binding SelectedUser.LastName}" Grid.Row="1" Grid.Column="1"/>
+    <TextBlock Grid.Row="1" Grid.Column="0"
+               Text="Nachname:" />
+    <TextBox Grid.Row="1" Grid.Column="1"
+             Text="{Binding SelectedUser.LastName}" />
 
-    <TextBlock Text="Straße:" Grid.Row="2" Grid.Column="0"/>
-    <TextBox Text="{Binding SelectedUser.Street}" Grid.Row="2" Grid.Column="1"/>
+    <TextBlock Grid.Row="2" Grid.Column="0"
+               Text="Straße:" />
+    <TextBox Grid.Row="2" Grid.Column="1"
+             Text="{Binding SelectedUser.Street}"/>
 
-    <TextBlock Text="Hausnummer:" Grid.Row="3" Grid.Column="0"/>
-    <TextBox Text="{Binding SelectedUser.HouseNumber}" Grid.Row="3" Grid.Column="1"/>
+    <TextBlock Grid.Row="3" Grid.Column="0"
+               Text="Hausnummer:" />
+    <TextBox Grid.Row="3" Grid.Column="1"
+             Text="{Binding SelectedUser.HouseNumber}"/>
 
-    <TextBlock Text="PLZ:" Grid.Row="4" Grid.Column="0"/>
-    <TextBox Text="{Binding SelectedUser.PostalCode}" Grid.Row="4" Grid.Column="1"/>
+    <TextBlock Grid.Row="4" Grid.Column="0"
+               Text="PLZ:"/>
+    <TextBox Grid.Row="4" Grid.Column="1"
+             Text="{Binding SelectedUser.PostalCode}"/>
 
-    <TextBlock Text="Ort:" Grid.Row="5" Grid.Column="0"/>
-    <TextBox Text="{Binding SelectedUser.City}" Grid.Row="5" Grid.Column="1"/>
+    <TextBlock Grid.Row="5" Grid.Column="0"
+               Text="Ort:"/>
+    <TextBox Grid.Row="5" Grid.Column="1"
+             Text="{Binding SelectedUser.City}"/>
 
-    <TextBlock Text="Email:" Grid.Row="6" Grid.Column="0"/>
-    <TextBox Text="{Binding SelectedUser.Email}" Grid.Row="6" Grid.Column="1"/>
+    <TextBlock Grid.Row="6" Grid.Column="0"
+               Text="Email:"/>
+    <TextBox Grid.Row="6" Grid.Column="1"
+             Text="{Binding SelectedUser.Email}"/>
 
-    <TextBlock Text="Passwort:" Grid.Row="7" Grid.Column="0"/>
-    <TextBox Text="{Binding SelectedUser.Password}" Grid.Row="7" Grid.Column="1"/>
+    <TextBlock Grid.Row="7" Grid.Column="0"
+               Text="Passwort:"/>
+    <TextBox Grid.Row="7" Grid.Column="1"
+             Text="{Binding SelectedUser.Password}"/>
 
-    <TextBlock Text="Admin?" Grid.Row="8" Grid.Column="0"/>
-    <CheckBox IsChecked="{Binding SelectedUser.IsAdmin}" Grid.Row="8" Grid.Column="1"/>
+    <TextBlock Grid.Row="8" Grid.Column="0"
+               Text="Admin?"/>
+    <CheckBox Grid.Row="8" Grid.Column="1"
+              IsChecked="{Binding SelectedUser.IsAdmin}"/>
 
     <!-- Buttons -->
     <StackPanel Grid.Row="9" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Center" Margin="10">
-      <Button Content="Speichern" Command="{Binding SaveUserCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}" Width="100"/>
-      <Button Content="Abbrechen" Command="{Binding CancelUserCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}" Width="100"/>
+      <Button Width="100" 
+              Content="Speichern" 
+              Command="{Binding SaveUserCommand}" 
+              CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}"/>
+
+      <Button Width="100"
+              Content="Abbrechen" 
+              Command="{Binding CancelUserCommand}" 
+              CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}"/>
     </StackPanel>
   </Grid>
 </Window>

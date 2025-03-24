@@ -18,20 +18,27 @@
       <ColumnDefinition/>
       <ColumnDefinition/>
     </Grid.ColumnDefinitions>
-    <Image Source="{Binding CurrentContestImage.Image}" Margin="5"/>
 
+    <Image Margin="5"
+           Source="{Binding CurrentContestImage.Image}" />
 
-      <StackPanel Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center">
-      <TextBlock HorizontalAlignment="Left" Margin="5" TextWrapping="Wrap"
-                 Style="{StaticResource SimpleTextBlock}">
+    <StackPanel Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center">
+      <TextBlock HorizontalAlignment="Left" Margin="5" 
+                 TextWrapping="Wrap" Style="{StaticResource SimpleTextBlock}">
         <Run Text="Hochgeladen von:" />
         <Run Text="{Binding CurrentContestImage.UploadedBy}" />
       </TextBlock>
-      <Button Content="Freischalten" Command="{Binding ApproveContestImageCommand}"/>
-      <Button Content="Löschen" Command="{Binding DeleteContestImageCommand}"/>
+      <Button Content="Freischalten" 
+              Command="{Binding ApproveContestImageCommand}"/>
+      <Button Content="Löschen"
+              Command="{Binding DeleteContestImageCommand}"/>
     </StackPanel>
 
-    <Button Grid.Row="1" Grid.Column="0" Content="Vorheriges Bild" Command="{Binding PreviousContestImageCommand}"/>
-    <Button Grid.Row="1" Grid.Column="1" Content="Nächstes Bild" Command="{Binding NextContestImageCommand}"/>
+    <Button Grid.Row="1" Grid.Column="0" 
+            Content="Vorheriges Bild" 
+            Command="{Binding PreviousContestImageCommand}"/>
+    <Button Grid.Row="1" Grid.Column="1" 
+            Content="Nächstes Bild" 
+            Command="{Binding NextContestImageCommand}"/>
   </Grid>
 </Page>
