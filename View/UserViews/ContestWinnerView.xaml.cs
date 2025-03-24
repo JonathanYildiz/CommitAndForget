@@ -3,11 +3,11 @@
 namespace CommitAndForget.View.UserViews
 {
   /// <summary>
-  /// Interaction logic for ProfileEditView.xaml
+  /// Interaction logic for ContestWinnerView.xaml
   /// </summary>
-  public partial class ProfileEditView : Window
+  public partial class ContestWinnerView : Window
   {
-    public ProfileEditView()
+    public ContestWinnerView()
     {
       InitializeComponent();
     }

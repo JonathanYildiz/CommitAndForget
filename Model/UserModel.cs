@@ -80,7 +80,7 @@ namespace CommitAndForget.Model
 
     #region Constructor
     public UserModel() { }
-    public UserModel (UserModel user)
+    public UserModel(UserModel user)
     {
       Key = user.Key;
       FirstName = user.FirstName;

@@ -1,8 +1,8 @@
-﻿using System.Collections.ObjectModel;
+﻿using CommitAndForget.Converter;
+using CommitAndForget.Model;
+using System.Collections.ObjectModel;
 using System.Data;
 using System.Windows;
-using CommitAndForget.Converter;
-using CommitAndForget.Model;
 
 namespace CommitAndForget.Services.DataProvider
 {
@@ -145,6 +145,43 @@ namespace CommitAndForget.Services.DataProvider
       {
         MessageBoxService.DisplayMessage(ex.Message, MessageBoxImage.Error);
       }
+    }
+
+    public static ObservableCollection<ImageModel> GetLastWinners()
+    {
+      try
+      {
+        DataTable dt = DataBaseService.ExecuteSP("spGetContestWinner");
+        var winnerCollection = new ObservableCollection<ImageModel>();
+        if (dt is not null && dt.Rows.Count > 0)
+        {
+          foreach (DataRow row in dt.Rows)
+          {
+            var image = new ImageModel();
+            image.Key = row["image_nKey"] != DBNull.Value ? (int)row["image_nKey"] : default;
+            image.UploadedBy = row["image_szUploadedBy"] != DBNull.Value ? row["image_szUploadedBy"].ToString() ?? string.Empty : string.Empty;
+
+            // Sicherheitsüberprüfung: Keine Produktbilder
+            if (image.UploadedBy == "admin")
+              continue;
+
+            // Bild aus LONGBLOB laden
+            if (row["image_vbImage"] != DBNull.Value)
+            {
+              byte[] imageData = (byte[])row["image_vbImage"];
+              image.Image = ByteArrayToBitmapImageConverter.LoadImage(imageData);
+            }
+
+            winnerCollection.Add(image);
+          }
+          return winnerCollection;
+        }
+      }
+      catch (Exception ex)
+      {
+        MessageBoxService.DisplayMessage(ex.Message, MessageBoxImage.Error);
+      }
+      return null;
     }
   }
 }

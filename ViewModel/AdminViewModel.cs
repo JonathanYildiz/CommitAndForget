@@ -1,16 +1,15 @@
-﻿using System.Collections.ObjectModel;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Input;
-using System.Windows.Media.Imaging;
-using CommitAndForget.Essentials;
+﻿using CommitAndForget.Essentials;
 using CommitAndForget.Model;
 using CommitAndForget.Services;
 using CommitAndForget.Services.DataProvider;
 using CommitAndForget.View.AdminViews;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Win32;
-using Mysqlx.Crud;
+using System.Collections.ObjectModel;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Input;
+using System.Windows.Media.Imaging;
 
 namespace CommitAndForget.ViewModel
 {
@@ -287,7 +286,7 @@ namespace CommitAndForget.ViewModel
     {
       if (SelectedUser is not null)
       {
-        if (UserList.Any(UserList => UserList.Key == SelectedUser.Key)) 
+        if (UserList.Any(UserList => UserList.Key == SelectedUser.Key))
         {
           // Wenn User vorhanden -> Updaten
           UserDataProvider.UpdateUser(SelectedUser);
@@ -300,7 +299,7 @@ namespace CommitAndForget.ViewModel
             MessageBoxService.DisplayMessage("Email und Passwort müssen angegeben werden", MessageBoxImage.Information);
             return;
           }
-          var addedUser = UserDataProvider.Register(SelectedUser); 
+          var addedUser = UserDataProvider.Register(SelectedUser);
           if (addedUser is not null)
             UserList.Add(addedUser);
           else

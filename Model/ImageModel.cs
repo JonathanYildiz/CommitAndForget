@@ -1,5 +1,5 @@
-﻿using System.Windows.Media;
-using CommitAndForget.Essentials;
+﻿using CommitAndForget.Essentials;
+using System.Windows.Media;
 
 namespace CommitAndForget.Model
 {
