@@ -409,15 +409,25 @@ namespace CommitAndForget.ViewModel
       }
     }
 
-    private void RateImage(Tuple<ImageModel, decimal> parameter)
+    private void RateImage(Tuple<ImageModel, decimal>? parameter)
     {
-      ImageModel selectedImage = parameter.Item1;
-      decimal rating = parameter.Item2;
-
-      if (selectedImage != null && rating > 0)
+      try
       {
-        selectedImage.Rating = rating;
-        ImageDataProvider.SetRating(selectedImage, CurrentUser.Key);
+        if (parameter is null)
+          return;
+
+        ImageModel selectedImage = parameter.Item1;
+        decimal rating = parameter.Item2;
+
+        if (selectedImage != null && rating > 0)
+        {
+          selectedImage.Rating = rating;
+          ImageDataProvider.SetRating(selectedImage, CurrentUser.Key);
+        }
+      }
+      catch (Exception ex)
+      {
+        MessageBoxService.DisplayMessage(ex.Message, MessageBoxImage.Error);
       }
     }
 
@@ -442,19 +452,33 @@ namespace CommitAndForget.ViewModel
     #region User
     private void EditProfile()
     {
-      BackupUser = new UserModel(CurrentUser);
+      try
+      {
+        BackupUser = new UserModel(CurrentUser);
 
-      var view = new ProfileEditView();
-      view.DataContext = this;
-      view.Owner = Application.Current.Windows.OfType<Window>().FirstOrDefault(w => w.IsActive);
-      view.WindowStartupLocation = WindowStartupLocation.CenterOwner;
-      view.ShowDialog();
+        var view = new ProfileEditView();
+        view.DataContext = this;
+        view.Owner = Application.Current.Windows.OfType<Window>().FirstOrDefault(w => w.IsActive);
+        view.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+        view.ShowDialog();
+      }
+      catch (Exception ex)
+      {
+        MessageBoxService.DisplayMessage(ex.Message, MessageBoxImage.Error);
+      }
     }
 
     private void CancelEdit(Window? window)
     {
-      CurrentUser.RollbackChanges(BackupUser);
-      window?.Close();
+      try
+      {
+        CurrentUser.RollbackChanges(BackupUser);
+        window?.Close();
+      }
+      catch (Exception ex)
+      {
+        MessageBoxService.DisplayMessage(ex.Message, MessageBoxImage.Error);
+      }
     }
 
     private void SaveEdit(Window? window)
@@ -471,7 +495,7 @@ namespace CommitAndForget.ViewModel
       if (MessageBoxService.LogoutMessage("Möchten Sie sich wirklich abmelden?", MessageBoxImage.Information) == MessageBoxResult.Yes)
       {
         // Aktuelles Window wegspeichern
-        var currentWindow = Application.Current.Windows.OfType<Window>().FirstOrDefault(w => w.IsActive);
+        var currentWindow = Application.Current?.Windows?.OfType<Window>()?.FirstOrDefault(w => w.IsActive);
 
         var view = new LoginView();
         view.WindowStartupLocation = WindowStartupLocation.CenterScreen;
